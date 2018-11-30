@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"   "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="favorite">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="rfId" column="RF_ID" />
+		<result property="rfResType" column="RF_ResType" />
+		<result property="rfResTypeName" column="RF_ResTypeName" />
+		<result property="rfSort" column="RF_Sort" />
+		<result property="rfSortName" column="RF_SortName" />
+		<result property="rfName" column="RF_Name" />
+		<result property="rfResourceURL" column="RF_ResourceURL" />
+		<result property="rfResID" column="RF_ResID" />
+		<result property="userId" column="USER_ID" />
+		<result property="rfCreateTime" column="RF_CreateTime" />
+		<result property="rfParentId" column="RF_ParentID" />
+		<result property="rfPath" column="RF_Path" />
+		<result property="rfLevel" column="RF_Level" />
+		<result property="rfIsPath" column="RF_IsPath" />
+		<result property="rfIsChild" column="RF_IsChild" />
+		<result property="rfType" column="RF_Type" />
+	</resultMap>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.RF_ID,favorite.RF_ResType,favorite.RF_Sort,favorite.RF_SortName,favorite.RF_Name,favorite.RF_ResourceURL,favorite.RF_ResID,favorite.USER_ID,DATE_FORMAT(favorite.RF_CreateTime,'%Y-%m-%d') RF_CreateTime from res_favorite favorite 
+		<where>
+			<trim prefixOverrides="and">
+			 	<if test="rfName!=null and rfName!=''">
+			 	and favorite.RF_Name like '%${rfName}%'
+				</if>
+				<if test="rfResTypeName!=null and rfResTypeName!=''">
+			 	and favorite.RF_ResTypeName like '${rfResTypeName}%'
+				</if>
+				<if test="rfSortName !=null and rfSortName !=''">
+			 	and favorite.RF_SortName='${rfSortName}'
+				</if>
+				<if test="s_userID!=null">
+			 	 and favorite.USER_ID=${s_userID}
+				</if>
+			</trim>
+		</where>
+		order by favorite.RF_ID desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_userid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.RF_ID,favorite.RF_ResType,favorite.RF_Sort,favorite.RF_SortName,favorite.RF_Name,favorite.RF_ResourceURL,favorite.RF_ResID,favorite.USER_ID,DATE_FORMAT(favorite.RF_CreateTime,'%Y-%m-%d %H:%i:%s') RF_CreateTime from res_favorite favorite 
+		<where>
+			<trim prefixOverrides="and">
+			 	<if test="rfName!=null and rfName!=''">
+			 	and favorite.RF_Name like '%${rfName}%'
+				</if>
+				<if test="rfResTypeName!=null and rfResTypeName!=''">
+			 	and favorite.RF_ResTypeName like '${rfResTypeName}%'
+				</if>
+				<if test="rfSortName !=null and rfSortName !=''">
+			 	and favorite.RF_SortName='${rfSortName}'
+				</if>
+				<if test="userID!=null">
+			 	 and favorite.USER_ID=${uID}
+				</if>
+			</trim>
+		</where>
+		order by favorite.RF_ID desc
+		limit ${start},${offset}
+	</select>	
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_favorite favorite
+		<where>
+			<trim prefixOverrides="and">
+			 		<if test="rfName!=null and rfName!=''">
+			 	and favorite.RF_Name like '%${rfName}%'
+				</if>
+				<if test="rfResTypeName!=null and rfResTypeName!=''">
+			 	and favorite.RF_ResTypeName like '${rfResTypeName}%'
+				</if>
+				<if test="rfSortName !=null and rfSortName !=''">
+			 	and favorite.RF_SortName='${rfSortName}'
+				</if>
+				<if test="s_userID!=null">
+			 	 and favorite.USER_ID=${s_userID}
+				</if>
+			</trim>
+		</where>
+	</select>	
+	
+	<select id="select_count_by_user_id" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_favorite favorite
+		<where>
+			<trim prefixOverrides="and">
+			<if test="rfResID!=null">
+		 	 and favorite.RF_ResID=${rfResID}
+			</if>	
+			<if test="s_userID!=null">
+		 	and favorite.USER_ID=${s_userID}
+			</if>	
+			<if test="rfSort!=null and rfSort!=''">
+		 	and favorite.RF_SortName='${rfSort}'
+			</if>
+			</trim>			
+		</where>
+	</select>
+	
+	<select id="select_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.* from res_favorite favorite
+		<where>
+			<if test="rfParentId!=null">
+		 	 favorite.RF_ID=${rfParentId}
+			</if>						
+		</where>
+	</select>	
+	
+	<select id="select_by_parent_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.* from res_favorite favorite
+		<where>
+			<trim prefixOverrides="and">
+		 	<if test="parentID!=null">
+		 	 and favorite.RF_ParentID=${parentID}
+			</if>
+			<if test="id!=null">
+		 	 and favorite.RF_ParentID=${id}
+			</if>			
+			<if test="s_userID!=null">
+		 	 and favorite.USER_ID=${s_userID}
+			</if>		
+			</trim>	
+		</where>
+	</select>
+	
+	<select id="select_by_user_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.* from res_favorite favorite where favorite.USER_ID=${s_userID} and favorite.RF_Type=0
+	</select>	
+	
+	<select id="select_by_sort_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.* from res_favorite favorite where favorite.RF_Sort=${rfSort} and favorite.RF_Type=1
+	</select>
+	
+	<select id="select_child_count_by_parent_id" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_favorite favorite
+		<where>
+		 	<if test="rfParentId!=null">
+		 	 favorite.RF_ParentID=${rfParentId}
+			</if>
+		</where>
+	</select>	
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_favorite
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="s_userID!=null">,USER_ID</if>
+			<if test="rfId!=null">,RF_ID</if>
+			<if test="rfParentId!=null">,RF_ParentID</if>
+			<if test="rfResType!=null">,RF_ResType</if>
+			<if test="rfResTypeName!=null">,RF_ResTypeName</if>
+			<if test="rfPath!=null">,RF_Path</if>
+			<if test="rfSort!=null">,RF_Sort</if>
+			<if test="rfSortName!=null">,RF_SortName</if>
+			<if test="rfLevel!=null">,RF_Level</if>
+			<if test="rfIsChild!=null">,RF_IsChild</if>
+			<if test="rfIsPath!=null">,RF_IsPath</if>
+			<if test="rfCreateTime!=null">,RF_CreateTime</if>
+			<if test="rfName!=null">,RF_Name</if>
+			<if test="rfType!=null">,RF_Type</if>
+			<if test="rfResourceURL!=null">,RF_ResourceURL</if>
+			<if test="rfResID!=null">,RF_ResID</if>
+			,RF_CreateTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="s_userID!=null">,${s_userID}</if>
+			<if test="rfId!=null">,${rfId}</if>
+			<if test="rfParentId!=null">,${rfParentId}</if>
+			<if test="rfResType!=null">,${rfResType}</if>
+			<if test="rfResTypeName!=null">,${rfResTypeName}</if>
+			<if test="rfPath!=null">,#{rfPath}</if>
+			<if test="rfSort!=null">,#{rfSort}</if>
+			<if test="rfSortName!=null">,#{rfSortName}</if>
+			<if test="rfLevel!=null">,${rfLevel}</if>
+			<if test="rfIsChild!=null">,${rfIsChild}</if>
+			<if test="rfIsPath!=null">,${rfIsPath}</if>
+			<if test="rfCreateTime!=null">,${rfCreateTime}</if>
+			<if test="rfName!=null">,#{rfName}</if>
+			<if test="rfType!=null">,${rfType}</if>
+			<if test="rfResourceURL!=null">,#{rfResourceURL}</if>
+			<if test="rfResID!=null">,${rfResID}</if>
+			,now()			
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update res_favorite
+		<set>			
+			<trim prefixOverrides=",">
+			<if test="rfParentId!=null">,RF_ParentID=${rfParentId}</if>
+			<if test="rfPath!=null">,RF_Path=#{rfPath}</if>
+			<if test="rfSort!=null">,RF_Sort=#{rfSort}</if>
+			<if test="rfLevel!=null">,RF_Level=${rfLevel}</if>
+			<if test="rfName!=null">,RF_Name=#{rfName}</if>
+			</trim>
+		</set>
+		 where RF_ID=${rfId}
+	</update>
+	
+	<update id="update_path_ischild" parameterType="java.util.HashMap">
+		update res_favorite
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="rfPath!=null">,RF_Path = #{rfPath}</if>
+				<if test="rfIsChild!=null">,RF_IsChild = ${rfIsChild}</if>
+			</trim>
+		</set>
+		 where RF_ID=${rfId}
+	</update>
+	
+	<update id="update_favorite_1" parameterType="java.util.HashMap">
+		update res_favorite
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="rfSort !=null">,RF_Sort = '${rfSort}'</if>
+			</trim>
+		</set>
+		 where RF_Sort='${rfSort1}'
+	</update>
+	
+	<update id="update_favorite_2" parameterType="java.util.HashMap">
+		update res_favorite
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="rfResType !=null">,RF_ResType = '${rfResType}'</if>
+			</trim>
+		</set>
+		 where RF_ResType='${rfResType1}'
+	</update>
+	
+	<update id="update_by_pid" parameterType="java.util.HashMap">
+		update res_favorite
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="rfIsChild!=null">,RF_IsChild = ${rfIsChild}</if>
+			</trim>
+		</set>
+		 where RF_ID=${rfParentId}
+	</update>	
+	<update id="update_path_by_pid" parameterType="java.util.HashMap">
+		update res_favorite
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="rfPath!=null">,RF_Path = #{rfPath}</if>
+			</trim>
+		</set>
+		 where RF_ID=${generatedKey}
+	</update>			
+	<delete id="delete_by_id" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_favorite where RF_ID in (${rfId})
+		</trim>
+	</delete>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_favorite 
+			<if test="rfSortName !=null and rfSortName !='' ">
+		 	and favorite.RF_SortName='${rfSortName}'
+			</if>
+			<if test="rfResID !=null and rfResID!='' ">
+		 	and	favorite.RF_ResID=${rfResID}
+			</if>
+		</trim>
+	</delete>
+	
+	<delete id="delete_by_pid" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_favorite where RF_ID in (${rfParentId})
+		</trim>
+	</delete>	
+
+	<delete id="delete_parent_by_id" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_favorite where RF_ParentID in (${rfId})
+		</trim>
+	</delete>	
+	
+	<delete id="delete_parent_by_userid" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_favorite where USER_ID in (${userID})
+		</trim>
+	</delete>
+	
+	<select id="select_all_except_current" resultMap="convertResult" parameterType="java.util.HashMap">
+		select favorite.* from res_favorite favorite where favorite.RF_ID!=#{rfId}
+	</select>
+
+</mapper>
+

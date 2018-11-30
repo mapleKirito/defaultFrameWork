@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="sys_Article">
+	<!--
+	   AREA_ID              bigint not null,
+	   AREA_NAME        varchar(200),
+	        注：xxxx系统说明，因角色暂无停用一条件，暂时性将角色状态(ROLE_STATUS)字段关闭。    2010-9-16  成生记录
+	-->
+	<resultMap id="convertResultRole" type="result">
+		<result property="aID" column="Article_id" />
+		<result property="aTitle" column="Article_title" />
+		<result property="aText" column="Article_text" />
+		<result property="aContent" column="Article_content" />
+		<result property="aCreater" column="Article_creater" />
+		<result property="aCreaterName" column="user_name" />
+		<result property="aTime" column="Article_time" />
+		<result property="userImg" column="user_img" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResultRole" parameterType="param">
+		select sa.Article_id,sa.Article_title,sa.Article_text,sa.Article_content,sa.Article_creater,DATE_FORMAT(sa.Article_time,'%Y-%m-%d') as Article_time from sys_Article sa
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="aTitle != null and aTitle != ''">
+					and sa.Article_title like '%${aTitle}%' 
+				</if>
+				<if test="userID != null and userID != '' ">
+					and sa.Article_creater = ${userID}
+				</if>
+			</trim>
+		</where>
+		ORDER BY sa.Article_id desc
+		limit ${start},${offset}
+	 </select>
+	 <select id="select_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(sa.Article_id) from sys_Article sa
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="aTitle != null and aTitle != ''">
+					and sa.Article_title like '%${aTitle}%' 
+				</if>
+				<if test="userID != null and userID != '' ">
+					and sa.Article_creater = ${userID}
+				</if>
+			</trim>
+		</where>
+	 </select>
+	
+	<select id="select_by_id" resultMap="convertResultRole" parameterType="param">
+		select * from sys_Article where Article_id=${aID}
+	 </select>
+	 <select id="select_by_userid2" resultMap="convertResultRole" parameterType="param">
+		select Article_id,Article_title,DATE_FORMAT(Article_time,'%Y-%m-%d %H:%i:%s') as Article_time from sys_Article where Article_creater=${uID} 
+	 </select>
+	 
+	 <select id="select_by_userid" resultMap="convertResultRole" parameterType="param">
+		select su.user_name,Article_id,Article_title,Article_creater,ui.user_img,DATE_FORMAT(Article_time,'%Y-%m-%d') as Article_time from sys_Article,sys_user_info ui,sys_user su where Article_creater=${userID} and Article_creater = ui.user_id and su.user_id = ui.user_id 
+		order by Article_time desc
+	
+	 </select>
+	 
+	 <select id="select_by_team" resultMap="convertResultRole" parameterType="param">
+		select t.Article_creater,t.Article_id,t.Article_text,t.Article_content,su.user_name,ui.user_img,t.Article_title,DATE_FORMAT(t.Article_time,'%Y-%m-%d') as Article_time from sys_Article t,sys_user su,sys_user_info ui
+		where t.Article_creater=su.user_id and t.Article_creater in (select userid from sys_team_user_mapper where teamid=${tID} and memState >0) and su.user_id = ui.user_id order by Article_time desc
+	 </select>
+	 
+	<select id="select_all" resultMap="convertResultRole" parameterType="param">
+		select t.*,su.user_name from sys_Article t,sys_user su where t.Article_creater=su.user_id
+			<if test="uType != null and uType != ''">
+				and su.USER_Type=${uType}
+			</if>
+		order by t.Article_time desc
+		limit ${start},${offset} 
+	 </select>
+	 <select id="select_all_page" resultType="java.lang.Integer" parameterType="param">
+		select count(t.Article_id) from sys_Article t,sys_user su where t.Article_creater=su.user_id
+			<if test="uType != null and uType != ''">
+				and su.USER_Type=${uType}
+			</if>
+	 </select>
+	 <!-- 
+	 <insert id="addBlog" parameterType="Blog" > 
+	 	<selectKey keyProperty="blogid" resultType="int" order="BEFORE"> 
+	 		select seq_order.nextval() from dual </selectKey> 
+	 	insert into Blog
+	 		(author,subject,content, publishTime,blogid)
+	    values
+	    	(#{author}#,#{subject}#,#{content}#,#{publishTime}#,#{blogid}) 
+	 </insert>
+	  -->
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_Article (Article_title,Article_text,Article_content,Article_creater,Article_time)
+		values (#{aTitle},#{aText},#{aContent},${aCreater},now())	
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	 </insert>
+
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_Article
+		<set>
+		<trim prefixOverrides=",">		
+			,Article_time = now()
+			<if test="aTitle!=null">,Article_title = #{aTitle}</if>
+			<if test="aText!=null">,Article_text = #{aText}</if>
+			<if test="aContent!=null">,Article_content = #{aContent}</if>
+			</trim>
+		</set>
+		 where Article_creater=${userID} and Article_id=${aID}
+	</update>	 
+	
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_Article where Article_id in (${aID}) and Article_creater=${s_userID}
+	</delete> 
+</mapper>

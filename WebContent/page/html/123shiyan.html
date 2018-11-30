@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<script type="text/javascript" src="page/html/pageUnit/lib/jquery-1.9.1.min.js"></script>
+ <style type="text/css">
+li{width: 154px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+<script type="text/javascript">
+var oHight = 480,oWidth=800;
+$(function(){
+	var object_play = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="'+oHight+'" width="'+oWidth+'"><param name="movie" value="###shiyan###" /><embed height="'+oHight+'" pluginspage="http://www.macromedia.com/go/getflashplayer" src="###shiyan###" type="application/x-shockwave-flash" width="'+oWidth+'"></embed></object>';
+	$(".lrUpload").html(object_play);	
+	
+	
+	$(".vp").each(function(){
+		$(this).click(function(){
+			var str=$(this).attr("fpath");
+			init(str);
+		});
+	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+})
+
+function init(path){
+	var object_play = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="'+oHight+'" width="'+oWidth+'"><param name="movie" value="'+path+'" /><embed height="'+oHight+'" pluginspage="http://www.macromedia.com/go/getflashplayer" src="'+path+'" type="application/x-shockwave-flash" width="'+oWidth+'"></embed></object>';
+	$(".lrUpload").html(object_play);	
+}
+</script>
+</head>
+<body style="background:url('page/html/34/24.png');margin: 0px;">
+	<table style="width: 1024px;">
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<img class="icon" style="margin-left: 20px;" src="page/html/34/name.png" border="0" alt="">
+						</td>
+						<td>
+							<table style="margin-left:100px;">
+								<tr>
+									###pageList###
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;position: relative;top:-10px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<span style="font-size: 35px;margin-left: 20px;">###name###</span>
+			</td>
+		</tr>
+		<tr>
+			<td  style="vertical-align:top;">
+				<table cellspacing="10px">
+						<tr>
+							<td >
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<div class="lrUpload" style="position:relative;width:800px;height:480px;float: right;"></div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td  style="vertical-align:top;">
+								<table >
+										
+										<tr>
+											<td>
+												<ul style="width:171px;height: 500px;overflow: auto;padding: 0px; ">
+												###shiyanList###
+												</ul>
+										   </td>									
+									    </tr>
+								</table>
+						   </td>
+						
+						</tr>
+					</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

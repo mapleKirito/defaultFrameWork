@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+function loadComplete(){
+	
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+	
+	
+	var ug = navigator.userAgent.toLowerCase();
+	var userAgent = document.getElementById("userAgent");
+	var browserType = "";
+	var ver = "";
+	var IE = ug.match(/msie\s*\d\.\d/);
+	var isIE = check(/msie/);
+	if(isIE) {
+	    $("#music").html('<embed src="###audio###" id="mp" style="height:0px;width:0px;" autostart="false" loop="true">');
+	}else{
+	 	$("#music").html('<audio src="###audio###" id="mp"></audio>');
+	}
+	    
+	//$("#pikame").PikaChoose({carousel:true});
+	    
+	//初始化
+	$("#pikame").css({"width":$("#pikame li").length*161+"px"});
+	
+	var clickTag=true;
+	$(".clip img:first").addClass("active");
+	$(".pika-stage img").attr("src",$(".clip img:first").attr("srcs"));
+	
+	
+	$(".clip").each(function(){
+		$(this).find("img").click(function(){
+			//alert($(this).parent().parent().index());
+			$(".pika-stage img").attr("src",$(this).attr("srcs"));
+			$(".clip img").removeClass("active");
+			$(this).addClass("active");
+		});
+	})
+	
+	$(".pika-stage").on("swipeleft",function(){
+		    if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().next().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+		  }); 
+	
+	$(".pika-stage").on("swiperight",function(){
+		 if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().prev().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+	  }); 
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    	});
+	   	}
+  	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	$("#jump_map").click(function(){
+		
+		//window.maplistner.openMap($("#point_x").val(),$("#point_y").val());
+		window.maplistner.openMap("113.831434,30.250184|105.424609,30.683294|105.632728,30.699194|105.405061,30.506227|139.489503,48.968316|59.866003,51.05453|54.273224,41.052502|50.446587,28.729963|33.373895,53.841147|33.521074,62.088353");
+	})
+		
+	
+	 /* $("#pikame").on("swipeleft",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=-720;
+		    if((0-l)+720>parseInt($(this).css("width"))){
+		    	l=0-(parseInt($(this).css("width"))-720);
+		    }
+		    $(this).animate({"left":l+"px"});
+		  }); 
+	 
+	 $("#pikame").on("swiperight",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=720;
+		    if(l>0){
+		    	l=0;
+		    }
+		    $(this).animate({"left":l+"px"});
+		  });  */
+	
+		
+		$("#allmap").click(function(){
+			//alert("全屏地图");
+			window.maplistner.openMap($("#dingwei").val());
+		});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+function initialize() {
+    //地图
+	var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+	var point = new BMap.Point(74.404, 53.915);
+	map.centerAndZoom(point, 4);
+	map.enableScrollWheelZoom();  
+
+	var erlalo = $("#dingwei").val();
+	var erval = erlalo.split("|");
+	var ischina = true;
+
+	for (var i = 0; i < erval.length; i ++) {
+		var jing = erval[i].split(",")[0];
+		var weid = erval[i].split(",")[1];
+		
+		if(jing>=73.33 && jing<=135.05 && weid>=3.51 && weid<= 53.33){
+			ischina = false;
+		}
+	    var point = new BMap.Point(erval[i].split(",")[0], erval[i].split(",")[1]);
+	    addMarker(point);
+	}
+
+	if(ischina){
+		setTimeout(function(){
+			map.setCenter(new BMap.Point(0, 20));  
+			map.setZoom(3);    
+		}, 1500);	
+		 	
+	}    
+	
+	function addMarker(point){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	}
+	//地图结束
+}
+
+function loadScript() {
+    var script = document.createElement("script");
+    script.src = "http://api.map.baidu.com/api?v=1.5&ak=D1835706182777b6cf2e0a57846a26e8&callback=initialize";
+    document.body.appendChild(script);
+}
+ 
+window.onload = loadScript;
+
+</script>
+</head>
+<body style="background:url('page/html/34/24.png');margin: 0px;">
+<input type="hidden" value="###dingwei###" id="dingwei" />
+	<table>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<img class="icon" style="margin-left: 20px;" src="page/html/34/name.png" border="0" alt="">
+						</td>
+						<td>
+							<table style="margin-left:100px;">
+								<tr>
+									###pageList###
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;position: relative;top:-10px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<span style="font-size: 35px;margin-left: 20px;">###name###</span>
+				###audioBtn###
+				<div id="music" style="display: none;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td  style="vertical-align:top;">
+				<table cellspacing="10px">
+						<tr>
+							<td >
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<div class="pikachoose">
+															<div class="pika-stage" style="height: 330px;">
+																<img class="b" src="" alt="" title="" style="left: 0px; display: inline;">
+															</div>
+															<div class=" jcarousel-skin-pika">
+																<div class="jcarousel-container jcarousel-container-horizontal" style="position: relative; display: block;">
+																	<div class="jcarousel-clip jcarousel-clip-horizontal" style="position: relative;">
+																		<ul id="pikame" class="pika-thumbs jcarousel-list jcarousel-list-horizontal" style="overflow: hidden; position: relative; top: 0px; margin: 0px; padding: 0px; left: 0px;">
+																			###imgList###
+																		</ul>
+																	</div>
+																	<div class="jcarousel-prev jcarousel-prev-horizontal jcarousel-prev-disabled jcarousel-prev-disabled-horizontal" disabled="disabled" style="display: block;"></div>
+																	<div class="jcarousel-next jcarousel-next-horizontal" style="display: block;"></div>
+																</div>
+															</div>
+															<div class="pika-tooltip" style="display: none; opacity: 0.01;"></div>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td  style="vertical-align:top;">
+								<table >
+										
+										<tr>
+											<td>
+												<table>
+														<tr>
+															<td>
+																<div id="allmap" style="width:265px; height:218px;">
+																地图加载中
+																</div>
+															</td>
+																
+														</tr>
+														<tr>
+															<td >
+																<div style="width:265px; height:218px;overflow-y:auto;overflow-x:hidden;font-size: 14px;  ">
+																	<table border="1" width="100%" cellspacing="0" cellpadding="0" style="line-height: 30px;table-layout: fixed;word-wrap:break-word;">
+																		###infoTable###
+																		
+																	</table>
+																</div>
+														   </td>									
+													    </tr>
+												</table>
+										   </td>									
+									    </tr>
+								</table>
+						   </td>
+						
+						</tr>
+					</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			###content###
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/1368269094890_middle.gif");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

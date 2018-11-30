@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="sys_team_user_mapper">
+	<!--
+	   AREA_ID              bigint not null,
+	   AREA_NAME        varchar(200),
+	   state	0申请、1正式、2所有者
+	   level	当前用户是否是所有者
+	        注：xxxx系统说明，因角色暂无停用一条件，暂时性将角色状态(ROLE_STATUS)字段关闭。    2010-9-16  成生记录
+	-->
+	<resultMap id="convertResultRole" type="result">
+		<result property="userID" column="userid" />
+		<result property="teamID" column="teamid" />
+		<result property="tUserName" column="user_name" />
+		<result property="tUserType" column="user_type" />
+		<result property="tLevel" column="level" />
+		<result property="uState" column="memState" />
+		<result property="userImg" column="user_img" />
+	</resultMap>
+	<select id="select_by_userid" resultMap="convertResultRole" parameterType="param">
+		select * from space_info where user_id=${ID}
+	 </select>
+	<select id="select_all" resultMap="convertResultRole" parameterType="param">
+		select * from space_info 
+	 </select>
+	 <select id="select_page" resultMap="convertResultRole" parameterType="param">
+		select stu.userid,su.user_name,ui.user_img,su.user_type,stu.memState,(select count(teamid) from sys_team st where st.creater=${s_userID} and st.teamid=${tID} ) as level from sys_team_user_mapper stu,sys_user su,sys_user_info ui 
+		where stu.userid=su.user_id 
+		and su.user_id = ui.user_id
+		and stu.teamid=${tID} 
+		<if test=" uState!= null and uState != ''">and memState != ${uState}</if>
+		ORDER BY stu.time desc
+		limit ${start},${offset}
+	 </select>
+	 
+	 <select id="select_page_count" resultMap="convertResultRole" parameterType="param">
+		select count(userid) from sys_team_user_mapper stu,sys_user su where stu.userid=su.user_id and stu.teamid=${tID}
+	 </select>
+	 <select id="select_school_count" resultMap="convertResultRole" parameterType="param">
+		select count(user_id) from space_info where user_id in (${userID})
+	 </select>
+	 <!-- 
+	 <insert id="addBlog" parameterType="Blog" > 
+	 	selectKey keyProperty="blogid" resultType="int" order="BEFORE"> 
+	 		select seq_order.nextval() from dual </selectKey> 
+	 	insert into Blog
+	 		(author,subject,content, publishTime,blogid)
+	    values
+	    	(#{author}#,#{subject}#,#{content}#,#{publishTime}#,#{blogid}) 
+	 </insert>
+	  -->
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_team_user_mapper (teamid,memState,userid,time)
+		values (${tID},${uState},${uID},now())
+	 </insert>
+	 
+	 <insert id="insertApply" parameterType="java.util.HashMap">
+	 	insert into sys_team_user_mapper (teamid,memState,userid,time)
+		values (${tID},0,${uID},now())
+	 </insert>
+
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_team_user_mapper
+		<set>
+		<trim prefixOverrides=",">		
+			,time = now()
+			<if test=" uState!= null and uState != ''">,memState = ${uState}</if>
+			</trim>
+		</set>
+		 where teamid=${tID} and userid = ${uID}
+	</update>	 
+	
+	<update id="update_HeadImg" parameterType="java.util.HashMap">
+		update space_info
+		<set>
+			<trim prefixOverrides=",">
+				<if test="spaceImg != null">,space_img = #{spaceImg}</if>
+			</trim>
+		</set>
+		where user_id = ${s_userID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_team_user_mapper where teamid in (${tID})
+	</delete> 
+	<delete id="delete_mem" parameterType="java.util.HashMap">
+		delete from sys_team_user_mapper where teamid=${tID} and userid=${uID}
+	</delete> 
+</mapper>

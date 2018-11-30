@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="trdRecord">
+	<!-- 
+	trId                 varchar(50)          not null,
+	   USER_SerialNO        varchar(50)          null,
+	   user_Extphone        varchar(20)          null,
+	   bgnDate              datetime             null,
+	   endDate              datetime             null,
+	   fileAddr             varchar(500)         null,
+	   moduleId             varchar(2)           null,     1 呼入客户模块 2 催缴模块
+	   modifyDate           datetime             null,
+	   modifyBy             varchar(50)          null,
+	 -->
+	<resultMap id="convertResult" type="result">
+		<result property="trId" column="trId" />
+		<result property="userSeriaNO" column="USER_SerialNO" />
+		<result property="userExtPhone" column="user_Extphone" />
+		<result property="callNumber" column="callNumber" />
+		<result property="bgnDate" column="bgnDate" />
+		<result property="endDate" column="endDate" />
+		<result property="fileAddr" column="fileAddr" />
+		<result property="moduleId" column="moduleId" />
+		<result property="modifyDate" column="modifyDate" />
+		<result property="modifyBy" column="modifyBy" />
+	</resultMap>
+
+	<select id="select_all" resultMap="convertResult" parameterType="param">
+		
+		select * from 
+		(select row_number() over(order by connectDate desc) as rowNum, 
+		tr.*,u.USER_Name, 
+		CONVERT(varchar,tr.connectDate,120 ) as connectDate1,
+		 CONVERT(varchar,tr.bgnDate,120 ) as bgnDate1, 
+		CONVERT(varchar,tr.endDate,120 ) as endDate1, 
+		datediff(ss,tr.bgnDate,tr.endDate) as timeLength,
+		o.ORG_Name,c.Name,c.pcard1,c.Org 
+		from TRD_TelRecord tr join SYS_User u on tr.USER_SerialNO=u.USER_ID left join sys_organization o 
+		on (cast (o.ORG_ID as varchar)=tr.orgId )
+		left join CTD_CallInfo c on c.infoId= tr.recDealId
+		<where>
+			<if test="s_userLoginAccount!='admin' and s_userExtPhone!='0000'">and tr.USER_SerialNO=(select USER_ID from SYS_User where USER_Account='${s_userLoginAccount}')</if>
+			<if test="s_userLoginAccount!='admin' and s_userExtPhone=='0000'">and tr.orgId in (select distinct o.org_id  from sys_organization o,sys_user u
+				where (o.org_id='${s_userOrgID}' or o.org_relation like '%,${s_userOrgID},%') and o.org_id = u.user_orgid )</if>
+			<if test="searchUserExtPhone!=null and searchUserExtPhone!=''"> and tr.user_Extphone like '%'+#{searchUserExtPhone}+'%'</if>
+			<if test="searchCallNumber!=null and searchCallNumber!=''"> and tr.callNumber like '%'+#{searchCallNumber}+'%'</if>
+			<if test="timeStart!=null and timeStart!=''"> and tr.connectDate >= '${timeStart}'</if>
+			<if test="timeEnd!=null and timeEnd!=''"> and '${timeEnd}' >= tr.hungupDate </if>
+			<if test="searchCallerState!=null and searchCallerState!=''"> and tr.callerState like '%'+#{searchCallerState}+'%'</if>
+			<if test="searchPcard1!=null and searchPcard1!=''"> and c.pcard1 like '%'+#{searchPcard1}+'%'</if>
+		</where>
+		)  as TRD_TelRecord
+		where rowNum> ${start} and rowNum<![CDATA[<${offset}]]>
+	 </select>
+	<select id="select_all_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from TRD_TelRecord tr join SYS_User u on tr.USER_SerialNO=u.USER_ID left join sys_organization o 
+		on (cast (o.ORG_ID as varchar)=tr.orgId ) left join CTD_CallInfo c on c.infoId= tr.recDealId
+		<where>
+			<if test="s_userLoginAccount!='admin' and s_userExtPhone!='0000'">and tr.USER_SerialNO=(select USER_ID from SYS_User where USER_Account='${s_userLoginAccount}')</if>
+			<if test="s_userLoginAccount!='admin' and s_userExtPhone=='0000'">and tr.orgId in (select distinct o.org_id  from sys_organization o,sys_user u
+				where (o.org_id='${s_userOrgID}' or o.org_relation like '%,${s_userOrgID},%') and o.org_id = u.user_orgid )</if>
+			<if test="searchUserExtPhone!=null and searchUserExtPhone!=''"> and tr.user_Extphone like '%'+#{searchUserExtPhone}+'%'</if>
+			<if test="searchCallNumber!=null and searchCallNumber!=''"> and tr.callNumber like '%'+#{searchCallNumber}+'%'</if>
+			<if test="timeStart!=null and timeStart!=''"> and tr.connectDate >= '${timeStart}'</if>
+			<if test="timeEnd!=null and timeEnd!=''"> and '${timeEnd}' >= tr.hungupDate </if>
+			<if test="searchCallerState!=null and searchCallerState!=''"> and tr.callerState like '%'+#{searchCallerState}+'%'</if>
+			<if test="searchPcard1!=null and searchPcard1!=''"> and c.pcard1 like '%'+#{searchPcard1}+'%'</if>
+		</where>
+	 </select>
+	 <select id="select_org" resultMap="convertResult" parameterType="param">
+	 	select substring(ORG_Relation,2,len(ORG_Relation)) 
+	 	from sys_organization o,SYS_User u where u.USER_OrgID=o.ORG_ID and u.USER_Account='${s_userLoginAccount}'
+	 </select>
+	 <select id="select_agent_by_id" resultMap="convertResult" parameterType="param">
+	 	select * from TRD_TelRecord where trId=${trId}
+	 </select>	 	 
+	  <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into TRD_TelRecord
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null">trId</if>
+			<if test="userExtPhone!=null">,userExtPhone</if>
+			<if test="callNumber!=null">,callNumber</if>	
+			<if test="bgnDate!=null">,bgnDate</if>
+			<if test="endDate!=null">,endDate</if>
+			<if test="agentPhone!=null">,Agent_Phone</if>
+			<if test="s_userLoginName!=null">,modifyBy</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null">${autoPrimaryKey}</if>
+			<if test="userExtPhone!=null">,${userExtPhone}</if>
+			<if test="callNumber!=null">,${callNumber}</if>				
+ 			<if test="bgnDate!=null">,#{bgnDate}</if>
+			<if test="endDate!=null">,#{endDate}</if>
+			<if test="fileAddr!=null">,#{fileAddr}</if>
+			<if test="s_userLoginName!=null">,getDate()</if>
+			<if test="s_userLoginName!=null">,#{s_userLoginName}</if>
+		</trim>
+	 </insert>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from TRD_TelRecord where trId in (${trId})
+	</delete>
+	
+	<insert id="call_data_save" parameterType="java.util.HashMap">
+		insert into TRD_TelRecord
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null and autoPrimaryKey!=''">,trId</if>
+			<if test="s_userID!=null and s_userID!=''">,USER_SerialNO</if>
+			<if test="s_userExtPhone!=null and s_userExtPhone!=''">,user_Extphone</if>
+			<if test="dataTel!=null and dataTel!=''">,callNumber</if>
+			<if test="dataInComingDate!=null and dataInComingDate!=''">,connectDate</if>
+			<if test="dataInComingDate!=null and dataInComingDate!='' and dataHangUpDate!=null and dataHangUpDate!=''">,hungupDate</if>
+			<if test="dataEstablishDate!=null and dataEstablishDate!=''">,bgnDate</if>
+			<if test="dataEstablishDate!=null and dataEstablishDate!='' and dataEndDate!=null and dataEndDate!=''">,endDate</if>
+			<if test="datafile!=null and datafile!=''">,fileAddr</if>
+			<if test="dataState!=null and dataState!=''">,callState</if>
+			<if test="dataCallerState!=null and dataCallerState!=''">,callerState</if>
+			,dealState
+			<if test="s_userOrgID!=null and s_userOrgID!=''">,orgId</if>
+			<if test="dataRecDealId!=null and dataRecDealId!=''">,recDealId</if>
+			<if test="s_userID!=null and s_userID!=''">,modifyBy</if>
+			<if test="s_userID!=null and s_userID!=''">,modifyDate</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null and autoPrimaryKey!=''">,#{autoPrimaryKey}</if>
+			<if test="s_userID!=null and s_userID!=''">,#{s_userID}</if>
+			<if test="s_userExtPhone!=null and s_userExtPhone!=''">,#{s_userExtPhone}</if>
+			<if test="dataTel!=null and dataTel!=''">,#{dataTel}</if>
+			<if test="dataInComingDate!=null and dataInComingDate!=''">,#{dataInComingDate}</if>
+			<if test="dataInComingDate!=null and dataInComingDate!='' and dataHangUpDate!=null and dataHangUpDate!=''">,#{dataHangUpDate}</if>
+			<if test="dataEstablishDate!=null and dataEstablishDate!=''">,#{dataEstablishDate}</if>
+			<if test="dataEstablishDate!=null and dataEstablishDate!='' and dataEndDate!=null and dataEndDate!=''">,#{dataEndDate}</if>
+			<if test="datafile!=null and datafile!=''">,#{datafile}</if>
+			<if test="dataState!=null and dataState!=''">,#{dataState}</if>
+			<if test="dataCallerState!=null and dataCallerState!=''">,#{dataCallerState}</if>
+			,0
+			<if test="s_userOrgID!=null and s_userOrgID!=''">,#{s_userOrgID}</if>
+			<if test="dataRecDealId!=null and dataRecDealId!=''">,#{dataRecDealId}</if>
+			<if test="s_userID!=null and s_userID!=''">,#{s_userID}</if>
+			<if test="s_userID!=null and s_userID!=''">,getDate()</if>
+		</trim>
+	</insert>
+	
+	<select id="get_tel_record_detail" resultMap="convertResult" parameterType="param">
+	 	select tr.*,u.USER_Name,u.USER_Password,CONVERT(varchar,tr.connectDate,120 ) as connectDate1,
+		CONVERT(varchar,tr.hungupDate,120 ) as hungupDate1,CONVERT(varchar,tr.bgnDate,120 ) as bgnDate1,CONVERT(varchar,tr.modifyDate,120 ) as modifyDate1,
+		CONVERT(varchar,tr.endDate,120 ) as endDate1,datediff(ss,tr.bgnDate,tr.endDate) as cutDate
+		from TRD_TelRecord tr,SYS_User u
+		where tr.USER_SerialNO=u.USER_ID
+		and fileAddr=#{fileAddr}
+	</select>
+	<update id="update" parameterType="java.util.HashMap">
+		update TRD_TelRecord
+		<set>
+			<if test="dealState!=null">dealState = ${dealState}</if>
+		</set>
+		 where trId=${trId}
+	</update> 
+</mapper>

@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+function loadComplete(){
+	
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+	var curWwwPath=window.document.location.href; 
+	var pathName=window.document.location.pathname; 
+	var pos=curWwwPath.indexOf(pathName); 
+	var localhostPaht=curWwwPath.substring(0,pos); 
+	var st=localhostPaht+"/dm/";
+	
+	var ug = navigator.userAgent.toLowerCase();
+	var userAgent = document.getElementById("userAgent");
+	var browserType = "";
+	var ver = "";
+	var IE = ug.match(/msie\s*\d\.\d/);
+	var isIE = check(/msie/);
+	var isPad= (ug.match(/iPad/i)=="ipad");
+	if(isIE) {
+	    $("#music").html('<embed src="" id="mp" style="height:0px;width:0px;" autostart="false" loop="true">');
+	}else{
+	 	$("#music").html('<audio src="" id="mp"></audio>');
+	}
+	    
+	//$("#pikame").PikaChoose({carousel:true});
+	    
+	//初始�?
+	$("#pikame").css({"width":$("#pikame li").length*161+"px"});
+	
+	var clickTag=true;
+	$(".clip img:first").addClass("active");
+	$(".pika-stage img").attr("src",$(".clip img:first").attr("srcs"));
+	
+	
+	$(".clip").each(function(){
+		$(this).find("img").click(function(){
+			//alert($(this).parent().parent().index());
+			$(".pika-stage img").attr("src",$(this).attr("srcs"));
+			$(".clip img").removeClass("active");
+			$(this).addClass("active");
+		});
+	})
+	
+	$(".pika-stage").on("swipeleft",function(){
+		    if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().next().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+		  }); 
+	
+	$(".pika-stage").on("swiperight",function(){
+		 if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().prev().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+	  }); 
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+  	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	$("#jump_map").click(function(){
+		
+		//window.maplistner.openMap($("#point_x").val(),$("#point_y").val());
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+		
+	})
+		
+	
+	 /* $("#pikame").on("swipeleft",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=-720;
+		    if((0-l)+720>parseInt($(this).css("width"))){
+		    	l=0-(parseInt($(this).css("width"))-720);
+		    }
+		    $(this).animate({"left":l+"px"});
+		  }); 
+	 
+	 $("#pikame").on("swiperight",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=720;
+		    if(l>0){
+		    	l=0;
+		    }
+		    $(this).animate({"left":l+"px"});
+		  });  */
+	
+		
+	$("#allmap").click(function(){
+		//alert("全屏地图");
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+	});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+function initialize() {
+    //地图
+	var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+	var point = new BMap.Point(74.404, 53.915);
+	map.centerAndZoom(point, 4);
+	map.enableScrollWheelZoom();  
+
+	var erlalo = $("#dingwei").val();
+	var erval = erlalo.split("|");
+	var ischina = true;
+
+	for (var i = 0; i < erval.length; i ++) {
+		var jing = erval[i].split(",")[0];
+		var weid = erval[i].split(",")[1];
+		
+		if(jing>=73.33 && jing<=135.05 && weid>=3.51 && weid<= 53.33){
+			ischina = false;
+		}
+	    var point = new BMap.Point(erval[i].split(",")[0], erval[i].split(",")[1]);
+	    addMarker(point);
+	}
+
+	if(ischina){
+		setTimeout(function(){
+			map.setCenter(new BMap.Point(0, 20));  
+			map.setZoom(3);    
+		}, 1500);	
+		 	
+	}    
+	
+	function addMarker(point){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	}
+	//地图结束
+}
+
+function loadScript() {
+    var script = document.createElement("script");
+    script.src = "http://api.map.baidu.com/api?v=1.5&ak=D1835706182777b6cf2e0a57846a26e8&callback=initialize";
+    document.body.appendChild(script);
+}
+ 
+window.onload = loadScript;
+
+</script>
+</head>
+<body>
+<input type="hidden" value="" id="dingwei" />
+	<table>
+		
+		<tr>
+			<td>
+			<DIV LANG="zh-CN" TEXT="#000000" LINK="#0000ff" DIR="LTR"><P CLASS="cjk" ALIGN=CENTER STYLE="text-indent: 0.9cm; margin-bottom: 0.37cm;  line-height: 0.9cm; widows: 2; orphans: 2"><FONT FACE="微软雅黑, sans-serif"><FONT SIZE=6 STYLE="font-size: 25pt">三国两晋南北朝</FONT></FONT></P><H1 CLASS="cjk" ALIGN=CENTER STYLE="margin-top: 0cm; margin-bottom: 0cm;  font-weight: normal; line-height: 0.48cm"></H1><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">赤壁之战、司马昭之心、竹林七贤、陈后主亡国&hellip;&hellip;泱泱中华五千年文明，谱写了多少精彩动人的历史故事，造就了多少影响后世的历史人物。《三国两晋南北朝》通过大图美绘的全新形式，讲述了三国两晋南北朝时期近百则鲜活生动的小故事，让孩子充分认识和理解中华民族的发展轨迹和伟大智慧。而丰富的历史常识、翔实的背景资料，使故事性与知识性相辅相成，让孩子真正感受一脉相承的华夏文明！</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">董卓专权</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">王允巧施连环计</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">孙氏兄弟割据江东</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">挟天子以令诸侯</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">官渡之战</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">三顾茅庐</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">郭嘉计击蹋顿</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">火烧赤壁</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">神医华佗</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">张辽威震逍遥津</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">樊城之战</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">关羽败走麦城</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">曹植七步成诗</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">曹丕废汉称帝</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">陆逊火烧连营</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">七擒孟获</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">马谡失街亭</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">诸葛亮命殒五丈原</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">司马懿装病夺兵权</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">司马昭之心，路人皆知</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">竹林七贤</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">邓艾偷渡剑阁</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">乐不思蜀</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">姜维复国计难成</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">羊祜以德服人</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">王溶楼船破东吴</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">洛阳纸贵</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">石崇和王恺斗富</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">白痴皇帝</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">八王之乱</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">刘渊祢王建汉</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">王衍清谈误国</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">王与马，共天下</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">北伐英雄祖逖</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">恒温北伐</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">王猛扪虱谈天下</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">王羲之写字换鹅</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">一代画圣顾恺之</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">陶渊明不为五斗米折腰</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">淝水之战</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">拓硅建魏</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">刘裕智摆却月阵</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">山水诗的鼻祖谢灵运</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">檀道济因功被杀</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">范晔造反</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">宗悫乘风破浪</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">博学多才祖冲之</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">冯太后临朝称制</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">萧道成建南齐</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">江郎才尽</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">范缜反对迷信</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">北魏孝文帝迁都</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">郦道元写《水经注》</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">梁武帝出家</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">羊侃舍子守城</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">北周的奠基人宇文泰</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">高洋建北齐</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">宁为玉碎，不为瓦全</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">北齐名将斛律光</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-top: 0.49cm; margin-bottom: 0.49cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">周武帝统一北方</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">陈后主亡国</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"> </P><P ALIGN=RIGHT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt"><B>摘自</B></FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US"><B>:</B></SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt"><B>百度百科</B></FONT></P></DIV>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/pause.png");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

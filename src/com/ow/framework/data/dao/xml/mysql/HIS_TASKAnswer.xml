@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="tahistask">
+
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="taID" column="TA_ID" />
+		<result property="taContent" column="TA_Content" />								
+		<result property="taCreateTime" column="TA_CreateTime" />							
+		<result property="taUserID" column="TA_UserID" />
+		<result property="taHtaskID" column="TA_HtaskID" />
+		<result property="taIsMeAppend" column="TA_IsMeAppend" />
+		<result property="taParentsID" column="TA_ParentsID" />
+		<result property="taUserAccount" column="TA_UserAccount" />			
+		<result property="taIsNewTeam" column="TA_IsNewTeam" /> 
+		<result property="taIsAnswerOnly" column="TA_ISANWSERONLY" />
+		<result property="taIsAccept" column="TA_IsAccept" />
+		<result property="taHtaskIndex" column="TA_HtaskIndex" />
+		<result property="taHtaskLock" column="TA_HtaskLock" />
+		<result property="taCounts" column="counts" />
+		<result property="taUserName" column="user_name" />
+	</resultMap>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime
+		from his_task_answer tahistask where tahistask.TA_ID = ${taID} order by tahistask.TA_ID
+	</select>
+	
+	<select id="select_by_userid2" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime
+		from his_task_answer tahistask where tahistask.TA_UserID = ${uID} order by tahistask.TA_ID
+	</select>
+	
+	<select id="select_by_userid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime
+		from his_task_answer tahistask where tahistask.TA_UserID = ${s_userID} order by tahistask.TA_ID
+	</select>
+	
+	<select id="select_answer_counts" resultMap="convertResult" parameterType="java.util.HashMap">
+		select hta.ta_userid,count(hta.TA_ID) as counts,su.* from his_task_answer hta,sys_user su  where su.user_id=hta.ta_userid and su.user_type=2 group by  hta.ta_userID  order by counts desc
+	</select>
+	
+	<select id="select_by_team" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime
+		from his_task_answer tahistask where tahistask.TA_UserID in (select userid from sys_team_user_mapper where teamid=${tID}) order by tahistask.TA_CreateTime desc
+	</select>
+	
+	<select id="select_isAccpect" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from his_task_answer tahistask where tahistask.TA_HtaskID = ${htaskID} and tahistask.TA_HtaskIndex = ${htaskSplitIndex} and tahistask.TA_IsAccept = 1
+	</select>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime  from his_task_answer tahistask
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix="">
+				tahistask.TA_UserID = ${s_userID}
+			</trim>
+		</where>
+		ORDER BY tahistask.TA_ID desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(tahistask.TA_ID) from his_task_answer tahistask
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				tahistask.TA_UserID = ${s_userID}
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_by_htaskID_one" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime 
+		from his_task_answer tahistask
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				tahistask.TA_IsNewTeam = 1 and tahistask.TA_HtaskID = ${htaskID} 
+				<if test="htaskSplitIndex != null and htaskSplitIndex != '' ">
+					and TA_HtaskIndex = ${htaskSplitIndex} 
+				</if>
+			</trim>
+		</where>	
+		ORDER BY tahistask.TA_ID
+	</select>
+	
+	<select id="select_by_taHtaskID" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime 
+		from his_task_answer tahistask where tahistask.TA_IsNewTeam != 1 and tahistask.TA_HtaskID = ${htaskID} ORDER BY tahistask.TA_ID 
+	</select>
+	
+	<select id="select_by_taHtaskID_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime 
+		from his_task_answer tahistask 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				tahistask.TA_HtaskID = ${htaskID} and tahistask.TA_ParentsID = 0 AND tahistask.TA_IsAccept != 1 
+				<if test="htaskSplitIndex != null and htaskSplitIndex != '' ">
+					and TA_HtaskIndex = ${htaskSplitIndex} 
+				</if>
+			</trim>
+		</where>		
+		ORDER BY tahistask.TA_UserID = ${s_userID} DESC,tahistask.TA_ID; 
+	</select>
+	
+	<select id="select_by_taHtaskID_all_children" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime 
+		from his_task_answer tahistask 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				tahistask.TA_HtaskID = ${htaskID} and tahistask.TA_ParentsID != 0 AND tahistask.TA_IsAccept != 1
+				<if test="htaskSplitIndex != null and htaskSplitIndex != '' ">
+					and TA_HtaskIndex = ${htaskSplitIndex} 
+				</if>
+			</trim>
+		</where>
+		 ORDER BY tahistask.TA_ID	 
+	</select>
+	
+	<select id="select_accpet_maple" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime 
+		from his_task_answer tahistask 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				tahistask.TA_HtaskID = ${htaskID} AND tahistask.TA_IsAccept = 1 
+				<if test="htaskSplitIndex != null and htaskSplitIndex != '' ">
+					and TA_HtaskIndex = ${htaskSplitIndex} 
+				</if>
+			</trim>
+		</where>
+		ORDER BY tahistask.TA_ID
+		limit 0,1
+	</select>
+	
+	<select id="select_accpet_by_index" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tahistask.TA_ID,tahistask.TA_HtaskLock,tahistask.TA_HtaskIndex,tahistask.TA_ISANWSERONLY,tahistask.TA_UserAccount,tahistask.TA_ParentsID,tahistask.TA_IsNewTeam,tahistask.TA_IsMeAppend,tahistask.TA_HtaskID,tahistask.TA_Content,tahistask.TA_UserID,tahistask.TA_IsAccept,
+		DATE_FORMAT(tahistask.TA_CreateTime,'%Y-%m-%d %H:%i:%s')  TA_CreateTime 
+		from his_task_answer tahistask 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				tahistask.TA_HtaskID = ${htaskID} AND tahistask.TA_IsAccept = 1 
+				<if test="htaskSplitIndex != null and htaskSplitIndex != '' ">
+					and TA_HtaskIndex = ${htaskSplitIndex} 
+				</if>
+			</trim>
+		</where>
+		ORDER BY tahistask.TA_ID
+	</select>
+	
+	<select id="select_countCurrent_by_taParentsID" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT COUNT(*) FROM his_task_answer a WHERE a.TA_ParentsID>0 AND a.TA_HtaskID = ${htaskID}
+	</select>
+	
+	<select id="select_countNum_by_taParentsID" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT COUNT(*) FROM his_task_answer a WHERE a.TA_ParentsID=0 AND a.TA_HtaskID = ${htaskID}
+	</select>
+	
+	<select id="select_countNum_by_taHtaskIndex" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task_answer WHERE TA_HtaskID = ${htaskID} AND TA_HtaskIndex = ${htaskSplitIndex} AND TA_UserID = ${s_userID}
+	</select>
+	
+	<select id="select_IsAccpect_by_taHtaskIndex" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task_answer WHERE TA_HtaskID = ${htaskID} AND TA_HtaskIndex = ${htaskSplitIndex}
+	</select>
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into his_task_answer
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taHtaskID !=null">,TA_HtaskID</if>
+			<if test="taParentsID !=null">,TA_ParentsID</if>
+			<if test="taContent !=null">,TA_Content</if>
+			<if test="taUserID !=null">,TA_UserID</if>
+			<if test="taIsMeAppend !=null">,TA_IsMeAppend</if>
+			,TA_UserAccount
+			<if test="taIsAnswerOnly !=null">,TA_ISANWSERONLY</if>
+			,TA_CreateTime
+			<if test="taHtaskIndex !=null">,TA_HtaskIndex</if>		
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taHtaskID !=null">,#{taHtaskID}</if>
+			<if test="taParentsID !=null">,#{taParentsID}</if>
+			<if test="taContent !=null">,#{taContent}</if>
+			<if test="taUserID !=null">,#{taUserID}</if>
+			<if test="taIsMeAppend !=null">,#{taIsMeAppend}</if>
+			,#{s_userLoginAccount}
+			<if test="taIsAnswerOnly !=null">,#{taIsAnswerOnly}</if>
+			,now()	
+			<if test="taHtaskIndex !=null">,#{taHtaskIndex}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update_content_maple" parameterType="java.util.HashMap">
+		update his_task_answer
+		<set>
+			<trim prefixOverrides=",">
+				<if test="taContent !=null">,TA_Content=#{taContent}</if>
+			</trim>
+		</set>
+		where TA_ID=${taID} and TA_UserID=${taUserID}
+	</update>
+	
+	<update id="update_content" parameterType="java.util.HashMap">
+		update his_task_answer
+		<set>
+			<trim prefixOverrides=",">
+				<if test="taContent !=null">,TA_Content=#{taContent}</if>
+			</trim>
+		</set>
+		where TA_ID=${taID}
+	</update>
+	
+	<update id="update_isNewTeameq0" parameterType="java.util.HashMap">
+		UPDATE his_task_answer a SET a.TA_IsNewTeam = 0 WHERE a.TA_HtaskID = ${taHtaskID}
+	</update>
+	
+	<update id="update_isNewTeameq1" parameterType="java.util.HashMap">
+		update his_task_answer set TA_IsNewTeam = 1 where TA_ID = ${taID}
+	</update>
+	
+	<update id="update_isAccept" parameterType="java.util.HashMap">
+		update his_task_answer
+		<set>
+			<trim prefixOverrides=",">
+				<if test="taIsAccept !=null">,TA_IsAccept=#{taIsAccept}</if>
+			</trim>
+		</set>
+		where TA_ID=${taID}
+	</update>
+	
+	<update id="update_isAccpet" parameterType="java.util.HashMap">
+		update his_task_answer set TA_IsAccept = 1 where TA_ID = #{taID} OR TA_ParentsID = #{taID}
+	</update>
+	
+	<update id="update_isLock" parameterType="java.util.HashMap">
+		update his_task_answer set TA_HtaskLock = 0 where TA_ID = #{taID} OR TA_ParentsID = #{taID}
+	</update>
+	
+</mapper>

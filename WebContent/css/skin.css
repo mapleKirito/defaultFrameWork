@@ -1,0 +1,398 @@
+body{
+	SCROLLBAR-FACE-COLOR: #eeeeee; 
+	SCROLLBAR-HIGHLIGHT-COLOR:#ffffff; 
+	SCROLLBAR-SHADOW-COLOR: #aaaaaa; 
+	SCROLLBAR-3DLIGHT-COLOR: #ffffff; 
+	SCROLLBAR-ARROW-COLOR: #666666; 
+	SCROLLBAR-TRACK-COLOR: #ffffff; 
+	SCROLLBAR-DARKSHADOW-COLOR: #ffffff;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+}
+
+td,th
+{
+	font-size: 12px;
+}
+
+#ladingImag{position: absolute;top: 45%;}
+
+.tableT
+{
+	background-color: #606373;
+	font-size: 12px;
+}
+.tableTleft
+{
+	background-color: #606373;
+	height: 30px;
+	width: 12px;
+}
+.tableTcenter
+{
+	background-color: #606373;
+	font-size: 12px;
+}
+.tableTright
+{
+	background-color: #606373;
+	height: 30px;
+	width: 16px;
+}
+
+.tableC
+{
+	font-size: 12px;
+}
+.tableCleft
+{
+	background-color: #606373;
+	width: 8px;
+}
+.tableCcenter
+{
+	background-color: #e8e8e8;
+	font-size: 12px;
+}
+.tableCright
+{
+	background-color: #606373;
+	width: 8px;
+}
+.tableF
+{
+	background-color: #606373;
+}
+.tableFleft
+{
+	background-color: #606373;
+	width: 8px;
+}
+.tableFcenter
+{
+	background-color: #606373;
+}
+.tableFright
+{
+	background-color: #606373;
+	width: 8px;
+}
+.tableTBig{
+	font-size: 12px;
+	font-weight: normal;
+	text-indent: 5px;
+	color: #ffffff;
+}
+
+
+#container tr td{color: #606373;}
+table tr td img{cursor: pointer;}
+#container tr td img,#container tr td span{vertical-align: middle;}
+#jq_screen_operate tr td input{border-color: rgb(200, 200, 198);color:rgb(96, 99, 115);cursor: pointer;}
+.labelonLeft{font-size:12px;background:url(../images/label/onleft.jpg) no-repeat;width:6px;height:21px;}
+.labelonBg{font-size:12px;color:#fffff7;background:url(../images/label/onbg.jpg);height:21px;padding-left:11px;padding-right:11px;}
+.labelonRight{font-size:12px;background:url(../images/label/onright.jpg) no-repeat;width:6px;height:21px;}
+.labelonBgA{color:#F7F7FF;}
+
+.labeloutLeft{font-size:12px;background:url(../images/label/outleft.jpg) no-repeat bottom 0px;width:6px;height:19px;}
+.labeloutBg{font-size:12px;background:url(../images/label/outbg.jpg) repeat-x bottom 0px;height:19px;margin-bottom:0px;color:#52759C;padding-left:11px;padding-right:11px;}
+.labeloutRight{font-size:12px;background:url(../images/label/outright.jpg) no-repeat bottom 0px;width:6px;height:19px;}
+.labeloutBgA{color:#52759C;}
+
+.gridTable{table-layout: fixed;   } 
+.gridTable tr td span a img,.gridTable tr td span a span{vertical-align: middle;margin: 0;}
+.gridTable #checkboxAll input,.gridTable #checkboxAll span{vertical-align:middle;margin:0;}
+
+.SkyTableLine tr td{padding-right: 10px;}
+.SkyTableLine tr td a span{color: #000000;}
+input.submit
+{
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT-SIZE: 12px; BACKGROUND-IMAGE: url(../images/default/bgbtn2_0.gif); BORDER-LEFT: medium none; WIDTH: 40px; CURSOR: hand; BORDER-BOTTOM: medium none; FONT-FAMILY: "??"; HEIGHT: 20px
+}
+
+.jq_screen_closeBtn{
+	font-size: 12px;
+	color: #1065AD;
+	background-image: url(../images/default/btnSave.jpg);
+	filter:alpha(opacity=100);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 22px;
+	width: 50px;
+	border: 0px none;
+}
+
+input.button
+{
+	BORDER-RIGHT: medium none;
+	BORDER-TOP: medium none;
+	FONT-SIZE: 12px;
+	
+	BORDER-LEFT: medium none;
+	WIDTH: 40px;
+	CURSOR: hand;
+	BORDER-BOTTOM: medium none;
+	FONT-FAMILY: "??";
+	HEIGHT: 20px
+}
+SELECT {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 12px; BORDER-LEFT: #000000 1px solid; COLOR: #000000; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #f4f4f4
+}
+asp:unknown {
+	BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; COLOR: #000000; FONT-FAMILY: ??; BACKGROUND-COLOR: #e8e8e8; BORDER-RIGHT-WIDTH: 1px
+}
+TEXTAREA {
+	BORDER-TOP-WIDTH: 1px; SCROLLBAR-FACE-COLOR: #cccccc; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; SCROLLBAR-HIGHLIGHT-COLOR: #f5f9ff; SCROLLBAR-SHADOW-COLOR: #828282; SCROLLBAR-3DLIGHT-COLOR: #000000; SCROLLBAR-ARROW-COLOR: #797979; SCROLLBAR-TRACK-COLOR: #cccccc; SCROLLBAR-DARKSHADOW-COLOR: #000000; BACKGROUND-COLOR: #f4f4f4; BORDER-RIGHT-WIDTH: 1px
+}
+INPUT2 {
+	BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; COLOR: #000000; FONT-FAMILY: ??; BACKGROUND-COLOR: #e8e8e8; BORDER-RIGHT-WIDTH: 1px
+}
+INPUT,button {
+	FONT-SIZE: 12px;
+	COLOR: #000000;
+  	
+	height: 20px;
+	border: 1px solid #C8C8C6;
+}
+/*----------------------------------------------------------------------------*/
+/*濠电姰鍨奸崺鏍偋閻樿纾块悗闈涙啞閸嬫﹢鏌曟繝蹇擃湅濠㈣鍔欓幃瑙勬媴閻熸壆顦村銈嗘惈閹凤拷--------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+.SkyButtonBlur
+{
+	font-size: 12px;
+	color: #1065AD;
+	background-image: url(../images/default/btnSave.jpg);
+	filter:alpha(opacity=100);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 22px;
+	width: 50px;
+	border: 0px none;
+	cursor: pointer;
+}
+.SkyButtonFocus
+{
+	font-size: 12px;
+	color: #000000;
+	background-image: url(../images/default/btnSave.jpg);
+	filter:alpha(opacity=100);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 22px;
+	width: 50px;
+	border: 0px none;
+	font-weight: normal;
+}
+/*----------------------------------------------------------------------------*/
+/*濠电姰鍨奸崺鏍偋閻樿纾块悗闈涙啞閸嬫﹢鏌曟繝蹇擃湅濠㈣鍔欓幃瑙勬媴閻熸壆顦村銈嗘惈閹风兘姊洪崷顓х劸妞ぱ傜窔楠炴劙骞庨挊澶岊樅闂佺粯顭囩划顖毿掗幇鐗堢厸鐎广儱鎳庡Σ鑽ょ磼閹插瀚�--------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+.SkyButtonBlurLong
+{
+	font-size: 12px;
+	color: #1065AD;
+	background-image: url(../images/default/btnSave.jpg);
+	filter:alpha(opacity=100);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 22px;
+	width: 75px;
+	border: 0px none;
+}
+.SkyButtonFocusLong
+{
+	font-size: 12px;
+	color: #000000;
+	background-image: url(../images/default/btnSave.jpg);
+	filter:alpha(opacity=100);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 22px;
+	width: 75px;
+	border: 0px none;
+	font-weight: normal;
+}
+/*----------------------------------------------------------------------------*/
+/*濠电姰鍨奸崺鏍偋閻樿纾块悗闈涙啞閸嬫﹢鏌曟繝蹇擃湅濠㈣鍔欓幃瑙勬媴閻熸壆顦村銈嗘惈閹凤拷--------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+.Wtablemain{ width:100%;}
+.WtableNav{color: #03515d;font-size: 12px;}
+.WtableTBig{font-size: 12px; font-weight: bold;text-indent: 5px;}
+.Wtablenormal{font-size: 12px;text-indent: 5px;}
+.WtableT
+{
+	background-image: url(../images/default/tab/tab_05.gif);
+	background-color:#FFFFFF;
+	font-size: 12px;
+}
+.WtableTleft
+{
+	background-image: url(../images/default/tab/tab_03T.gif);
+	height: 30px;
+	width: 12px;
+}
+.WtableTcenter
+{
+	background-image: url(../images/default/tab/tab_05.gif);
+	background-color:#FFFFFF;
+	font-size: 12px;
+}
+.WtableTright
+{
+	background-image: url(../images/default/tab/tab_07T.gif);
+	height: 30px;
+	width: 16px;
+}
+.WtableF
+{
+	background-image: url(../images/default/tab/tab_19.gif);
+	height: 35px;
+}
+.WtableFleft
+{
+	background-image: url(../images/default/tab/tab_18.gif);
+	height: 35px;
+	width: 12px;
+}
+.WtableFcenter
+{
+	background-image: url(../images/default/tab/tab_19.gif);
+	height: 35px;
+}
+.WtableFright
+{
+	background-image: url(../images/default/tab/tab_20.gif);
+	height: 35px;
+	width: 16px;
+}
+/*----------------------------------------------------------------------------*/
+
+.tablemain{ width:100%;}
+.tableNav{color: #03515d;font-size: 12px;}
+.tablenormal{font-size: 12px;text-indent: 5px;}
+.tablenoprinfo{font-size: 12px;text-indent: 5px;}
+
+/*----------------------------------------------------------------------------*/
+/*缂傚倸鍊烽悞锕傚箰鐠囧樊鐒芥い鎰剁稻閸庣喖鏌￠崶銉ョ仼闁告柣鍎甸幃璺衡槈閺嵮冾湬闂佺粯顨滈幗婊堝箯鐎ｎ喖绠查柟浼存涧閹拷-----------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------*/
+/*闁诲孩顔栭崳顖炲箯閻戣В锟藉┑鐘叉搐缁�啴鏌涘☉娆愮稇闁告柣鍎甸幃璺衡槈閺嵮冾湬闂佺粯顨滈幗婊堝箯鐎ｎ喖绠查柟浼存涧閹拷-----------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+.Ntable
+{	
+	border:0px solid #bbbfc2;
+}
+.Ntable tr{border-bottom:0px dotted #bbbfc2;}
+.Ntable .SkyTDLine{border-bottom:0px dotted #bbbfc2;}
+
+
+.NtableT
+{
+	background-image: url(../images/default/tab/bg.gif);
+	height: 20px;
+	font-size: 12px;
+}
+.NtableInfo
+{
+	background-color:#FFFFFF;
+	height: 20px;
+	font-size: 12px;
+}
+/*----------------------------------------------------------------------------*/
+/*闁诲孩顔栭崳顖炲箯閻戣В锟藉┑鐘叉搐缁�啴鏌涘☉娆愮稇闁告柣鍎甸幃璺衡槈閺嵮冾湬闂佺粯顨滈幗婊堝箯鐎ｎ喖绠查柟浼存涧閹拷-----------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*
+	background-image: url(../images/default/line.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+*/
+form{
+	margin:0px;
+}
+.SkyTableLine tr td span,.SkyTableLine tr td input,.SkyTableLine tr td a img{vertical-align: middle;}
+.SkyTDTopLine {
+	background-image: url(../images/default/tab/bg.gif);
+	height: 20px;
+	font-size: 12px;
+}
+.SkyTD3Table{
+	font-size: 12px;
+	width: 100%;
+	background-image: url(../images/default/Menu3.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	height: 28px;
+	background-color: #FFFFFF;
+	text-indent: 40px;
+	font-weight: bold;
+	color: #000000;
+ }
+ .SkyDrpInfo{
+ 	height:12px; width:60px; border:1px solid #999999;
+ }
+ .skyButtonLink{
+	background-color: #EEEEEE;
+	height: 15px;
+	width: 43px;
+	background-image: url(../images/default/Button.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	vertical-align: bottom;
+	color: #000000;	
+}
+.skyLog1{
+	background-image: url(true.jpg);
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+.skyLog0{
+	background-image: url(false.jpg);
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+.zhucebiao{margin-left: 45px;}
+.zhaohuibiao{margin-left: 45px;font-size: 20px;vertical-align: -50px; width: 500px;height: 30px;padding-top: 60px;}
+/*----------------------------------------------------------------------------*/
+/*婵犳鍠楃换鎰緤閸ф鐏虫慨妤嬫嫹缁狅綁鏌″搴″⒕闁归鍏樺娲箰鎼达絾鍣銈嗘穿閹凤拷  ------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+.navPoint { 
+	COLOR: white; CURSOR: hand; FONT-FAMILY: Webdings; FONT-SIZE: 9pt 
+} 
+.SkyUserPrint {
+	border: 1px solid #999999;
+}
+/*----------------------------------------------------------------------------*/
+/*缂傚倸鍊搁悧鍡涒�閻戣棄违濠㈣泛顭崯鍛存煏婢跺牆鍔氱�鐗堟閺屸剝寰勯崱妤�拤闂佺粯顨滃畷顒勵敋閿濆鏅搁柨鐕傛嫹------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+.btnover { font-size:12px;color: blue; height:20px; width:50px; background-color: #CAE4F3; border: #FFFFFF 1px solid; text-align: center;}
+.btnout { font-size:12px;color: blue; height:20px; width:50px; background-color: #CCCCCC; border: #FFFFFF 1px solid; text-align: center;}
+.jumpcnt{ font-size:12px;color: blue; height:18px; width:30px; background-color: #ffffff; border: #CAE4F3 1px solid; text-align: center;}
+.jumpbtn {font-size:12px;color: #006699;border: 1px solid #CCCCCC;height: 18px;}
+.btnover { font-size:12px;color: blue; height:18px; width:50px; background-color: #CAE4F3; border: #FFBDDC 1px solid; text-align: center; vertical-align: top}
+.btnout { font-size:12px;color: blue; height:18px; width:50px; background-color: #CCCCCC; border: #FFBDDC 1px solid; text-align: center; vertical-align: top}
+.listTrOver{ font-size:12px;color: #000000; height:18px; width:50px; background-color: #FFFFFA; border: #FFBDDC 1px solid;}
+#screen__ {DISPLAY: none; Z-INDEX: 9998; BACKGROUND: #575757; FILTER: alpha(Opacity=30); LEFT: 0px; POSITION: absolute; TOP: 0px;opacity:0.30;}
+#message__ {DISPLAY: none; Z-INDEX: 9999; POSITION: absolute}
+#iframeScreen__{position:absolute;z-index:5;height:100%;width:100%;FILTER:alpha(Opacity=30);opacity:0.30;}
+.#mask {visibility: hidden;background-color: #000000;left: 0px;position: absolute;top: 0px;background-image: none;filter:alpha(opacity: 50);}
+.#dialog{visibility: hidden;background-color: #f7fcfe;z-index:100;width:500px;position: absolute;height:235px;}
+.showDiv {border-right: #ffffff 1px solid; border-top: #ffffff 1px solid; background: #ffffff; border-left: #ffffff 1px solid; width: 500px; border-bottom: #ffffff 1px solid; height: 400px;}
+.textArea{overflow:auto;width:600px;}
+.textArea_short{overflow:auto;width:200px;}
+
+#message_only,#message_refer{DISPLAY: none; Z-INDEX: 9999; POSITION: absolute}
+.message_only,.message_refer{border-right: #ffffff 1px solid; border-top: #ffffff 1px solid; background: #ffffff; border-left: #ffffff 1px solid; width: 250px; border-bottom: #ffffff 1px solid; height: 150px;}
+.WtableTBig_close .WtableTBig ._close,.WtableTBig_close .WtableTBig .refer_close{cursor: pointer;}
+span#container_text{line-height: 10px;}
+
+
+
+ul{
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}

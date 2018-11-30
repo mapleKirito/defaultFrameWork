@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+
+
+
+function loadComplete(){
+	
+	var oHight = 480,oWidth=800;
+	
+	init('###model###','###filePath###','###info###');
+	
+	$(".vp").each(function(){
+		$(this).click(function(){
+			var v1=$(this).attr("fpath");
+			var v2=$(this).attr("fmode");
+			var v3=$(this).attr("finfo");
+			$("#imgshow").html("");
+			init(v2,v1,v3);
+		});
+	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	
+	$(".vp").each(function(){
+		$(this).click(function(){
+			var str=$(this).attr("fpath");
+			init(str);
+		});
+	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+
+
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+		
+		
+	$("#allmap").click(function(){
+		//alert("全屏地图");
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+	});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+</script>
+</head>
+<body style="background:url('page/html/34/24.png');margin: 0px;">
+<input type="hidden" value="###dingwei###" id="dingwei" />
+	<table>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<img class="icon" style="margin-left: 20px;" src="page/html/34/name.png" border="0" alt="">
+						</td>
+						<td>
+							<table style="margin-left:100px;">
+								<tr>
+									###pageList###
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;position: relative;top:-10px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<span style="font-size: 35px;margin-left: 20px;">###name###</span>
+				<div id="music" style="display: none;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td  style="vertical-align:top;">
+				<table cellspacing="10px">
+						<tr>
+							<td >
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<div class="rg-image-wrapper" style="text-align: center;width: 800px;">
+															<script type="text/javascript">
+																function init(vModel,vFilePath,vInfo) {
+																	$("#imgshow").html("");
+																	$("#bg").show();
+																	$("#prog").show();
+																	var SCALE = 10;
+																	var oImg = document
+																			.getElementById('img1');
+																	var oTxt = document
+																			.getElementById(
+																					'prog')
+																			.getElementsByTagName(
+																					'span')[0];
+																	var oBar = document
+																			.getElementById('bar');
+																	var aImg = [];
+	
+																	var iImgCount = Count;
+																	var iLoaded = 0;
+																	var iNow = 0;
+																	var i = 0;
+																	var k = 0;
+																	var mode = vModel;
+	
+																	var filefoldpath = vFilePath;
+																	var file = vInfo;
+																	var filearray = file
+																			.split(",");
+																	var _name = filearray[0];
+																	var _suff = filearray[1];
+																	var _count = filearray[2];
+	
+																	var Count = _count;
+	
+																	//加载所有资源
+																	if (mode == '1') {
+																		iImgCount = Count * 2;
+																	} else {
+																		iImgCount = Count
+																	}
+																	for (i = 0; i < Count; i++) {
+																		(function(i) {
+																			var oNewImg = new Image();
+																			oNewImg.onload = function() {
+																				oTxt.innerHTML = oBar.style.width = Math
+																						.ceil(100
+																								* iLoaded
+																								/ iImgCount)
+																						+ '%';
+																				oNewImg.onload = null;
+																				var oImg = document
+																						.createElement('img');
+																				oImg.src = this.src;
+																				oImg.style.display = 'none';
+																				document
+																						.getElementById(
+																								'imgshow')
+																						.appendChild(
+																								oImg);
+																				aImg[i] = oImg;
+																				if (++iLoaded == iImgCount)
+																					onLoad();
+																			};
+																			oNewImg.src = filefoldpath
+																					+ '/'
+																					+ _name
+																					+ '('
+																					+ i
+																					+ ')'
+																					+ _suff;
+																		})(i);
+																	}
+	
+																	if (mode == '1') {
+																		for (k = i; k < iImgCount; k++) {
+																			var j = iImgCount
+																					- k
+																					- 1;
+																			(function(
+																					k) {
+																				var oNewImg = new Image();
+																				oNewImg.onload = function() {
+																					oTxt.innerHTML = oBar.style.width = Math
+																							.ceil(100
+																									* iLoaded
+																									/ iImgCount)
+																							+ '%';
+																					oNewImg.onload = null;
+																					var oImg = document
+																							.createElement('img');
+																					oImg.src = this.src;
+																					oImg.style.display = 'none';
+																					document
+																							.getElementById(
+																									'imgshow')
+																							.appendChild(
+																									oImg);
+																					aImg[k] = oImg;
+																					if (++iLoaded == iImgCount)
+																						onLoad();
+																				};
+	
+																				oNewImg.src = filefoldpath
+																						+ '/'
+																						+ _name
+																						+ '('
+																						+ j
+																						+ ')'
+																						+ _suff;
+																			})(k);
+																		}
+																	}
+																	//效果
+																	function onLoad() {
+																		for (i = 0; i < iImgCount; i++)
+																			if (!aImg[i])
+																				alert('资源加载失败，请刷新重试');
+																		var lastImg = null;
+																		document
+																				.getElementById('prog').style.display = document
+																				.getElementById('bg').style.display = 'none';
+																		//document.body.removeChild(oImg);
+																		var body = document
+																				.getElementById('imgshow');
+																		oImg = null;
+																		var timer = null;
+																		var num = iNow;
+																		var speed = 0;
+	
+																		aImg[0].style.display = 'block';
+																		lastImg = aImg[0];
+																		var picV=document.getElementById('imgshow');
+																		picV.ontouchstart = function(
+																				ev) {
+																			var oEvent = ev;
+																			var startX = oEvent.targetTouches[0].clientX;
+																			var lastX = startX;
+																			var picVi=document.getElementById('imgshow');
+																				picVi.ontouchmove = onMove;
+																				picVi.ontouchend = onUp;
+	
+																			function onMove(
+																					ev) {
+																				var oEvent = ev;
+																				var i = -(oEvent.targetTouches[0].clientX - startX)
+																						/ SCALE;
+	
+																				num = (iNow
+																						+ i + Math
+																						.abs(Math
+																								.floor(i
+																										/ iImgCount))
+																						* iImgCount)
+																						% iImgCount;
+	
+																				if (lastImg != aImg[parseInt(num)]) {
+																					lastImg.style.display = 'none';
+																					aImg[parseInt(num)].style.display = 'block';
+																					lastImg = aImg[parseInt(num)];
+																				}
+	
+																				speed = -(oEvent.targetTouches[0].clientX - lastX)
+																						/ SCALE;
+																				lastX = oEvent.targetTouches[0].clientX;
+	
+																				return false;
+																			}
+	
+																			function onUp() {
+																				this.ontouchmove = null;
+																				this.ontouchend = null;
+	
+																				iNow = num;
+	
+																				startMove();
+																			}
+	
+																			stopMove();
+	
+																			return false;
+																		};
+																		document.onmousedown = function(
+																				ev) {
+																			var oEvent = ev
+																					|| event;
+																			var startX = oEvent.clientX;
+																			var lastX = startX;
+	
+																			if (body.setCapture) {
+																				body.onmousemove = onMove;
+																				body.onmouseup = onUp;
+																			} else {
+																				document.onmousemove = onMove;
+																				document.onmouseup = onUp;
+																			}
+	
+																			function onMove(
+																					ev) {
+																				var oEvent = ev
+																						|| event;
+																				var i = -(oEvent.clientX - startX)
+																						/ SCALE;
+	
+																				num = (iNow
+																						+ i + Math
+																						.abs(Math
+																								.floor(i
+																										/ iImgCount))
+																						* iImgCount)
+																						% iImgCount;
+	
+																				if (lastImg != aImg[parseInt(num)]) {
+																					lastImg.style.display = 'none';
+																					aImg[parseInt(num)].style.display = 'block';
+																					lastImg = aImg[parseInt(num)];
+																				}
+	
+																				speed = -(oEvent.clientX - lastX)
+																						/ SCALE;
+																				lastX = oEvent.clientX;
+	
+																				return false;
+																			}
+	
+																			function onUp() {
+																				this.onmousemove = null;
+																				this.onmouseup = null;
+	
+	
+																				iNow = num;
+	
+																				startMove();
+																			}
+	
+																			stopMove();
+	
+																			return false;
+																		};
+	
+																		function startMove() {
+																			timer = setInterval(
+																					function() {
+																						iNow = (iNow
+																								+ speed + Math
+																								.abs(Math
+																										.floor(i
+																												/ iImgCount))
+																								* iImgCount)
+																								% iImgCount;
+																						lastImg.style.display = 'none';
+																						aImg[parseInt(iNow)].style.display = 'block';
+																						lastImg = aImg[parseInt(iNow)];
+	
+																						speed *= 0.884;
+	
+																						if (Math
+																								.abs(speed) <= 1) {
+																							clearInterval(timer);
+																							speed = 0;
+																						}
+																					},
+																					30);
+																		}
+	
+																		function stopMove() {
+																			clearInterval(timer);
+																		}
+																		var cliheight = $(
+																				"#iframeHeight",
+																				parent.document)
+																				.val();
+																		var cliwidth = document.body.clientWidth;
+																		$(
+																				"#imgshow")
+																				.css(
+																						"height",
+																						cliheight - 30);
+																		$(
+																				"#imgshow img")
+																				.css(
+																						"cursor",
+																						"w-resize")
+																				.css(
+																						"margin",
+																						"0 auto");
+																	}
+	
+																};
+															</script>
+															<div id="bg">
+																<div id="prog" style="margin-top: 20%; color: #000000;">
+																	<h1>
+																		<span
+																			style="font-weight: bold; font-size: 35px; color: #000000;">载入中......0%</span>
+																	</h1>
+																	<div id="bar"></div>
+																</div>
+															</div>
+															<div id="imgshow" style="vertical-align: middle;"></div>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td  style="vertical-align:top;">
+								<table >
+										
+										<tr>
+											<td>
+												<table>
+														<tr>
+															<td>
+																<div id="allmap" style="width:265px; height:218px;">
+																列表
+																</div>
+															</td>
+																
+														</tr>
+														<tr>
+															<td >
+																<div style="width:265px; height:218px;overflow-y:auto;overflow-x:hidden;font-size: 14px;  ">
+																	<table border="1" width="100%" cellspacing="0" cellpadding="0" style="line-height: 30px;table-layout: fixed;word-wrap:break-word;">
+																		###infoTable###
+																		
+																	</table>
+																</div>
+														   </td>									
+													    </tr>
+												</table>
+										   </td>									
+									    </tr>
+								</table>
+						   </td>
+						
+						</tr>
+					</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			###content###
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/1368269094890_middle.gif");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

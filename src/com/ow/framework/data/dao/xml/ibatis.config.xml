@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc.properties"></properties>
+	<typeAliases >
+		<typeAlias type="java.util.HashMap" alias="param"/>
+		<typeAlias type="java.util.HashMap" alias="result" />
+	</typeAliases>
+	<environments default="development">
+		<environment id="MYSQL_datasource" >
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driverClassName}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+				<property name="poolMaximumActiveConnections" value="30" />
+			</dataSource>
+		</environment>		
+	</environments>
+	<mappers>
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_User.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Role.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Permission.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_OperateLog.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Organization.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_RolePermissionMapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_UserOrganizationMapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_UserRoleMapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_DictionaryType.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Dictionary.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Param.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/BSMS_Category.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Area.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_ExhibitionRoom.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Favorite.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/BSMS_FavoriteResMapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/STD_Task.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/STD_TaskInfo.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/STD_TaskInfoScore.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/STD_UserTaskAlertMapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_TaskOrganizationMapper.xml" />		
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_ObservationRoom.xml" />
+	    <mapper resource="com/ow/framework/data/dao/xml/mysql/RES_XiaoshiguanRoom.xml" />
+		
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_LaboratoryRoom.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_ProjectionRoom.xml" />
+		<!-- <mapper resource="com/ow/framework/data/dao/xml/mysql/RES_ExpandRoom.xml" /> -->
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_GradeRelationship.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Resource.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Refersouce.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Recommen.xml" /> 
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Relate.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Relate_About.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/Task_Finshed.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_SerialNumber.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Settings.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_News_News.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_News_Bigclass.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Review.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_AreaDistrir.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_User_Info.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_Table.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_History.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/User_Attention.xml" />
+		
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_TestPaperInfo.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_TestInfo.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/BSMS_CateScience.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/HIS_TASK.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/HIS_TASKAnswer.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Team.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Team_User_Mapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/HIS_TaskAnswerMapper.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_Article.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_TestInfoCount.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/SYS_MyGallery.xml" />
+		<mapper resource="com/ow/framework/data/dao/xml/mysql/RES_LovecountryRoom.xml" />
+
+	</mappers>
+</configuration>

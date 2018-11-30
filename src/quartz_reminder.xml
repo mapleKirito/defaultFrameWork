@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<quartz xmlns="http://quartznet.sourceforge.net/JobSchedulingData" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   version="1.0" 
+   overwrite-existing-jobs="true"> 
+<!-- 
+	<job>
+		<job-detail>
+			<name>CreateLog</name>
+			<group>log</group>
+			<job-class>com.ow.module.quartz.PointQuartz</job-class>
+		</job-detail>
+		<trigger>
+			<cron>
+				<name>logJOb</name>
+				<group>log</group>
+				<job-name>CreateLog</job-name>
+				<job-group>log</job-group>
+				<cron-expression>* * 1 * * ?</cron-expression>
+			</cron>
+		</trigger>
+	</job>
+	-->
+</quartz>

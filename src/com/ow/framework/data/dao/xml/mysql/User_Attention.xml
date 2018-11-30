@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="user_attention">
+	<!--
+	   AREA_ID              bigint not null,
+	   AREA_NAME        varchar(200),
+	        注：xxxx系统说明，因角色暂无停用一条件，暂时性将角色状态(ROLE_STATUS)字段关闭。    2010-9-16  成生记录
+	-->
+	<resultMap id="convertResultRole" type="result">
+		<result property="userID" column="user_id" />
+		<result property="targetID" column="target_id" />
+		<result property="userType" column="USER_Type" />
+		<result property="userName" column="USER_Name" />
+		<result property="wealth" column="wealth" />
+		<result property="userImg" column="user_img" />
+		<result property="qq" column="qq" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResultRole" parameterType="param">
+		select ua.*,us.*,ui.* from user_attention ua,sys_user us,sys_user_info ui 
+			where us.USER_ID=ua.target_id and us.USER_id = ui.user_id
+			<if test="userID != null and userID != ''">
+					and ua.user_id = ${userID}
+				</if>
+		limit ${start},${offset}
+	 </select>
+	 <select id="select_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(ua.user_id) from user_attention ua,sys_user us,sys_user_info ui 
+			where us.USER_ID=ua.target_id and us.USER_id = ui.user_id
+			<if test="userID != null and userID != ''">
+					and ua.user_id = ${userID}
+				</if>
+	 </select>
+	<select id="select_by_account" resultMap="convertResultRole" parameterType="param">
+		select ua.*,us.*,ui.* from user_attention ua,sys_user us,sys_user_info ui 
+			where ua.user_id=${s_userID} and us.USER_ID=ua.target_id and us.USER_id = ui.user_id
+		limit ${start},${offset}
+	 </select>
+	 <select id="select_by_account_count" resultType="java.lang.Integer" parameterType="param">
+		select count(ua.user_id) from user_attention ua,sys_user us,sys_user_info ui 
+			where ua.user_id=${s_userID} and us.USER_ID=ua.target_id and us.USER_id = ui.user_id
+	 </select>
+	 <select id="select_by_account_beAttention" resultMap="convertResultRole" parameterType="param">
+		select ua.*,us.*,ui.* from user_attention ua,sys_user us,sys_user_info ui 
+			where ua.target_id=${s_userID} and us.USER_ID=ua.user_id and us.USER_id = ui.user_id
+		limit ${start},${offset}
+	 </select>
+	 <select id="select_by_account_beAttention_count" resultType="java.lang.Integer" parameterType="param">
+		select count(ua.user_id) from user_attention ua,sys_user us,sys_user_info ui 
+			where ua.target_id=${s_userID} and us.USER_ID=ua.user_id and us.USER_id = ui.user_id
+	 </select>
+	 <select id="select_by_userid" resultMap="convertResultRole" parameterType="param">
+		select ua.*,us.* from user_attention ua,sys_user us where ua.user_id=${s_userID} and ua.target_id=${userID} and us.USER_ID=ua.target_id
+	 </select>
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	replace into user_attention
+		values (#{userID},#{targetID})	
+	 </insert>
+	
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from user_attention where user_id = ${userID} and target_id=${targetID}
+	</delete> 
+</mapper>

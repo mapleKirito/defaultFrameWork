@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<script type="text/javascript" src="page/html/pageUnit/lib/jquery-1.9.1.min.js"></script>
+ <style type="text/css">
+li{width: 154px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+<script type="text/javascript">
+$(function(){
+	$(".vp").each(function(){
+		$(this).click(function(){
+			var str=$(this).attr("srcs");
+			sVideo(str);
+		});
+	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+})
+</script>
+</head>
+<body style="background:url('page/html/34/24.png');margin: 0px;">
+	<table style="width: 1024px;">
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<img class="icon" style="margin-left: 20px;" src="page/html/34/name.png" border="0" alt="">
+						</td>
+						<td>
+							<table style="margin-left:100px;">
+								<tr>
+									###pageList###
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;position: relative;top:-10px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<span style="font-size: 35px;margin-left: 20px;">###name###</span>
+			</td>
+		</tr>
+		<tr>
+			<td  style="vertical-align:top;">
+				<table cellspacing="10px">
+						<tr>
+							<td >
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<div>
+														<div id="video" style="position:relative;z-index: 100;width:800px;height:480px;float: left;"><div id="a1"></div></div>
+
+<script type="text/javascript" src="ckplayer/ckplayer.js" charset="utf-8"></script>
+<script type="text/javascript">
+ document.getElementById("video").onClick=function(){
+       var video = document.getElementById("ckplayer_a1");
+       var button = document.getElementById("video");
+       if (video.paused) {
+          video.play();
+          button.css({"background":"red"});
+       } else {
+          video.pause();
+          button.css({"background":"green"});
+       }
+    };
+function checkKey() {        
+        var k = window.event.keyCode;           
+        if (window.event.ctrlKey && k == 87)
+            window.event.returnValue =  false;        
+    }     
+document.onkeydown = checkKey;  
+
+var nowvolume = 80; 
+var flashvars={
+		f:"###video###",
+		c:0,
+		p:0,
+		b:0
+		};
+var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};
+var deailimghe = document.body.clientHeight;
+var deailimgwidth = document.body.clientWidth;
+CKobject.embedSWF('ckplayer/ckplayer.swf','a1','ckplayer_a1',800,480,flashvars,params);
+
+	
+	/* var video=['###video###->video/mp4'];
+	var support=['iPad','iPhone','ios','android+false','msie10+false','webKit'];
+	CKobject.embedHTML5('video','ckplayer_a1',800,480,video,flashvars,support);  */ 
+	
+	function sVideo(vp) {
+        var myPlayer=document.getElementById("ckplayer_a1");
+		if(myPlayer.nodeName=="VIDEO"){
+		   var video_src=document.getElementById("video_src");
+  		   video_src.src=vp;
+ 		   myPlayer.load();
+		}else{
+			//alert(CKobject.getObjectById('ckplayer_a1').outerHTML);
+		   CKobject.getObjectById('ckplayer_a1').ckplayer_newaddress('{f->'+"../"+vp+'}');
+		}
+	}
+</script>	
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td  style="vertical-align:top;">
+								<table >
+										
+										<tr>
+											<td>
+												<ul style="width:171px;height: 500px;overflow: auto;padding: 0px; ">
+												###videoList###
+												</ul>
+										   </td>									
+									    </tr>
+								</table>
+						   </td>
+						
+						</tr>
+					</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="user">
+	<!--
+		USER_ID int(11) (NULL) NO PRI (NULL) select,insert,update,references 用户随机编号：系统生成
+		 USER_OrgID int(11) (NULL) YES (NULL) select,insert,update,references 父机构ID：机构树状结构父节点标识 
+		 USER_Account varchar(50) utf8_bin YES UNI (NULL) select,insert,update,references 用户登录ID：用户登录系统的标识，一般是英文字符或者数字。 
+		 USER_Name varchar(100) utf8_bin YES (NULL) select,insert,update,references 用户名称：登录系统的用户的姓名。 
+		 USER_Type smallint(6) (NULL) YES (NULL) select,insert,update,references  0.超级管理员 1.其他管理员 
+		 USER_Password varchar(50) utf8_bin YES (NULL) select,insert,update,references 用户密码：用户登录系统的验证密码。 
+		 USER_Gender smallint(6) (NULL) YES (NULL) select,insert,update,references  用户性别 
+		 USER_MobilePhone varchar(20) utf8_bin YES (NULL) select,insert,update,references 用户移动电话：用户移动电话号码。 
+		 USER_OfficePhone varchar(20) utf8_bin YES (NULL) select,insert,update,references 用户办公电话：用户办公电话号码。 
+		 USER_Email varchar(200) utf8_bin YES (NULL) select,insert,update,references 用户邮件：用户的邮箱地址。 
+		 USER_Desc varchar(200) utf8_bin YES (NULL) select,insert,update,references 用户描述：用户一些相关的备注信息
+		USER_Status smallint(6) (NULL) YES (NULL) select,insert,update,references 用户状态：1.启用 0.禁用 
+		USER_CreateTime datetime (NULL) YES (NULL) select,insert,update,references 创建时间：记录用户的创建时间。 
+	-->
+	<resultMap id="convertResultUser" type="result">
+		<result property="userID" column="USER_ID" />
+		<result property="userAccount" column="USER_Account" />
+		<result property="userName" column="USER_Name" />
+		<result property="userAlert" column="USER_Alert" />
+		<result property="userNo" column="USER_No" />
+		<result property="userType" column="USER_Type" />
+		<result property="userPassword" column="USER_Password" />
+		<result property="userCenterPath" column="USER_CenterPath" />
+		<result property="userGender" column="USER_Gender" />
+		<result property="userMobilePhone" column="USER_MobilePhone" />
+		<result property="userOfficePhone" column="USER_OfficePhone" />
+		<result property="userEmail" column="USER_Email" />
+		<result property="userDesc" column="USER_Desc" />
+		<result property="userStatus" column="USER_Status" />
+		<result property="userCreateTime" column="USER_CreateTime" />
+		<result property="userCreator" column="USER_Creator" />
+		<result property="userPhone" column="USER_Phone" />
+		<result property="userDicType" column="USER_DicType" />
+		<result property="userAnswer" column="USER_Answer" />
+		<result property="lastLoginTime" column="USER_LastLoginTime" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="count" column="count" />
+		<result property="urmUserID" column="URM_UserID" />
+		<result property="wealth" column="wealth" />
+		<result property="userImg" column="user_img" />
+		<result property="tLevel" column="level" />
+		<result property="qq" column="qq" />
+		<result property="resLike" column="res_like" />
+		<result property="askLike" column="ask_like" />
+		<result property="attention" column="attention" />
+		
+	</resultMap>
+	<resultMap type="result" id="userPer">
+		<result property="userID" column="UUG_UserID" />
+		<result property="perCode" column="RP_PmsID" />
+	</resultMap>
+	<resultMap type="result" id="pageSize">
+		<result property="size" column="size" />
+	</resultMap>
+	<select id="select_login_user" resultMap="convertResultUser" parameterType="param">
+		select us.* from sys_user us
+		<where>
+		<trim prefixOverrides="and"> 
+		<if test="account!=null">
+		and us.USER_Account = #{account}
+		</if>
+		</trim>
+		</where>
+	</select>
+	
+	<select id="select_by_session_account" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.* from sys_user us,sys_user_info ui
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="s_userLoginAccount != null or s_userLoginAccount != ''">
+				and us.USER_Account = #{s_userLoginAccount}
+				</if>
+				and us.USER_id = ui.user_id
+			</trim>
+		</where>
+	</select>	
+	<select id="select_by_userID" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.*,(select count(ua.user_id) from user_attention ua where ua.user_id=${s_userID} and ua.target_id=${userID}) as attention from sys_user us,sys_user_info ui
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="userID != null or userID != ''">
+				and us.USER_id = ${userID}
+				</if>
+				and us.USER_id = ui.user_id
+			</trim>
+		</where>
+	</select>	
+	<select id="select_by_space_account" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.wealth,ui.user_img from sys_user us,sys_user_info ui
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and us.USER_ID = ${userID}
+				and us.USER_id = ui.user_id
+			</trim>
+		</where>
+	</select>	
+	
+	<select id="select_by_account" resultMap="convertResultUser" parameterType="param">
+		select us.* from sys_user us
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="userAccount != null or userAccount != ''">
+				and us.USER_Account = #{userAccount}
+				</if>
+			</trim>
+		</where>
+	</select>	
+	<select id="select_attention_user" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.* from sys_user us,sys_user_info ui
+		where (us.user_type=1 or us.user_type=2) 
+		and us.USER_id = ui.user_id 
+		and us.USER_id != ${s_userID}
+		and us.USER_id not in (select uat.target_id from user_attention uat where uat.user_id =${s_userID})
+		<if test="name != null or name != ''">
+			and us.USER_Name like '%${name}%'
+		</if>
+	</select>	
+	
+	
+	<select id="select_space_user" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.* from sys_user us,sys_user_info ui
+		where (us.user_type=1 or us.user_type=2) and us.USER_id = ui.user_id
+		limit ${start},${offset}
+	</select>	
+	<select id="select_user_wealth" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.* from sys_user us,sys_user_info ui
+		where us.user_type=2 and us.USER_id = ui.user_id
+		ORDER BY ui.wealth desc
+	</select>
+	
+	<select id="select_space_user_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_user us,sys_user_info ui
+		where (us.user_type=1 or us.user_type=2) and us.USER_id = ui.user_id
+	</select>
+	
+	<select id="select_user_count_by_org_id" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_user us,sys_user_organization_mapper uom
+		where  us.USER_ID= uom.USER_ID and uom.ORG_ID in(${s_userOrgID})
+	</select>	
+	
+	
+	<select id="select_user_page" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.user_img,(select URM_UserID from sys_user_role_mapper sur where sur.URM_UserID=us.USER_ID) as URM_UserID from SYS_User us,sys_user_info ui 
+		<where>
+			<trim  prefixOverrides="and"> 
+				<![CDATA[us.USER_Type <> 0]]> and us.USER_Status=1
+				and us.USER_ID = ui.user_id
+				<if test="tID!=null and tID!=''"> 
+					and us.USER_ID not in (select userid from sys_team_user_mapper where teamid=${tID})
+				</if>
+				<if test="name!=null and name!=''"> and us.USER_Name like '%${name}%'</if>
+				<if test="userAccount!=null and userAccount!=''"> 
+					and us.USER_Account like '%${userAccount}%'
+				</if>			
+				<if test="userType !=null and userType !=''"> 
+					and us.USER_Type = ${userType}
+				</if>	
+			</trim>
+		</where>
+		order by us.USER_Type asc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_applyList" resultMap="convertResultUser" parameterType="param">
+		select us.*,ui.user_img from SYS_User us,sys_user_info ui,sys_team_user_mapper stu
+		where stu.teamid=${tID} and stu.memState =0 and us.USER_ID=stu.userid and us.USER_ID = ui.user_id
+	 </select>
+	
+	<select id="select_user_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(us.user_id) from SYS_User us,sys_user_info ui 
+		<where>
+			<trim  prefixOverrides="and"> 
+				<![CDATA[us.USER_Type <> 0]]> and us.USER_Status=1
+				and us.USER_ID = ui.user_id
+				<if test="tID!=null and tID!=''"> 
+					and us.USER_ID not in (select userid from sys_team_user_mapper where teamid=${tID})
+				</if>
+				<if test="name!=null and name!=''"> and us.USER_Name like '%${name}%'</if>
+				<if test="userAccount!=null and userAccount!=''"> 
+					and us.USER_Account like '%${userAccount}%'
+				</if>			
+				<if test="userType !=null and userType !=''"> 
+					and us.USER_Type = ${userType}
+				</if>	
+			</trim>
+		</where>
+		order by us.USER_Type asc
+	</select>
+	
+	<select id="select_user_by_id" resultMap="convertResultUser" parameterType="param">
+		select us.USER_ID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.USER_CreateTime,
+		us.USER_DicType,
+		us.USER_Answer
+		from sys_user us
+		where  us.USER_ID=${userID}
+	</select>
+	 
+	<select id="select_user_org_by_id" resultMap="convertResultUser" parameterType="param">
+		<if test="s_userType == 2">
+		select us.USER_ID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.USER_CreateTime,
+		us.USER_No,
+		us.USER_DicType,
+		us.USER_Answer,
+		org.ORG_ID,
+		org.ORG_Name
+		from sys_user us ,sys_user_organization_mapper uom,sys_organization org
+		where  us.USER_ID=uom.USER_ID and uom.ORG_ID=org.ORG_ID and us.USER_ID=${userID}		
+		</if>
+		<if test="s_userType == 1">
+		select us.USER_ID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.USER_CreateTime,
+		us.USER_No,
+		us.USER_DicType,
+		us.USER_Answer
+		from sys_user us 
+		where us.USER_ID=${userID}
+		</if>	
+		<if test="s_userType == 3">
+		select us.USER_ID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.USER_CreateTime,
+		us.USER_No,
+		us.USER_DicType,
+		us.USER_Answer
+		from sys_user us 
+		where us.USER_ID=${userID}
+		</if>
+		<if test="s_userType == 0">
+		select us.USER_ID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.USER_CreateTime,
+		us.USER_No,
+		us.USER_DicType,
+		us.USER_Answer
+		from sys_user us 
+		where us.USER_ID=${userID}
+		</if>				
+	</select>	 
+	 <select id="select_stu_class_org_by_id" resultMap="convertResultUser" parameterType="param">
+		<if test="s_userType == 3">
+		select org.ORG_Name,us.USER_ID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.USER_CreateTime,
+		us.USER_No,
+		us.USER_DicType,
+		us.USER_Answer
+		from sys_user us ,sys_user_organization_mapper uom,sys_organization org
+		where  us.USER_ID=uom.USER_ID and uom.ORG_ID=org.ORG_ID and us.USER_ID=${userID}	
+		</if>			
+	</select>	 
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_user
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="loginID!=null">,USER_Account</if>
+			<if test="name!=null">,USER_Name</if>
+			<if test="type!=null">,USER_Type</if>
+			<if test="idNo!=null">,USER_No</if>
+			<if test="password!=null">,USER_Password</if>
+			<if test="gender!=null">,USER_Gender</if>
+			<if test="mobilePhone!=null">,USER_MobilePhone</if>
+			<if test="officePhone!=null">,USER_OfficePhone</if>
+			<if test="userAnswer!=null">,USER_Answer</if>
+			<if test="userDicType!=null">,USER_DicType</if>	
+			<if test="email!=null">,USER_Email</if>
+			<if test="description!=null">,USER_Desc</if>
+			
+			,USER_Status,USER_CreateTime
+			<if test="s_userLoginAccount!=null">,USER_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="loginID!=null">,#{loginID}</if>
+			<if test="name!=null">,#{name}</if>
+			<if test="type!=null">,${type}</if>
+			<if test="idNo!=null">,#{idNo}</if>
+			<if test="password!=null">,#{password}</if>
+			<if test="gender!=null">,${gender}</if>
+			<if test="mobilePhone!=null">,#{mobilePhone}</if>
+			<if test="officePhone!=null">,#{officePhone}</if>
+			<if test="userAnswer!=null">,#{userAnswer}</if>
+			<if test="userDicType!=null">,#{userDicType}</if>	
+			<if test="email!=null">,#{email}</if>
+			<if test="description!=null">,#{description}</if>
+			,1,now()
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<insert id="init_insert" parameterType="java.util.HashMap">
+		insert into sys_user
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="userAccount!=null">,USER_Account</if>
+			<if test="userName!=null">,USER_Name</if>
+			
+			<if test="userType!=null">,USER_Type</if>
+			<if test="userPassword!=null">,USER_Password</if>
+			<if test="userGender!=null">,USER_Gender</if>
+			<if test="userMobilePhone!=null">,USER_MobilePhone</if>
+			<if test="userOfficePhone!=null">,USER_OfficePhone</if>
+			<if test="userEmail!=null">,USER_Email</if>
+			<if test="userStatus!=null">,USER_Status</if>
+			,USER_CreateTime
+			<if test="userCreator!=null">,USER_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="userAccount!=null">,#{userAccount}</if>
+			<if test="userName!=null">,#{userName}</if>
+			
+			<if test="userType!=null">,${userType}</if>
+			<if test="userPassword!=null">,#{userPassword}</if>
+			<if test="userGender!=null">,${userGender}</if>
+			<if test="userMobilePhone!=null">,#{userMobilePhone}</if>
+			<if test="userOfficePhone!=null">,#{userOfficePhone}</if>
+			<if test="userEmail!=null">,#{userEmail}</if>
+			<if test="userStatus!=null">,${userStatus}</if>
+			,now()
+			<if test="userCreator!=null">,#{userCreator}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>			
+	</insert>	
+	
+	<update id="init_update" parameterType="java.util.HashMap">
+		update sys_user
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="userName!=null">,USER_Name = #{userName}</if>
+				
+				<if test="userGender!=null">,USER_Gender = #{userGender}</if>
+				<if test="userMobilePhone!=null">,USER_MobilePhone = #{userMobilePhone}</if>
+				<if test="userOfficePhone!=null">,USER_OfficePhone = #{userOfficePhone}</if>
+				<if test="userEmail!=null">,USER_Email = #{userEmail}</if>
+				
+			</trim>
+		</set>
+		 where USER_ID=${userID}
+	</update>
+	<update id="update_lastlogin_time_by_id" parameterType="java.util.HashMap">
+	update sys_user
+	<set>			
+		<trim prefixOverrides=",">		
+			,USER_LastLoginTime = now()
+		</trim>
+	</set>
+	 where USER_ID=${s_userID}
+	</update>
+		
+	<update id="update_cen_by_id" parameterType="java.util.HashMap">
+	update sys_user
+	<set>			
+		<trim prefixOverrides=",">		
+			,USER_CenterPath = #{srOperaPath}
+		</trim>
+	</set>
+	 where USER_ID=${s_userID}
+	</update>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_user
+		<set>			
+			<trim prefixOverrides=",">		
+				<if test="name!=null">,USER_Name = #{name}</if>
+				<if test="userNo!=null">,USER_No = #{userNo}</if>
+				<if test="gender!=null">,USER_Gender = #{gender}</if>
+				<if test="mobilePhone!=null">,USER_MobilePhone = #{mobilePhone}</if>
+				<if test="officePhone!=null">,USER_OfficePhone = #{officePhone}</if>
+				<if test="email!=null">,USER_Email = #{email}</if>
+				<if test="userPhone!=null">,USER_Phone = #{userPhone}</if>
+				<if test="userDicType!=null">,USER_DicType = #{userDicType}</if>
+				<if test="userAnswer!=null">,USER_Answer = #{userAnswer}</if>				
+				<if test="description!=null">,USER_Desc = #{description}</if>
+			</trim>
+		</set>
+		 where USER_ID=${userID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_user where USER_ID in (${userID})
+		</trim>
+	</delete>
+	
+	<update id="password_modify" parameterType="java.util.HashMap">
+		update sys_user
+		<set>			
+			<if test="newPassword!=null">USER_Password = #{newPassword}</if>
+		</set>
+		where USER_ID=${userID}
+	</update>
+		
+	<update id="update_password_by_account" parameterType="java.util.HashMap">
+		update sys_user
+		<set>			
+			<if test="newPassword!=null">USER_Password = #{newPassword}</if>
+		</set>
+		where USER_Account=#{userAccount}
+	</update>		
+		
+	<select id="get_password_by_id" resultMap="convertResultUser"
+		parameterType="param">
+		select USER_Password from sys_user
+		where USER_ID = ${userID}
+	</select>
+	
+	<select id="check_account" resultType="java.lang.Integer"
+		parameterType="param">
+		select count(*) from sys_user
+		where USER_Account = #{loginID}
+	</select>
+	
+	<select id="select_user_by_orgId_page" resultMap="convertResultUser" parameterType="param">
+		select su.USER_ID,su.USER_Account,su.USER_Name,su.USER_Email,su.USER_Gender,su.USER_LastLoginTime as lastLoginTime,so.ORG_Name,so.ORG_ID as orgID from sys_user su join sys_user_organization_mapper s_uom on su.USER_ID=s_uom.USER_ID join sys_organization so on s_uom.ORG_ID=so.ORG_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and su.USER_Type=2 
+				<if test="s_userLoginAccount != null and s_userLoginAccount!= 'admin'">
+					and su.USER_ID in (select uom.USER_ID from sys_user_organization_mapper uom where uom.ORG_ID in (select suom.ORG_ID from sys_user_organization_mapper suom where suom.USER_ID=#{s_userID}))						
+				</if>
+				<if test="userName != null and userName !=''">
+					and su.USER_Name like '%${userName}%'
+				</if>
+				<if test="orgID!=null and orgID!=''">
+					and s_uom.ORG_ID=${orgID}
+				</if>
+			</trim>
+		</where>
+			limit ${start},${offset}		
+	</select>
+	<select id="select_user_by_orgId_page_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) as count from sys_user su join sys_user_organization_mapper s_uom on su.USER_ID=s_uom.USER_ID join sys_organization so on s_uom.ORG_ID=so.ORG_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and su.USER_Type=2 
+				<if test="s_userLoginAccount != null and s_userLoginAccount!= 'admin'">
+					and su.USER_ID in (select uom.USER_ID from sys_user_organization_mapper uom where uom.ORG_ID in (select suom.ORG_ID from sys_user_organization_mapper suom where suom.USER_ID=#{s_userID}))						
+				</if>
+				<if test="userName != null and userName !=''">
+					and su.USER_Name like '%${userName}%'
+				</if>
+				<if test="orgID!=null and orgID!=''">
+					and s_uom.ORG_ID=${orgID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_teacherId_by_studentId" resultMap="convertResultUser" parameterType="param">
+		select su.USER_ID from sys_user su, sys_user_organization_mapper suom
+		 where su.user_id=suom.user_id and suom.org_id=(select suom1.org_id from sys_user_organization_mapper suom1 where suom1.user_id=${s_userID})  and su.user_type=1		
+	</select>
+</mapper>

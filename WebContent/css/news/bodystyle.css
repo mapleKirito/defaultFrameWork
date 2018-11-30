@@ -1,0 +1,72 @@
+/* CSS Document */
+
+
+@charset "UTF-8";
+
+
+select option{color: #262429;}
+input.chinese {color: #262429;}
+.chinese input{color: #262429;}
+.chinese textarea{color: #535353;}
+
+.color1 {background-color:#535353;}
+.color2 {background-color:#3A3A3A;}
+.color3 {background-color:#262429;}
+
+.TLayout{line-height: 35px;border-top:1px solid #B5B5B5;border-left: 1px solid #B5B5B5;border-right:1px solid #B5B5B5;}
+
+/*閹稿鎸崇仦鐐达拷*/
+.button {
+	BORDER-RIGHT: #457FFC 1px ridge;
+	PADDING-RIGHT: 1px;
+	BORDER-TOP: #ffffff 1px ridge;
+	PADDING-LEFT: 1px;
+	FONT-SIZE: 9pt;
+	PADDING-BOTTOM: 1px;
+	BORDER-LEFT: #ffffff 1px ridge;
+	COLOR: #000000;
+	PADDING-TOP: 1px;
+	BORDER-BOTTOM: #457FFC 1px ridge;
+	FONT-FAMILY: "鐎瑰缍�;
+	HEIGHT: 20px;
+	BACKGROUND-COLOR: #f1f1f1;
+	cursor: hand;
+}
+
+/*閺傚洤鐡х仦鐐达拷*/
+.chinese
+{
+    FONT-SIZE: 12px;
+	color:#FFFFFF;
+    FONT-FAMILY: "鐎瑰缍�;
+    
+}
+
+/*閺嶅洭顣界仦鐐达拷*/
+.title {
+	font-size:12pt;
+	font-family: "鐎瑰缍�;
+	color:#FFFFFF;
+	}
+	
+/*閹绘劗銇氭穱鈩冧紖鐎涙ぞ缍嬬仦鐐达拷*/
+.info1
+{ 
+	color:red;
+    font-size:10pt;
+}
+
+/*鐞涖劍鐗哥仦鐐达拷*/
+table { 
+	
+	border-color:#457FFC;
+	border-collapse:collapse;
+	border-top-color:#457FFC;
+	border-right-color:#457FFC;
+	border-left-color:#457FFC;
+	border-bottom-color:#457FFC;
+}
+	
+tr { border-color:#457FFC; }
+td { border-color:#457FFC; }	
+

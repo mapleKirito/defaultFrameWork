@@ -1,0 +1,1505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="exhibition">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="erID" column="ER_ID" />
+		<result property="erCode" column="ER_Code" />
+		<result property="erName" column="ER_Name" />
+		<result property="erChar" column="ER_Char" />
+		<result property="erRecommen" column="ER_Recommen" /> 
+		<result property="erType" column="ER_Type" />
+		<result property="erUpload" column="ER_Upload" />
+		<result property="erAudio" column="ER_Audio" />
+		<result property="erThumbnail" column="ER_Thumbnail" />
+		<result property="erInThum" column="ER_InThum" />
+		<result property="erStoryState" column="ER_StoryState" />
+		<result property="erTotalID" column="ER_TotalID" />
+		<result property="erTotal" column="ER_Total" />
+		<result property="erJieID" column="ER_JieID" />
+		<result property="erJie" column="ER_Jie" />
+		<result property="erChorID" column="ER_ChorID" />
+		<result property="erChor" column="ER_Chor" />
+		<result property="erGangID" column="ER_GangID" />  
+		<result property="erGang" column="ER_Gang" />
+		<result property="erOrderID" column="ER_OrderID" />
+		<result property="erOrder" column="ER_Order" />
+		<result property="erCategory" column="ER_Category" />
+		<result property="erCategoryName" column="ER_CategoryName" />
+		<result property="erGenusID" column="ER_GenusID" />
+		<result property="erGenus" column="ER_Genus" />
+		
+		<result property="erCustom" column="ER_Custom" />
+		<result property="erLatinNameID" column="ER_LatinNameID" />
+		<result property="erLatinName" column="ER_LatinName" />
+		<result property="erBiologicalReserve" column="ER_BiologicalReserve" />
+		<result property="erHunters" column="ER_Hunters" />
+		<result property="erSpecimensNo" column="ER_SpecimensNo" />
+		<result property="erSpecimensDate" column="ER_SpecimensDate" />
+		
+		<result property="erCountry" column="ER_Country" />
+		<result property="erCountryName" column="ER_Country_Name" />
+		<result property="erProvince" column="ER_Province" />
+		<result property="erProvinceName" column="ER_Province_Name" />
+		<result property="erPlaceName" column="ER_PlaceName" />
+		<result property="erCity" column="ER_City" />
+		<result property="erLongitude" column="ER_Longitude" />
+		<result property="erLatitude" column="ER_Latitude" />
+		
+		<result property="erHabitat" column="ER_Habitat" />
+		<result property="erCharacteristics" column="ER_Characteristics" />
+		<result property="erDescription" column="ER_Description" />
+		<result property="erElevation" column="ER_Elevation" />
+		<result property="erIdentifier" column="ER_Identifier" />
+		<result property="erIdentifierDate" column="ER_IdentifierDate" />
+		<result property="erUse" column="ER_Use" />
+		<result property="erRemarks" column="ER_Remarks" />
+		<result property="erContent" column="ER_Content" />
+		<result property="erContentPath" column="ER_ContentPath" />
+		
+		<result property="erIsGrade" column="ER_IsGrade" />
+		<result property="erGrade" column="ER_Grade" />
+		<result property="erContest" column="ER_Contest" />
+
+		<result property="erUserID" column="ER_UserID" />
+		<result property="erUserAccount" column="ER_UserAccount" />
+		<result property="erOperateTime" column="ER_OperateTime" />
+		<result property="erCreateTime" column="ER_CreateTime" />
+		<result property="erCreator" column="ER_Creator" />
+		<result property="erRelLinksState" column="ER_RelLinksState" />
+		<result property="erRelatedLinks" column="ER_RelatedLinks" />
+		
+		<result property="erKeywords" column="ER_Keywords" />
+		<result property="erCountLike" column="ER_CountLike" />
+		<result property="erIsShare" column="ER_IsShare" />
+		<result property="erAbout" column="ER_About" />
+		<result property="erRelation" column="ER_Relation" />
+		
+		
+	</resultMap>
+<!-- 修改 -->
+	<select id="select_by_name" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select
+			DISTINCT ( exhibition.ER_Name )
+		from
+			res_exhibition_room exhibition
+		where
+			exhibition.ER_Name like '${erName}%' or exhibition.ER_Char like '${erName}%'
+	</select>	
+<!-- 修改 -->
+	
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name,exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,exhibition.ER_City,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,exhibition.ER_Relation,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,exhibition.ER_About,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom,
+			exhibition.ER_CreateTime, exhibition.ER_Creator,exhibition.ER_IsGrade,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select exhibition.* from res_exhibition_room exhibition where exhibition.ER_Content!=''
+	</select>
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,exhibition.ER_Relation,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,exhibition.ER_Grade,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, DATE_FORMAT(exhibition.ER_OperateTime,'%Y-%m-%d %H:%i:%s') ER_OperateTime,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName ,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom,
+			a_co.AREA_Name as ER_Country_Name,
+			a_p.AREA_Name as ER_Province_Name,a_ci.AREA_Name as erCityName,
+			(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as  er_Path
+
+		from
+			res_exhibition_room exhibition
+			left join sys_area a_co on a_co.AREA_ID = exhibition.ER_Country
+			left join sys_area a_p on a_p.AREA_ID = exhibition.ER_Province
+			left join sys_area a_ci on a_ci.AREA_ID = exhibition.ER_City
+		where
+			exhibition.ER_Code = '${code}'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate, exhibition.ER_Keywords,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,exhibition.ER_Grade,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, DATE_FORMAT(exhibition.ER_OperateTime,'%Y-%m-%d %H:%i:%s') ER_OperateTime,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName ,exhibition.ER_IsShare ,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom,
+			a_co.AREA_Name as ER_Country_Name,
+			a_p.AREA_Name as ER_Province_Name,a_ci.AREA_Name as erCityName,
+			(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as  er_Path
+
+		from
+			res_exhibition_room exhibition
+			left join sys_area a_co on a_co.AREA_ID = exhibition.ER_Country
+			left join sys_area a_p on a_p.AREA_ID = exhibition.ER_Province
+			left join sys_area a_ci on a_ci.AREA_ID = exhibition.ER_City
+		where
+			exhibition.ER_ID = ${erID}
+	</select>
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,exhibition.ER_City,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, DATE_FORMAT(exhibition.ER_OperateTime,'%Y-%m-%d %H:%i:%s') ER_OperateTime,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName ,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom,
+			a_co.AREA_Name as ER_Country_Name,
+			a_p.AREA_Name as ER_Province_Name,r_r.RE_ID as reRecommendID
+
+		from
+			res_exhibition_room exhibition
+			left join sys_area a_co on a_co.AREA_ID = exhibition.ER_Country
+			left join sys_area a_p on a_p.AREA_ID = exhibition.ER_Province
+			left join res_recommen r_r on r_r.RE_RecommendID = exhibition.ER_ID	
+		where
+			exhibition.ER_ID in (${erID})
+	</select>
+	
+	<select id="select_count_by_category" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_one_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, DATE_FORMAT(exhibition.ER_SpecimensDate,'%Y-%m-%d %H:%i:%s') ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,exhibition.ER_City,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			DATE_FORMAT(exhibition.ER_IdentifierDate,'%Y-%m-%d %H:%i:%s') ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, DATE_FORMAT(exhibition.ER_OperateTime,'%Y-%m-%d %H:%i:%s') ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+		where
+			exhibition.ER_ID = ${erID}
+	</select>
+		
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState,  (select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as path,exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_InThum,
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+					<if test="erName != null and erName != ''">
+				and exhibition.ER_Name like '%${erName}%'
+				</if>
+				<if test="erIsGrade != null ">
+				and exhibition.ER_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '${keyword}%' 
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and exhibition.ER_IsShare = ${IsShare}</if>
+				<if test="erID != null and erID != '' "> exhibition.ER_ID = ${erID}</if>
+				<if test="erCode != null and erCode != '' "> and exhibition.ER_Code = '${erCode}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '${erType}'</if>
+				<if test="erRecommen != null and erRecommen != '' "> and exhibition.ER_Recommen = '${erRecommen}'</if>
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erTotal != null and erTotal != '' "> and exhibition.ER_Total = '${erTotal}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erChor != null and erChor != '' "> and exhibition.ER_Chor = '${erChor}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erOrder != null and erOrder != '' "> and exhibition.ER_Order = '${erOrder}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erGenus != null and erGenus != '' "> and exhibition.ER_Genus = '${erGenus}'</if>
+				<if test="erLatinNameID != null and erLatinNameID != '' "> and exhibition.ER_LatinNameID = '${erLatinNameID}'</if>
+				<if test="erLatinName != null and erLatinName != '' "> and exhibition.ER_LatinName = '${erLatinName}'</if>
+				<if test="erBiologicalReserve != null and erBiologicalReserve != '' "> and exhibition.ER_BiologicalReserve like '${erBiologicalReserve}%'</if>
+				<if test="erHunters != null and erHunters != '' "> and exhibition.ER_Hunters = '${erHunters}'</if>
+				<if test="erSpecimensNo != null and erSpecimensNo != '' "> and exhibition.ER_SpecimensNo = '${erSpecimensNo}'</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != '' "> and exhibition.ER_SpecimensDate = '${erSpecimensDate}'</if>
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+				<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+				<if test="erPlaceName != null and erPlaceName != '' "> and exhibition.ER_PlaceName = '${erPlaceName}'</if>
+				<if test="erLongitude != null and erLongitude != '' "> and exhibition.ER_Longitude = '${erLongitude}'</if>
+				<if test="erLatitude != null and erLatitude != '' "> and exhibition.ER_Latitude = '${erLatitude}'</if>
+				<if test="erHabitat != null and erHabitat != '' "> and exhibition.ER_Habitat = '${erHabitat}'</if>
+				<if test="erCharacteristics != null and erCharacteristics != '' "> and exhibition.ER_Characteristics = '${erCharacteristics}'</if>
+				<if test="erDescription != null and erDescription != '' "> and exhibition.ER_Description = '${erDescription}'</if>
+				<if test="erElevation != null and erElevation != '' "> and exhibition.ER_Elevation = '${erElevation}'</if>
+				<if test="erIdentifier != null and erIdentifier != '' "> and exhibition.ER_Identifier = '${erIdentifier}'</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != '' "> and exhibition.ER_IdentifierDate = '${erIdentifierDate}'</if>
+				<if test="erUse != null and erUse != '' "> and exhibition.ER_Use = '${erUse}'</if>
+				<if test="erRemarks != null and erRemarks != '' "> and exhibition.ER_Remarks = '${erRemarks}'</if>
+				<if test="erThumbnail != null and erThumbnail != '' "> and exhibition.ER_Thumbnail = '${erThumbnail}'</if>
+				<if test="erInThum != null and erInThum != '' "> and exhibition.ER_InThum = '${erInThum}'</if>
+				<if test="erUserID != null and erUserID != '' "> and exhibition.ER_UserID = '${erUserID}'</if>
+				<if test="erUserAccount != null and erUserAccount != '' "> and exhibition.ER_UserAccount = '${erUserAccount}'</if>
+				<if test="erOperateTime != null and erOperateTime != '' "> and exhibition.ER_OperateTime = '${erOperateTime}'</if>
+				<if test="erCreateTime != null and erCreateTime != '' "> and exhibition.ER_CreateTime = '${erCreateTime}'</if>
+				<if test="erCreator != null and erCreator != '' "> and exhibition.ER_Creator = '${erCreator}'</if>
+				<if test="erIsGrade != null and erIsGrade != '' "> and exhibition.ER_IsGrade = '${erIsGrade}'</if>					
+			</trim>
+		</where>
+		ORDER BY exhibition.ER_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(exhibition.ER_ID) from res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erName != null and erName != ''">
+				and exhibition.ER_Name like '%${erName}%'
+				</if>
+				<if test="erIsGrade != null ">
+				and exhibition.ER_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '${keyword}%' 
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and exhibition.ER_IsShare = ${IsShare}</if>
+				<if test="erID != null and erID != '' "> exhibition.ER_ID = ${erID}</if>
+				<if test="erCode != null and erCode != '' "> and exhibition.ER_Code = '${erCode}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '${erType}'</if>
+				<if test="erRecommen != null and erRecommen != '' "> and exhibition.ER_Recommen = '${erRecommen}'</if>
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erTotal != null and erTotal != '' "> and exhibition.ER_Total = '${erTotal}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erChor != null and erChor != '' "> and exhibition.ER_Chor = '${erChor}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erOrder != null and erOrder != '' "> and exhibition.ER_Order = '${erOrder}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erGenus != null and erGenus != '' "> and exhibition.ER_Genus = '${erGenus}'</if>
+				<if test="erLatinNameID != null and erLatinNameID != '' "> and exhibition.ER_LatinNameID = '${erLatinNameID}'</if>
+				<if test="erLatinName != null and erLatinName != '' "> and exhibition.ER_LatinName = '${erLatinName}'</if>
+				<if test="erBiologicalReserve != null and erBiologicalReserve != '' "> and exhibition.ER_BiologicalReserve like '${erBiologicalReserve}%'</if>
+				<if test="erHunters != null and erHunters != '' "> and exhibition.ER_Hunters = '${erHunters}'</if>
+				<if test="erSpecimensNo != null and erSpecimensNo != '' "> and exhibition.ER_SpecimensNo = '${erSpecimensNo}'</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != '' "> and exhibition.ER_SpecimensDate = '${erSpecimensDate}'</if>
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+				<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+				<if test="erPlaceName != null and erPlaceName != '' "> and exhibition.ER_PlaceName = '${erPlaceName}'</if>
+				<if test="erLongitude != null and erLongitude != '' "> and exhibition.ER_Longitude = '${erLongitude}'</if>
+				<if test="erLatitude != null and erLatitude != '' "> and exhibition.ER_Latitude = '${erLatitude}'</if>
+				<if test="erHabitat != null and erHabitat != '' "> and exhibition.ER_Habitat = '${erHabitat}'</if>
+				<if test="erCharacteristics != null and erCharacteristics != '' "> and exhibition.ER_Characteristics = '${erCharacteristics}'</if>
+				<if test="erDescription != null and erDescription != '' "> and exhibition.ER_Description = '${erDescription}'</if>
+				<if test="erElevation != null and erElevation != '' "> and exhibition.ER_Elevation = '${erElevation}'</if>
+				<if test="erIdentifier != null and erIdentifier != '' "> and exhibition.ER_Identifier = '${erIdentifier}'</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != '' "> and exhibition.ER_IdentifierDate = '${erIdentifierDate}'</if>
+				<if test="erUse != null and erUse != '' "> and exhibition.ER_Use = '${erUse}'</if>
+				<if test="erRemarks != null and erRemarks != '' "> and exhibition.ER_Remarks = '${erRemarks}'</if>
+				<if test="erThumbnail != null and erThumbnail != '' "> and exhibition.ER_Thumbnail = '${erThumbnail}'</if>
+				<if test="erInThum != null and erInThum != '' "> and exhibition.ER_InThum = '${erInThum}'</if>
+				<if test="erUserID != null and erUserID != '' "> and exhibition.ER_UserID = '${erUserID}'</if>
+				<if test="erUserAccount != null and erUserAccount != '' "> and exhibition.ER_UserAccount = '${erUserAccount}'</if>
+				<if test="erOperateTime != null and erOperateTime != '' "> and exhibition.ER_OperateTime = '${erOperateTime}'</if>
+				<if test="erCreateTime != null and erCreateTime != '' "> and exhibition.ER_CreateTime = '${erCreateTime}'</if>
+				<if test="erCreator != null and erCreator != '' "> and exhibition.ER_Creator = '${erCreator}'</if>
+				<if test="erIsGrade != null and erIsGrade != '' "> and exhibition.ER_IsGrade = '${erIsGrade}'</if>				
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState,  (select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as erPath,exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_InThum,
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="catePath != null ">
+				and exhibition.ER_GangID in (select tc.CATE_ID from (select c.CATE_ID from res_category c where c.CATE_Path like '${catePath}%') as tc )
+				</if>
+				<if test="erName != null and erName != ''">
+				and exhibition.ER_Name like '%${erName}%'
+				</if>
+				<if test="erIsGrade != null ">
+				and exhibition.ER_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '${keyword}%' 
+				</if>
+				<if test="erID != null and erID != '' "> exhibition.ER_ID = ${erID}</if>
+				<if test="erCode != null and erCode != '' "> and exhibition.ER_Code = '${erCode}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '${erType}'</if>
+				<if test="erRecommen != null and erRecommen != '' "> and exhibition.ER_Recommen = '${erRecommen}'</if>
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erTotal != null and erTotal != '' "> and exhibition.ER_Total = '${erTotal}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erChor != null and erChor != '' "> and exhibition.ER_Chor = '${erChor}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erOrder != null and erOrder != '' "> and exhibition.ER_Order = '${erOrder}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erGenus != null and erGenus != '' "> and exhibition.ER_Genus = '${erGenus}'</if>
+				<if test="erLatinNameID != null and erLatinNameID != '' "> and exhibition.ER_LatinNameID = '${erLatinNameID}'</if>
+				<if test="erLatinName != null and erLatinName != '' "> and exhibition.ER_LatinName = '${erLatinName}'</if>
+				<if test="erBiologicalReserve != null and erBiologicalReserve != '' "> and exhibition.ER_BiologicalReserve like '${erBiologicalReserve}%'</if>
+				<if test="erHunters != null and erHunters != '' "> and exhibition.ER_Hunters = '${erHunters}'</if>
+				<if test="erSpecimensNo != null and erSpecimensNo != '' "> and exhibition.ER_SpecimensNo = '${erSpecimensNo}'</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != '' "> and exhibition.ER_SpecimensDate = '${erSpecimensDate}'</if>
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+				<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+				<if test="erPlaceName != null and erPlaceName != '' "> and exhibition.ER_PlaceName = '${erPlaceName}'</if>
+				<if test="erLongitude != null and erLongitude != '' "> and exhibition.ER_Longitude = '${erLongitude}'</if>
+				<if test="erLatitude != null and erLatitude != '' "> and exhibition.ER_Latitude = '${erLatitude}'</if>
+				<if test="erHabitat != null and erHabitat != '' "> and exhibition.ER_Habitat = '${erHabitat}'</if>
+				<if test="erCharacteristics != null and erCharacteristics != '' "> and exhibition.ER_Characteristics = '${erCharacteristics}'</if>
+				<if test="erDescription != null and erDescription != '' "> and exhibition.ER_Description = '${erDescription}'</if>
+				<if test="erElevation != null and erElevation != '' "> and exhibition.ER_Elevation = '${erElevation}'</if>
+				<if test="erIdentifier != null and erIdentifier != '' "> and exhibition.ER_Identifier = '${erIdentifier}'</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != '' "> and exhibition.ER_IdentifierDate = '${erIdentifierDate}'</if>
+				<if test="erUse != null and erUse != '' "> and exhibition.ER_Use = '${erUse}'</if>
+				<if test="erRemarks != null and erRemarks != '' "> and exhibition.ER_Remarks = '${erRemarks}'</if>
+				<if test="erThumbnail != null and erThumbnail != '' "> and exhibition.ER_Thumbnail = '${erThumbnail}'</if>
+				<if test="erInThum != null and erInThum != '' "> and exhibition.ER_InThum = '${erInThum}'</if>
+				<if test="erUserID != null and erUserID != '' "> and exhibition.ER_UserID = '${erUserID}'</if>
+				<if test="erUserAccount != null and erUserAccount != '' "> and exhibition.ER_UserAccount = '${erUserAccount}'</if>
+				<if test="erOperateTime != null and erOperateTime != '' "> and exhibition.ER_OperateTime = '${erOperateTime}'</if>
+				<if test="erCreateTime != null and erCreateTime != '' "> and exhibition.ER_CreateTime = '${erCreateTime}'</if>
+				<if test="erCreator != null and erCreator != '' "> and exhibition.ER_Creator = '${erCreator}'</if>
+				<if test="erIsGrade != null and erIsGrade != '' "> and exhibition.ER_IsGrade = '${erIsGrade}'</if>					
+			</trim>
+		</where>
+		ORDER BY exhibition.ER_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_quick_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(exhibition.ER_ID) from res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="catePath != null ">
+				and exhibition.ER_GangID in (select tc.CATE_ID from (select c.CATE_ID from res_category c where c.CATE_Path like '${catePath}%') as tc )
+				</if>
+				<if test="erName != null and erName != ''">
+				and exhibition.ER_Name like '%${erName}%'
+				</if>
+				<if test="erIsGrade != null ">
+				and exhibition.ER_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '${keyword}%' 
+				</if>
+				<if test="erID != null and erID != '' "> exhibition.ER_ID = ${erID}</if>
+				<if test="erCode != null and erCode != '' "> and exhibition.ER_Code = '${erCode}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '${erType}'</if>
+				<if test="erRecommen != null and erRecommen != '' "> and exhibition.ER_Recommen = '${erRecommen}'</if>
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erTotal != null and erTotal != '' "> and exhibition.ER_Total = '${erTotal}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erChor != null and erChor != '' "> and exhibition.ER_Chor = '${erChor}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erOrder != null and erOrder != '' "> and exhibition.ER_Order = '${erOrder}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erGenus != null and erGenus != '' "> and exhibition.ER_Genus = '${erGenus}'</if>
+				<if test="erLatinNameID != null and erLatinNameID != '' "> and exhibition.ER_LatinNameID = '${erLatinNameID}'</if>
+				<if test="erLatinName != null and erLatinName != '' "> and exhibition.ER_LatinName = '${erLatinName}'</if>
+				<if test="erBiologicalReserve != null and erBiologicalReserve != '' "> and exhibition.ER_BiologicalReserve like '${erBiologicalReserve}%'</if>
+				<if test="erHunters != null and erHunters != '' "> and exhibition.ER_Hunters = '${erHunters}'</if>
+				<if test="erSpecimensNo != null and erSpecimensNo != '' "> and exhibition.ER_SpecimensNo = '${erSpecimensNo}'</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != '' "> and exhibition.ER_SpecimensDate = '${erSpecimensDate}'</if>
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+				<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+				<if test="erPlaceName != null and erPlaceName != '' "> and exhibition.ER_PlaceName = '${erPlaceName}'</if>
+				<if test="erLongitude != null and erLongitude != '' "> and exhibition.ER_Longitude = '${erLongitude}'</if>
+				<if test="erLatitude != null and erLatitude != '' "> and exhibition.ER_Latitude = '${erLatitude}'</if>
+				<if test="erHabitat != null and erHabitat != '' "> and exhibition.ER_Habitat = '${erHabitat}'</if>
+				<if test="erCharacteristics != null and erCharacteristics != '' "> and exhibition.ER_Characteristics = '${erCharacteristics}'</if>
+				<if test="erDescription != null and erDescription != '' "> and exhibition.ER_Description = '${erDescription}'</if>
+				<if test="erElevation != null and erElevation != '' "> and exhibition.ER_Elevation = '${erElevation}'</if>
+				<if test="erIdentifier != null and erIdentifier != '' "> and exhibition.ER_Identifier = '${erIdentifier}'</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != '' "> and exhibition.ER_IdentifierDate = '${erIdentifierDate}'</if>
+				<if test="erUse != null and erUse != '' "> and exhibition.ER_Use = '${erUse}'</if>
+				<if test="erRemarks != null and erRemarks != '' "> and exhibition.ER_Remarks = '${erRemarks}'</if>
+				<if test="erThumbnail != null and erThumbnail != '' "> and exhibition.ER_Thumbnail = '${erThumbnail}'</if>
+				<if test="erInThum != null and erInThum != '' "> and exhibition.ER_InThum = '${erInThum}'</if>
+				<if test="erUserID != null and erUserID != '' "> and exhibition.ER_UserID = '${erUserID}'</if>
+				<if test="erUserAccount != null and erUserAccount != '' "> and exhibition.ER_UserAccount = '${erUserAccount}'</if>
+				<if test="erOperateTime != null and erOperateTime != '' "> and exhibition.ER_OperateTime = '${erOperateTime}'</if>
+				<if test="erCreateTime != null and erCreateTime != '' "> and exhibition.ER_CreateTime = '${erCreateTime}'</if>
+				<if test="erCreator != null and erCreator != '' "> and exhibition.ER_Creator = '${erCreator}'</if>
+				<if test="erIsGrade != null and erIsGrade != '' "> and exhibition.ER_IsGrade = '${erIsGrade}'</if>				
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_ajax" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+		where exhibition.ER_Category in (select tc.CATE_ID from (select c.CATE_ID from res_category c where c.CATE_Path like '${catePath}%') as tc )
+		<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+		<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+		<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+	
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_OZOO_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, 
+			exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail,  exhibition.ER_City, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '${keyword}%'  order by exhibition.ER_Name desc
+				</if>
+			</trim>
+		</where>
+	</select>
+		<select id="select_page_recom_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, 
+			exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail,  exhibition.ER_City, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '%${keyword}%' 
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_smallselect" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, 
+			exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province,exhibition.ER_About, exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail,  exhibition.ER_City, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade,
+			(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as  erPath
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+		<if test="keyword != '' and keyword != null ">order by exhibition.ER_Name='${keyword}' desc,exhibition.ER_Name</if>
+	</select>
+	<select id="select_page_other_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState,exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_City, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade,(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID )as  erPath
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != '' and flag == 'plant'">
+					and ( exhibition.ER_Name like '%${keyword}%'  and  (ER_JieID='1340' or  ER_JieID='346') and exhibition.ER_Name != '${keyword}' ) 
+				</if>
+				<if test="flag == 'animal' and keyword != '' and keyword != animal">
+					and ( exhibition.ER_Name like '%${keyword}%'   and  (ER_JieID='1124' or  ER_JieID='6') and exhibition.ER_Name != '${keyword}' )
+				</if>
+				<if test="flag == 'other' and keyword != '' and keyword != null">
+					and ( exhibition.ER_Name like '%${keyword}%' and exhibition.ER_Name != '${keyword}' )
+				</if>
+		
+				
+			</trim>
+		</where>
+		<if test="erID != '' and erID != null ">order by exhibition.ER_ID='${erID}' desc,exhibition.ER_ID</if>
+	</select>
+	<select id="select_page_other_about_manager" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_City, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade,(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID )as erPath
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+					and  exhibition.ER_Name like '${keyword}%'
+				</if>
+				
+			</trim>
+		</where>
+		<if test="erID != '' and erID != null ">order by exhibition.ER_ID='${erID}' desc,exhibition.ER_ID</if>
+	</select>
+	<select id="select_page_other" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_City, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+					and ( exhibition.ER_Name = '${keyword}' )
+				</if>				
+			</trim>
+		</where>
+		<if test="erID != '' and erID != null ">order by exhibition.ER_ID='${erID}' desc,exhibition.ER_ID</if>
+	</select>
+	
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_Keywords,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, c.CATE_Path as path, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province,  exhibition.ER_City, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade,
+			(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as erPath
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (exhibition.ER_UserID != '${s_userID}' or ISNULL(exhibition.ER_UserID))</if>
+				${values}
+
+		</where>
+		ORDER BY exhibition.ER_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (exhibition.ER_UserID != '${s_userID}' or ISNULL(exhibition.ER_UserID))</if>
+				${values}
+		</where>
+	</select>
+	
+	<select id="select_teacher_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, c.CATE_Path as path, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province,  exhibition.ER_City, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,exhibition.ER_IsShare ,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_UserID,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and exhibition.ER_Creator='${account}'
+				</if>
+				<if test="erName != null and erName != ''">
+					and exhibition.ER_Name like '${erName}%'
+				</if>
+				<if test="erIsGrade != null ">
+					and exhibition.ER_IsGrade = ${erIsGrade}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and exhibition.ER_IsShare = ${isShare}
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and exhibition.ER_Name like '%${keyword}%'
+				</if>
+				<if test="erID != null and erID != '' "> exhibition.ER_ID = ${erID}</if>
+				<if test="erCode != null and erCode != '' "> and exhibition.ER_Code = '${erCode}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '${erType}'</if>
+				<if test="erRecommen != null and erRecommen != '' "> and exhibition.ER_Recommen = '${erRecommen}'</if>
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erTotal != null and erTotal != '' "> and exhibition.ER_Total = '${erTotal}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erChor != null and erChor != '' "> and exhibition.ER_Chor = '${erChor}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erOrder != null and erOrder != '' "> and exhibition.ER_Order = '${erOrder}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erGenus != null and erGenus != '' "> and exhibition.ER_Genus = '${erGenus}'</if>
+				<if test="erLatinNameID != null and erLatinNameID != '' "> and exhibition.ER_LatinNameID = '${erLatinNameID}'</if>
+				<if test="erLatinName != null and erLatinName != '' "> and exhibition.ER_LatinName = '${erLatinName}'</if>
+				<if test="erBiologicalReserve != null and erBiologicalReserve != '' "> and exhibition.ER_BiologicalReserve like '${erBiologicalReserve}%'</if>
+				<if test="erHunters != null and erHunters != '' "> and exhibition.ER_Hunters = '${erHunters}'</if>
+				<if test="erSpecimensNo != null and erSpecimensNo != '' "> and exhibition.ER_SpecimensNo = '${erSpecimensNo}'</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != '' "> and exhibition.ER_SpecimensDate = '${erSpecimensDate}'</if>
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+				<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+				<if test="erPlaceName != null and erPlaceName != '' "> and exhibition.ER_PlaceName = '${erPlaceName}'</if>
+				<if test="erLongitude != null and erLongitude != '' "> and exhibition.ER_Longitude = '${erLongitude}'</if>
+				<if test="erLatitude != null and erLatitude != '' "> and exhibition.ER_Latitude = '${erLatitude}'</if>
+				<if test="erHabitat != null and erHabitat != '' "> and exhibition.ER_Habitat = '${erHabitat}'</if>
+				<if test="erCharacteristics != null and erCharacteristics != '' "> and exhibition.ER_Characteristics = '${erCharacteristics}'</if>
+				<if test="erDescription != null and erDescription != '' "> and exhibition.ER_Description = '${erDescription}'</if>
+				<if test="erElevation != null and erElevation != '' "> and exhibition.ER_Elevation = '${erElevation}'</if>
+				<if test="erIdentifier != null and erIdentifier != '' "> and exhibition.ER_Identifier = '${erIdentifier}'</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != '' "> and exhibition.ER_IdentifierDate = '${erIdentifierDate}'</if>
+				<if test="erUse != null and erUse != '' "> and exhibition.ER_Use = '${erUse}'</if>
+				<if test="erRemarks != null and erRemarks != '' "> and exhibition.ER_Remarks = '${erRemarks}'</if>
+				<if test="erThumbnail != null and erThumbnail != '' "> and exhibition.ER_Thumbnail = '${erThumbnail}'</if>
+				<if test="erInThum != null and erInThum != '' "> and exhibition.ER_InThum = '${erInThum}'</if>
+				<if test="erUserID != null and erUserID != '' "> and exhibition.ER_UserID = '${erUserID}'</if>
+				<if test="userID != null and userID != '' "> and exhibition.ER_UserID = '${userID}'</if>
+				<if test="erUserAccount != null and erUserAccount != '' "> and exhibition.ER_UserAccount = '${erUserAccount}'</if>
+				<if test="erOperateTime != null and erOperateTime != '' "> and exhibition.ER_OperateTime = '${erOperateTime}'</if>
+				<if test="erCreateTime != null and erCreateTime != '' "> and exhibition.ER_CreateTime = '${erCreateTime}'</if>
+				<if test="erCreator != null and erCreator != '' "> and exhibition.ER_Creator = '${erCreator}'</if>
+				<if test="erIsGrade != null and erIsGrade != '' "> and exhibition.ER_IsGrade = '${erIsGrade}'</if>
+			</trim>
+		</where>
+		ORDER BY exhibition.ER_ID desc
+		limit ${start},${offset}
+		
+	</select>
+	<select id="select_teacher_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_exhibition_room exhibition left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix="">
+				<if test="account !=null and account!=''">
+					and exhibition.ER_Creator='${account}'
+				</if>
+				<if test="erName != null and erName != ''">
+				and exhibition.ER_Name like '${erName}%'
+				</if>
+				<if test="erIsGrade != null ">
+				and exhibition.ER_IsGrade = ${erIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and exhibition.ER_IsShare = ${isShare}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '%${keyword}%'
+				</if>
+				<if test="erID != null and erID != '' "> exhibition.ER_ID = ${erID}</if>
+				<if test="erCode != null and erCode != '' "> and exhibition.ER_Code = '${erCode}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '${erType}'</if>
+				<if test="erRecommen != null and erRecommen != '' "> and exhibition.ER_Recommen = '${erRecommen}'</if>
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erTotal != null and erTotal != '' "> and exhibition.ER_Total = '${erTotal}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erChor != null and erChor != '' "> and exhibition.ER_Chor = '${erChor}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erOrder != null and erOrder != '' "> and exhibition.ER_Order = '${erOrder}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erGenus != null and erGenus != '' "> and exhibition.ER_Genus = '${erGenus}'</if>
+				<if test="erLatinNameID != null and erLatinNameID != '' "> and exhibition.ER_LatinNameID = '${erLatinNameID}'</if>
+				<if test="erLatinName != null and erLatinName != '' "> and exhibition.ER_LatinName = '${erLatinName}'</if>
+				<if test="erBiologicalReserve != null and erBiologicalReserve != '' "> and exhibition.ER_BiologicalReserve like '${erBiologicalReserve}%'</if>
+				<if test="erHunters != null and erHunters != '' "> and exhibition.ER_Hunters = '${erHunters}'</if>
+				<if test="erSpecimensNo != null and erSpecimensNo != '' "> and exhibition.ER_SpecimensNo = '${erSpecimensNo}'</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != '' "> and exhibition.ER_SpecimensDate = '${erSpecimensDate}'</if>
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+				<if test="erCity != null and erCity != '' "> and exhibition.ER_City = '${erCity}'</if>
+				<if test="erPlaceName != null and erPlaceName != '' "> and exhibition.ER_PlaceName = '${erPlaceName}'</if>
+				<if test="erLongitude != null and erLongitude != '' "> and exhibition.ER_Longitude = '${erLongitude}'</if>
+				<if test="erLatitude != null and erLatitude != '' "> and exhibition.ER_Latitude = '${erLatitude}'</if>
+				<if test="erHabitat != null and erHabitat != '' "> and exhibition.ER_Habitat = '${erHabitat}'</if>
+				<if test="erCharacteristics != null and erCharacteristics != '' "> and exhibition.ER_Characteristics = '${erCharacteristics}'</if>
+				<if test="erDescription != null and erDescription != '' "> and exhibition.ER_Description = '${erDescription}'</if>
+				<if test="erElevation != null and erElevation != '' "> and exhibition.ER_Elevation = '${erElevation}'</if>
+				<if test="erIdentifier != null and erIdentifier != '' "> and exhibition.ER_Identifier = '${erIdentifier}'</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != '' "> and exhibition.ER_IdentifierDate = '${erIdentifierDate}'</if>
+				<if test="erUse != null and erUse != '' "> and exhibition.ER_Use = '${erUse}'</if>
+				<if test="erRemarks != null and erRemarks != '' "> and exhibition.ER_Remarks = '${erRemarks}'</if>
+				<if test="erThumbnail != null and erThumbnail != '' "> and exhibition.ER_Thumbnail = '${erThumbnail}'</if>
+				<if test="erInThum != null and erInThum != '' "> and exhibition.ER_InThum = '${erInThum}'</if>
+				<if test="erUserID != null and erUserID != '' "> and exhibition.ER_UserID = '${erUserID}'</if>
+				<if test="userID != null and userID != '' "> and exhibition.ER_UserID = '${userID}'</if>
+				<if test="erUserAccount != null and erUserAccount != '' "> and exhibition.ER_UserAccount = '${erUserAccount}'</if>
+				<if test="erOperateTime != null and erOperateTime != '' "> and exhibition.ER_OperateTime = '${erOperateTime}'</if>
+				<if test="erCreateTime != null and erCreateTime != '' "> and exhibition.ER_CreateTime = '${erCreateTime}'</if>
+				<if test="erCreator != null and erCreator != '' "> and exhibition.ER_Creator = '${erCreator}'</if>
+				<if test="erIsGrade != null and erIsGrade != '' "> and exhibition.ER_IsGrade = '${erIsGrade}'</if>	
+			</trim>
+		</where>
+	</select>
+	<select id="select_res_area_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_exhibition_room exhibition left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erCountry != null and erCountry != '' "> and exhibition.ER_Country = '${erCountry}'</if>
+				<if test="erProvince != null and erProvince != '' "> and exhibition.ER_Province = '${erProvince}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_erThumbnail_erUpload" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select ER_Thumbnail from res_exhibition_room
+		<where>
+			<if test="erUpload != null">ER_Upload = #{erUpload}</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_exhibition_room
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="erCode != null">,ER_Code</if>
+			<if test="erName != null">,ER_Name</if>
+			<if test="erChar != null">,ER_Char</if>
+			<if test="erRecommen != null">,ER_Recommen</if>
+			<if test="erType != null">,ER_Type</if>
+			<if test="erUpload != null">,ER_Upload</if>
+			<if test="erAudio != null">,ER_Audio</if>
+			<if test="erThumbnail != null">,ER_Thumbnail</if>
+			<if test="erInThum != null">,ER_InThum</if>
+			<if test="erStoryState != null">,ER_StoryState</if>
+			<if test="erTotalID != null and erTotalID != '' ">,ER_TotalID</if>  
+			<if test="erTotal != null">,ER_Total</if>
+			<if test="erJieID != null and erJieID != '' ">,ER_JieID</if>
+			<if test="erJie != null">,ER_Jie</if>
+			<if test="erChorID != null and erChorID != '' ">,ER_ChorID</if>
+			<if test="erChor != null">,ER_Chor</if>
+			<if test="erGangID != null and erGangID != ''">,ER_GangID</if>
+			<if test="erGang != null">,ER_Gang</if>
+			<if test="erCategory != null and erCategory != ''">,ER_Category</if>
+			<if test="erCategoryName != null">,ER_CategoryName</if>
+			<if test="erOrderID != null and erOrderID != ''">,ER_OrderID</if>
+			<if test="erOrder != null">,ER_Order</if>
+			<if test="erGenus != null">,ER_Genus</if>
+		    <if test="erKeywords != null">,ER_Keywords</if>
+			<if test="erCustom != null">,ER_Custom</if>
+			<if test="erLatinName != null">,ER_LatinName</if>
+			<if test="erBiologicalReserve != null">,ER_BiologicalReserve</if>
+			<if test="erHunters != null">,ER_Hunters</if>
+			<if test="erSpecimensNo != null">,ER_SpecimensNo</if>
+			<if test="erSpecimensDate != null and erSpecimensDate != ''">,ER_SpecimensDate</if>
+			
+			<if test="erCountry != null">,ER_Country</if>
+			<if test="erProvince != null">,ER_Province</if>
+			<if test="erPlaceName != null">,ER_PlaceName</if>
+			<if test="erLongitude != null and erLongitude != ''">,ER_Longitude</if>
+			<if test="erLatitude != null and erLatitude != ''">,ER_Latitude</if>
+			<if test="erCity != null and erCity != '' "> ,ER_City</if>	
+			
+			<if test="erHabitat != null">,ER_Habitat</if>
+			<if test="erCharacteristics != null">,ER_Characteristics</if>
+			<if test="erDescription != null">,ER_Description</if>
+			<if test="erElevation != null">,ER_Elevation</if>
+			<if test="erIdentifier != null">,ER_Identifier</if>
+			<if test="erIdentifierDate != null and erIdentifierDate != ''">,ER_IdentifierDate</if>
+			<if test="erUse != null">,ER_Use</if>
+			<if test="erRemarks != null">,ER_Remarks</if>
+			<if test="erContent != null">,ER_Content</if>
+			
+			<if test="erIsGrade != null">,ER_IsGrade</if>
+			<if test="erGrade != null">,ER_Grade</if>
+			<if test="erContest != null">,ER_Contest</if>
+			<if test="erContentPath != null">,ER_ContentPath</if>
+			
+			<if test="s_userID != null">,ER_UserID</if>
+			<if test="s_userLoginAccount != null">,ER_UserAccount</if>
+			,ER_OperateTime
+			<if test="erCreateTime != null and erCreateTime != '' ">,ER_CreateTime</if>
+			<if test="s_userLoginAccount != null">,ER_Creator</if>
+			
+			<if test="erRelLinksState != null">,ER_RelLinksState</if>		
+			<if test="erRelatedLinks != null">,ER_RelatedLinks</if>	
+			<if test="erAbout != null">,ER_About</if>
+			<if test="erIsShare != null">,ER_IsShare</if>	
+			<if test="erRelation != null">,ER_Relation</if>	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="erCode != null">,#{erCode}</if>
+			<if test="erName != null">,#{erName}</if>
+			<if test="erChar != null">,#{erChar}</if>
+			<if test="erRecommen != null">,#{erRecommen}</if>
+			<if test="erType != null">,#{erType}</if>
+			<if test="erUpload != null">,#{erUpload}</if>
+			<if test="erAudio != null">,#{erAudio}</if>
+			<if test="erThumbnail != null">,#{erThumbnail}</if>
+			<if test="erInThum != null">,#{erInThum}</if>
+			<if test="erStoryState != null">,#{erStoryState}</if>
+			<if test="erTotalID != null and erTotalID != '' ">,#{erTotalID}</if>
+			<if test="erTotal != null">,#{erTotal}</if>
+			<if test="erJieID != null and erJieID != '' ">,#{erJieID}</if>
+			<if test="erJie != null">,#{erJie}</if>
+			<if test="erChorID != null and erChorID != '' ">,#{erChorID}</if>
+			<if test="erChor != null">,#{erChor}</if>
+			<if test="erGangID != null and erGangID != ''">,#{erGangID}</if>
+			<if test="erGang != null">,#{erGang}</if>
+			<if test="erCategory != null and erCategory != ''">,#{erCategory}</if>
+			<if test="erCategoryName != null">,#{erCategoryName}</if>
+			<if test="erOrderID != null and erOrderID != ''">,#{erOrderID}</if>
+			<if test="erOrder != null">,#{erOrder}</if>
+			<if test="erGenus != null">,#{erGenus}</if>
+			 <if test="erKeywords != null">,#{erKeywords}</if>
+			<if test="erCustom != null">,#{erCustom}</if>
+			<if test="erLatinName != null">,#{erLatinName}</if>
+			<if test="erBiologicalReserve != null">,#{erBiologicalReserve}</if>
+			<if test="erHunters != null">,#{erHunters}</if>
+			<if test="erSpecimensNo != null">,#{erSpecimensNo}</if>
+			<if test="erSpecimensDate != null and erSpecimensDate != ''">,#{erSpecimensDate}</if>
+			
+			<if test="erCountry != null">,#{erCountry}</if>
+			<if test="erProvince != null">,#{erProvince}</if>
+			<if test="erPlaceName != null">,#{erPlaceName}</if>
+			<if test="erLongitude != null and erLongitude != ''">,#{erLongitude}</if>
+			<if test="erLatitude != null and erLatitude != ''">,#{erLatitude}</if>
+			<if test="erCity != null">,#{erCity}</if>
+			
+			<if test="erHabitat != null">,#{erHabitat}</if>
+			<if test="erCharacteristics != null">,#{erCharacteristics}</if>
+			<if test="erDescription != null">,#{erDescription}</if>
+			<if test="erElevation != null">,#{erElevation}</if>
+			<if test="erIdentifier != null">,#{erIdentifier}</if>
+			<if test="erIdentifierDate != null and erIdentifierDate != ''">,#{erIdentifierDate}</if>
+			<if test="erUse != null">,#{erUse}</if>
+			<if test="erRemarks != null">,#{erRemarks}</if>
+			<if test="erContent != null">,#{erContent}</if>
+			
+			
+			<if test="erIsGrade != null">,#{erIsGrade}</if>
+			<if test="erGrade != null">,#{erGrade}</if>
+			<if test="erContest != null">,#{erContest}</if>
+			<if test="erContentPath != null">,#{erContentPath}</if>
+			
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="erCreateTime != null and erCreateTime != '' ">,#{erCreateTime}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			
+			<if test="erRelLinksState != null">,#{erRelLinksState}</if>		
+			<if test="erRelatedLinks != null">,#{erRelatedLinks}</if>	
+			<if test="erAbout != null">,#{erAbout}</if>	
+			<if test="erIsShare != null">,#{erIsShare}</if>	
+			<if test="erRelation != null">,#{erRelation}</if>	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="erName != null">,ER_Name = #{erName}</if>
+				<if test="erChar != null">,ER_Char = #{erChar}</if>
+				<if test="erType != null">,ER_Type = #{erType}</if>
+				<if test="erUpload != null">,ER_Upload = #{erUpload}</if>
+				<if test="erAudio != null">,ER_Audio = #{erAudio}</if>
+				<if test="erRecommen != null">,ER_Recommen = #{erRecommen}</if>
+				
+				<if test="erTotalID != null and erTotalID != ''">,ER_TotalID = #{erTotalID}</if>
+				<if test="erTotal != null">,ER_Total = #{erTotal}</if>
+				<if test="erJieID != ''">,ER_JieID = #{erJieID,jdbcType=BIGINT}</if>
+				<if test="erJie != null">,ER_Jie = #{erJie}</if>
+				<if test="erChorID != ''">,ER_ChorID = #{erChorID,jdbcType=BIGINT}</if>
+				<if test="erChor != null">,ER_Chor = #{erChor}</if>
+				<if test="erGangID != ''">,ER_GangID = #{erGangID,jdbcType=BIGINT}</if>
+				<if test="erGang != null">,ER_Gang = #{erGang}</if>
+				<if test="erCategory != '' ">,ER_Category = #{erCategory,jdbcType=BIGINT}</if>
+				<if test="erCategoryName != null">,ER_CategoryName = #{erCategoryName}</if>
+				<if test="erOrderID != '' ">,ER_OrderID = #{erOrderID,jdbcType=BIGINT}</if>
+				<if test="erOrder != null">,ER_Order = #{erOrder}</if>
+				<if test="erGenus != null">,ER_Genus = #{erGenus}</if>
+				<if test="erLatinName != null">,ER_LatinName = #{erLatinName}</if>
+				<if test="erContent != null">,ER_Content = #{erContent}</if>
+				<if test="erContentPath != null">,ER_ContentPath = #{erContentPath}</if>
+
+
+				<if test="erBiologicalReserve != null">,ER_BiologicalReserve = #{erBiologicalReserve}</if>
+				<if test="erHunters != null">,ER_Hunters = #{erHunters}</if>
+				<if test="erSpecimensNo != null">,ER_SpecimensNo = #{erSpecimensNo}</if>
+				<if test="erSpecimensDate != null and erSpecimensDate != ''">,ER_SpecimensDate = #{erSpecimensDate}</if>
+				<if test="erCountry != null">,ER_Country = #{erCountry}</if>
+				<if test="erProvince != null">,ER_Province = #{erProvince}</if>
+				<if test="erCity != null">,ER_City = #{erCity}</if>
+				<if test="erPlaceName != null">,ER_PlaceName = #{erPlaceName}</if>
+				<if test="erLongitude != null and erLongitude != ''">,ER_Longitude = #{erLongitude}</if>
+				<if test="erLatitude != null and erLatitude != ''">,ER_Latitude = #{erLatitude}</if>
+				<if test="erHabitat != null">,ER_Habitat = #{erHabitat}</if>
+				<if test="erCharacteristics != null">,ER_Characteristics = #{erCharacteristics}</if>
+				<if test="erDescription != null">,ER_Description = #{erDescription}</if>
+				<if test="erElevation != null">,ER_Elevation = #{erElevation}</if>
+				<if test="erIdentifier != null">,ER_Identifier = #{erIdentifier}</if>
+				<if test="erIdentifierDate != null and erIdentifierDate != ''">,ER_IdentifierDate = #{erIdentifierDate}</if>
+				<if test="erUse != null">,ER_Use = #{erUse}</if>
+				<if test="erRemarks != null">,ER_Remarks = #{erRemarks}</if>
+				<if test="erThumbnail != null">,ER_Thumbnail = #{erThumbnail}</if>
+				<if test="erInThum != null">,ER_InThum = #{erInThum}</if>
+				<if test="s_userID != null">,ER_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,ER_UserAccount = #{s_userLoginAccount}</if>
+				<if test="erCreateTime != nandl and erCreateTime != '' ">,ER_CreateTime = #{erCreateTime}</if>
+				,ER_OperateTime = now()
+				<if test="erIsGrade != null">,ER_IsGrade = #{erIsGrade}</if>
+				<if test="erGrade != null">,ER_Grade = #{erGrade}</if>
+				<if test="erContest != null">,ER_Contest = #{erContest}</if>
+				<if test="erCustom != null">,ER_Custom = #{erCustom}</if>
+				<if test="erKeywords != null">,ER_Keywords = #{erKeywords}</if>
+				
+				<if test="erRelLinksState != null">,ER_RelLinksState = #{erRelLinksState}</if>
+				<if test="erRelatedLinks != null">,ER_RelatedLinks = #{erRelatedLinks}</if>
+				<if test="erAbout != null">,ER_About = #{erAbout}</if>	
+				<if test="erIsShare != null">,ER_IsShare = #{erIsShare}</if>
+				<if test="erRelation != null">,ER_Relation = #{erRelation}</if>
+			</trim>
+		</set>
+		where ER_ID=${erID}
+	</update>
+
+	<update id="update_upload" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="erUpload != null">,ER_Upload = #{erUpload}</if>
+				<if test="erAudio != null">,ER_Audio = #{erAudio}</if>
+				<if test="erInThum != null">,ER_InThum = #{erInThum}</if>
+				<if test="s_userID != null">,ER_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,ER_UserAccount = #{s_userLoginAccount}</if>
+				,ER_OperateTime = now()
+			</trim>
+		</set>
+		where ER_ID=${erID}
+	</update>
+	
+	<update id="update_is_grade" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="erIsGrade != null">,ER_IsGrade = #{erIsGrade}</if>
+				<if test="s_userID != null">,ER_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,ER_UserAccount = #{s_userLoginAccount}</if>
+				,ER_OperateTime = now()
+			</trim>
+		</set>
+		where ER_ID=${erID}
+	</update>
+
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_exhibition_room where ER_ID in (${erID})
+		</trim>
+	</delete>
+	<select id="select_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState, exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_City, 
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, 
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+					and exhibition.ER_Name like '%${keyword}%' and exhibition.ER_TotalID='${erTotalID}'
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_area_position" resultMap="convertResult" parameterType="java.util.HashMap">
+		select 
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState,exhibition.ER_Name, 
+			 exhibition.ER_Longitude,exhibition.ER_City, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_Latitude, exhibition.ER_Thumbnail,
+			exhibition.ER_GangID, exhibition.ER_Gang,(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID )as  area_path
+		from
+			res_exhibition_room exhibition
+		
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erProvince != null and erProvince != ''">
+				exhibition.ER_City = '${erCity}' 
+				</if>
+				</trim>
+		</where>	
+	       limit ${startNum},  ${endNum} 
+	</select>
+	<select id="select_page_position_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select 
+			count(*) as area_count
+		from
+			res_exhibition_room exhibition
+			left join res_category c on c.CATE_ID = exhibition.ER_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erProvince != null and erProvince != ''">
+				exhibition.ER_City = '${erCity}'
+				</if>
+				</trim>
+		</where>	
+	</select>
+	
+	<select id="select_storystate" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select ER_StoryState from res_exhibition_room
+		where  ER_Upload = #{erUpload}
+	</select>
+	
+	<update id="update_storystate" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="erStoryState != null">,ER_StoryState = #{erStoryState}</if>
+				,ER_OperateTime = now()
+			</trim>
+		</set>
+		where  ER_Upload = '${erUpload}'
+	</update>
+	
+	<select id="select_relLinksState" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select ER_RelLinksState from res_exhibition_room
+		where  ER_Upload = #{erUpload}
+	</select>
+	
+	<update id="update_relLinksState" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="erRelLinksState != null">,ER_RelLinksState = #{erRelLinksState}</if>
+				,ER_OperateTime = now()
+			</trim>
+		</set>
+		where  ER_Upload = '${erUpload}'
+	</update>
+	
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		set ER_IsShare = ${erIsShare}
+		where  ER_ID = ${erID}
+	</update>
+	<update id="updateShare" parameterType="java.util.HashMap">
+		replace into res_exhibition_room(ER_ID,ER_IsShare) values(${erID},${erIsShare})
+	</update>
+	
+	<select id="select_area_position" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,  exhibition.ER_Name, 
+			exhibition.ER_Type,exhibition.ER_About,
+			exhibition.ER_Thumbnail, exhibition.ER_InThum,
+			exhibition.ER_CategoryName,exhibition.ER_Grade,(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as  erPath
+		from
+			res_exhibition_room exhibition
+		
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and exhibition.ER_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<update id="update_clickLile" parameterType="java.util.HashMap">
+		update res_exhibition_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="erCountLike != null">,ER_CountLike = #{erCountLike}</if>
+			</trim>
+		</set>
+		where  ER_id = '${erID}'
+	</update>
+	
+	<select id="select_page_category" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_Code,exhibition.ER_Name,exhibition.ER_Type,
+			exhibition.ER_Category, exhibition.ER_Order,
+			exhibition.ER_TotalID, exhibition.ER_Total,
+			exhibition.ER_OrderID, exhibition.ER_GenusID,
+			exhibition.ER_ChorID, exhibition.ER_Chor,
+			exhibition.ER_JieID, exhibition.ER_Jie, 
+			exhibition.ER_GangID, exhibition.ER_Gang,
+			exhibition.ER_CategoryName, exhibition.ER_CategoryName,exhibition.ER_Grade,
+			(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as erPath,			
+			exhibition.ER_Upload,exhibition.ER_InThum,exhibition.ER_Thumbnail, 
+			exhibition.ER_Remarks,exhibition.ER_CountLike,exhibition.ER_Audio,
+			exhibition.ER_About,exhibition.ER_Relation,			
+		    exhibition.ER_City,exhibition.ER_Country, exhibition.ER_Province,exhibition.ER_PlaceName, 		
+			(select a_p.area_name from sys_area a_p where a_p.area_id = exhibition.ER_City ) as ER_Province_Name
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '1011'</if>
+				<if test="erAbout != null and erAbout != '' "> and exhibition.ER_ID not in (${erAbout}) </if>
+				<if test="erID != null and erID != '' "> and exhibition.ER_ID != '${erID}' </if>
+			</trim>
+		</where>
+		ORDER BY exhibition.ER_ID desc
+	</select>
+	<select id="select_page_category_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState,  (select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as erPath,exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_InThum,
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '1011'</if>
+			</trim>
+		</where>
+		ORDER BY exhibition.ER_ID desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_category_pic" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_Code,exhibition.ER_Name,exhibition.ER_Type,
+			exhibition.ER_Category, exhibition.ER_Order,
+			exhibition.ER_TotalID, exhibition.ER_Total,
+			exhibition.ER_OrderID, exhibition.ER_GenusID,
+			exhibition.ER_ChorID, exhibition.ER_Chor,
+			exhibition.ER_JieID, exhibition.ER_Jie, 
+			exhibition.ER_GangID, exhibition.ER_Gang,
+			exhibition.ER_CategoryName, exhibition.ER_CategoryName,exhibition.ER_Grade,
+			(select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as erPath,			
+			exhibition.ER_Upload,exhibition.ER_InThum,exhibition.ER_Thumbnail, 
+			exhibition.ER_Remarks,exhibition.ER_CountLike,exhibition.ER_Audio,
+			exhibition.ER_About,exhibition.ER_Relation,			
+		    exhibition.ER_City,exhibition.ER_Country, exhibition.ER_Province,exhibition.ER_PlaceName, 		
+			(select a_p.area_name from sys_area a_p where a_p.area_id = exhibition.ER_City ) as ER_Province_Name
+		from
+			res_exhibition_room exhibition
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="erTotalID != null and erTotalID != '' "> and exhibition.ER_TotalID = '${erTotalID}'</if>
+				<if test="erJieID != null and erJieID != '' "> and exhibition.ER_JieID = '${erJieID}'</if>
+				<if test="erChorID != null and erChorID != '' "> and exhibition.ER_ChorID = '${erChorID}'</if>
+				<if test="erGangID != null and erGangID != '' "> and exhibition.ER_GangID = '${erGangID}'</if>
+				<if test="erOrderID != null and erOrderID != '' "> and exhibition.ER_OrderID = '${erOrderID}'</if>
+				<if test="erCategory != null and erCategory != '' "> and exhibition.ER_Category = '${erCategory}'</if>
+				<if test="erGenusID != null and erGenusID != '' "> and exhibition.ER_GenusID = '${erGenusID}'</if>
+				<if test="erType != null and erType != '' "> and exhibition.ER_Type = '1011'</if>
+				<if test="erAbout != null and erAbout != '' "> and exhibition.ER_ID not in (${erAbout}) </if>
+				<if test="erID != null and erID != '' "> and exhibition.ER_ID != '${erID}' </if>
+			</trim>
+		</where>
+		ORDER BY exhibition.ER_ID desc
+		limit 30
+	</select>
+	<select id="select_page_keywords" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_CountLike,exhibition.ER_RelLinksState,exhibition.ER_RelatedLinks,exhibition.ER_ContentPath,exhibition.ER_StoryState,  (select c.CATE_Path from res_category c where exhibition.ER_GangID=c.CATE_ID ) as erPath,exhibition.ER_Content,  exhibition.ER_Recommen, exhibition.ER_ChorID, exhibition.ER_Chor, exhibition.ER_Code, exhibition.ER_Upload, exhibition.ER_Name, exhibition.ER_TotalID,exhibition.ER_Total,
+			exhibition.ER_Type, exhibition.ER_Category, exhibition.ER_Order, exhibition.ER_Audio,
+			 exhibition.ER_Genus, exhibition.ER_LatinName,exhibition.ER_Contest,
+			exhibition.ER_OrderID, exhibition.ER_GenusID, exhibition.ER_LatinNameID,exhibition.ER_City,
+			exhibition.ER_BiologicalReserve, exhibition.ER_Hunters,
+			exhibition.ER_SpecimensNo, exhibition.ER_SpecimensDate,
+			exhibition.ER_Country, exhibition.ER_Province, exhibition.ER_About,exhibition.ER_Relation,
+			exhibition.ER_PlaceName, exhibition.ER_Longitude,
+			exhibition.ER_Latitude, exhibition.ER_Habitat,
+			exhibition.ER_Characteristics, exhibition.ER_Description,
+			exhibition.ER_Elevation, exhibition.ER_Identifier,
+			exhibition.ER_IdentifierDate, exhibition.ER_Use,
+			exhibition.ER_Remarks, exhibition.ER_Thumbnail, exhibition.ER_InThum,
+			exhibition.ER_UserID,exhibition.ER_InThum,
+			exhibition.ER_UserAccount, exhibition.ER_OperateTime,
+			exhibition.ER_JieID, exhibition.ER_Jie, exhibition.ER_GangID, exhibition.ER_Gang,  exhibition.ER_Custom, exhibition.ER_CategoryName,
+			DATE_FORMAT(exhibition.ER_CreateTime,'%Y-%m-%d')  ER_CreateTime, exhibition.ER_Creator ,
+			exhibition.ER_CategoryName,exhibition.ER_Grade
+		from
+			res_exhibition_room exhibition
+		where ${sqlParamer} and ER_ID not in(#{notInID})
+		ORDER BY exhibition.ER_ID desc
+	</select>
+	<select id="select_page_keywords_little" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			exhibition.ER_ID,exhibition.ER_Name
+		from
+			res_exhibition_room exhibition
+		where ${sqlParamer} and ER_ID not in(#{notInID})
+		ORDER BY exhibition.ER_ID desc
+		
+	</select>
+</mapper>

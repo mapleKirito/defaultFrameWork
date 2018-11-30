@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="user">
+	<!--
+		USER_ID int(11) (NULL) NO PRI (NULL) select,insert,update,references
+		用户随机编号：系统生成 USER_OrgID int(11) (NULL) YES (NULL)
+		select,insert,update,references 父机构ID：机构树状结构父节点标识 USER_Account
+		varchar(50) utf8_bin YES UNI (NULL) select,insert,update,references
+		用户登录ID：用户登录系统的标识，一般是英文字符或者数字。 USER_Name varchar(100) utf8_bin YES
+		(NULL) select,insert,update,references 用户名称：登录系统的用户的姓名。 USER_Type
+		smallint(6) (NULL) YES (NULL) select,insert,update,references 0.超级管理员
+		1.其他管理员 USER_Password varchar(50) utf8_bin YES (NULL)
+		select,insert,update,references 用户密码：用户登录系统的验证密码。 USER_Gender
+		smallint(6) (NULL) YES (NULL) select,insert,update,references 用户性别
+		USER_MobilePhone varchar(20) utf8_bin YES (NULL)
+		select,insert,update,references 用户移动电话：用户移动电话号码。 USER_OfficePhone
+		varchar(20) utf8_bin YES (NULL) select,insert,update,references
+		用户办公电话：用户办公电话号码。 USER_Email varchar(200) utf8_bin YES (NULL)
+		select,insert,update,references 用户邮件：用户的邮箱地址。 USER_Desc varchar(200)
+		utf8_bin YES (NULL) select,insert,update,references 用户描述：用户一些相关的备注信息
+		USER_Status smallint(6) (NULL) YES (NULL)
+		select,insert,update,references 用户状态：1.启用 0.禁用 USER_CreateTime
+		datetime (NULL) YES (NULL) select,insert,update,references
+		创建时间：记录用户的创建时间。 USER_Creator varchar(50) utf8_bin YES Example: <select
+		id=”findActiveBlogLike” parameterType=”Blog” resultType=”Blog”> SELECT
+		* FROM BLOG <where> <if test=”state != null”> state = #{state} </if>
+		<if test=”title != null”> AND title like #{title} </if> <if
+		test=”author != null and author.name != null”> AND title like
+		#{author.name} </if> </where> </select>
+	-->
+	<resultMap id="convertResultUser" type="result">
+		<result property="userID" column="USER_ID" />
+		<result property="userOrgID" column="USER_OrgID" />
+		<result property="userAccount" column="USER_Account" />
+		<result property="userName" column="USER_Name" />
+		<result property="userType" column="USER_Type" />
+		<result property="userPassword" column="USER_Password" />
+		<result property="userGender" column="USER_Gender" />
+		<result property="userMobilePhone" column="USER_MobilePhone" />
+		<result property="userOfficePhone" column="USER_OfficePhone" />
+		<result property="userEmail" column="USER_Email" />
+		<result property="userDesc" column="USER_Desc" />
+		<result property="userStatus" column="USER_Status" />
+		<result property="userCreateTime" column="USER_CreateTime" />
+		<result property="userCreator" column="USER_Creator" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="userExtPhone" column="USER_ExtPhone" />
+	</resultMap>
+	<resultMap type="result" id="userPer">
+		<result property="userID" column="UUG_UserID" />
+		<result property="perCode" column="RP_PmsID" />
+	</resultMap>
+	<resultMap type="result" id="pageSize">
+		<result property="size" column="size" />
+	</resultMap>
+	<select id="select_perm" resultMap="userPer" parameterType="param">
+		select UUG_UserID,RP_PmsID from SYS_UserUserGroup ug left join
+		SYS_UserGroupRole gr on ug.UUG_UGID=gr.UGR_UGID
+		left join SYS_RolePermission rp on gr.UGR_RoleID = rp.RP_RoleID where UUG_UserID = ${UUG_UserID}
+ 	</select>
+	  
+	<select id="select_login_user" resultMap="convertResultUser"
+		parameterType="param">
+		select * from SYS_User
+		<if test="account!=null">where USER_Account = #{account}</if>
+	</select>
+	
+	<select id="select_user_pwd" resultMap="convertResultUser"
+		parameterType="param">
+		select * from SYS_User
+		<if test="userSeriaNO!=null">where USER_ID='${userSeriaNO}'</if>
+	</select>
+	
+	<select id="select_user_page" resultMap="convertResultUser" parameterType="param">
+		select a.* from (
+		select row_number() over(order by USER_ID desc) as rowNum, us.*,org.ORG_Name  
+		from SYS_User us left join SYS_Organization org on USER_OrgID = ORG_ID 
+		<where>
+		and us.USER_Type!=0
+		<if test="select_default_value!=null and select_default_value!=''">
+			 and (org.ORG_Relation like '%,${select_default_value},%' or ORG_ID = ${select_default_value})
+		</if>
+		<if test="select_default_value==null or select_default_value==''">
+			<if test="s_userOrgID!=null and s_userOrgID!='' and s_userOrgID!=0">
+			 and (org.ORG_Relation like '%,${s_userOrgID},%' or ORG_ID = ${s_userOrgID})
+			</if>
+		</if>   
+		<if test="userAccount!=null and userAccount!=''"> and USER_Account like '%${userAccount}%'</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="userExtPhone!=null and userExtPhone!=''"> and USER_ExtPhone like '%${userExtPhone}%'</if>
+		</where>) a
+		where a.rowNum> ${start} and a.rowNum<![CDATA[<${offset}]]>
+	</select>
+	
+	<select id="select_user_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from SYS_User left join SYS_Organization org
+		on
+		USER_OrgID = ORG_ID
+		<where>
+		and USER_Type!=0
+		<if test="select_default_value!=null and select_default_value!=''">
+			 and (org.ORG_Relation like '%,${select_default_value},%' or ORG_ID = ${select_default_value})
+		</if>
+		<if test="select_default_value==null or select_default_value==''">
+			<if test="s_userOrgID!=null and s_userOrgID!='' and s_userOrgID!=0">
+			 and (org.ORG_Relation like '%,${s_userOrgID},%' or ORG_ID = ${s_userOrgID})
+			</if>
+		</if>
+		<if test="userAccount!=null and userAccount!=''"> and USER_Account like '%${userAccount}%'</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="userExtPhone!=null and userExtPhone!=''"> and USER_ExtPhone like '%${userExtPhone}%'</if>
+		</where>
+	</select>
+	
+	<select id="select_user_by_id" resultMap="convertResultUser" parameterType="param">
+		select us.USER_ID,
+		us.USER_OrgID,
+		us.USER_Account,
+		us.USER_Name,
+		us.USER_Type,
+		us.USER_Password,
+		us.USER_Gender,
+		us.USER_MobilePhone,
+		us.USER_OfficePhone,
+		us.USER_Email,
+		us.USER_Desc,
+		us.USER_Status,
+		us.USER_Creator,
+		us.User_ExtPhone,
+		CONVERT(varchar,us.USER_CreateTime, 120 ) USER_CreateTime,
+		org.ORG_Name 
+		from SYS_User us left join SYS_Organization org
+		on USER_OrgID = ORG_ID where USER_ID=${userID}
+	</select>
+	 
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into SYS_User
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null">USER_ID</if>
+			<if test="select_org_id!=null">,USER_OrgID</if>
+			<if test="loginID!=null">,USER_Account</if>
+			<if test="name!=null">,USER_Name</if>
+			,USER_Type
+			<if test="password!=null">,USER_Password</if>
+			<if test="gender!=null">,USER_Gender</if>
+			<if test="mobilePhone!=null">,USER_MobilePhone</if>
+			<if test="officePhone!=null">,USER_OfficePhone</if>
+			<if test="email!=null">,USER_Email</if>
+			<if test="description!=null">,USER_Desc</if>
+			,USER_Status,USER_CreateTime
+			<if test="s_userLoginAccount!=null">,USER_Creator</if>
+			<if test="userExtPhone!=null">,USER_ExtPhone</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null">${autoPrimaryKey}</if>
+			<if test="select_org_id!=null">,${select_org_id}</if>
+			<if test="loginID!=null">,#{loginID}</if>
+			<if test="name!=null">,#{name}</if>
+			,1
+			<if test="password!=null">,#{password}</if>
+			<if test="gender!=null">,${gender}</if>
+			<if test="mobilePhone!=null">,#{mobilePhone}</if>
+			<if test="officePhone!=null">,#{officePhone}</if>
+			<if test="email!=null">,#{email}</if>
+			<if test="description!=null">,#{description}</if>
+			,1,getDate()
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+			<if test="userExtPhone!=null">,#{userExtPhone}</if>
+		</trim>
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update SYS_User
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="select_org_id!=null and select_org_id!=''">,USER_OrgID = #{select_org_id}</if>
+				<if test="name!=null">,USER_Name = #{name}</if>
+				<if test="gender!=null">,USER_Gender = #{gender}</if>
+				<if test="mobilePhone!=null">,USER_MobilePhone = #{mobilePhone}</if>
+				<if test="officePhone!=null">,USER_OfficePhone = #{officePhone}</if>
+				<if test="email!=null">,USER_Email = #{email}</if>
+				<if test="description!=null">,USER_Desc = #{description}</if>
+				<if test="userExtPhone!=null">,User_ExtPhone = #{userExtPhone}</if>
+				
+			</trim>
+		</set>
+		 where USER_ID=${userID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from SYS_User where USER_ID in (${userID})
+		</trim>
+	</delete>
+	
+	<update id="password_modify" parameterType="java.util.HashMap">
+		update SYS_User
+		<set>			
+			<if test="newPassword!=null">USER_Password = #{newPassword}</if>
+		</set>
+		where USER_ID=${s_userID}
+	</update>
+	
+	<update id="modify_pwd" parameterType="java.util.HashMap">
+		update SYS_User
+		<set>			
+			<if test="newPassword!=null">USER_Password = #{newPassword}</if>
+		</set>
+		where USER_ID=${userID}
+	</update>
+	
+	<select id="get_password_by_id" resultMap="convertResultUser"
+		parameterType="param">
+		select USER_Password from SYS_User
+		where USER_ID = ${s_userID}
+	</select>
+	
+	<select id="check_account" resultType="java.lang.Integer"
+		parameterType="param">
+		select count(*) from SYS_User
+		where USER_Account = #{loginID}
+	</select>
+	
+	<select id="check_userExtPhone" resultType="java.lang.Integer"
+		parameterType="param">
+		select count(*) from SYS_User
+		<where>
+		<if test="userExtPhone=='0000'">
+		 and USER_ExtPhone = 'this is a particular value'
+		</if>
+		<if test="userExtPhone!=null and userExtPhone!='' and userExtPhone!='9999'">
+		 and USER_ExtPhone = #{userExtPhone}
+		</if>
+		</where>
+	</select>
+	
+	<select id="select_taskAllocate_user" resultMap="convertResultUser" parameterType="param">
+		select a.* from (
+		select row_number() over(order by USER_Account asc) as rowNum, us.*,org.ORG_Name  
+		from SYS_User us left join SYS_Organization org on USER_OrgID = ORG_ID 
+		<where>
+		and us.USER_Type!=0
+		and us.USER_ID in (
+			select u.USER_ID from SYS_User u,sys_role r,SYS_UserRoleMapper ur
+			where r.ROLE_ID in (
+				select r.ROLE_ID from sys_role r,sys_RolePermissionMapper rp,sys_Permission p 
+				where p.PMS_Index='call_mgr' and p.PMS_Code=rp.RPM_PmsCode and r.ROLE_ID=rp.RPM_RoleID
+			) and u.USER_ID=ur.URM_UserID and r.ROLE_ID=ur.URM_RoleID)
+		<if test="s_userOrgID!=null and s_userOrgID!='' and s_userOrgID!=0">
+		 and (org.ORG_Relation like '%,${s_userOrgID},%' or ORG_ID = ${s_userOrgID})
+		</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="userExtPhone!=null and userExtPhone!=''"> and USER_ExtPhone like '%${userExtPhone}%'</if>
+		<if test="searchUserAccount!=null and searchUserAccount!=''"> and USER_Account like '%${searchUserAccount}%'</if>
+		</where>) a
+		where a.rowNum> ${start} and a.rowNum<![CDATA[<${offset}]]>
+	</select>
+	
+	<select id="select_taskAllocate_user_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from SYS_User us left join SYS_Organization org
+		on
+		USER_OrgID = ORG_ID
+		<where>
+		and us.USER_Type!=0
+		and us.USER_ID in (
+			select u.USER_ID from SYS_User u,sys_role r,SYS_UserRoleMapper ur
+			where r.ROLE_ID in (
+				select r.ROLE_ID from sys_role r,sys_RolePermissionMapper rp,sys_Permission p 
+				where p.PMS_Index='call_mgr' and p.PMS_Code=rp.RPM_PmsCode and r.ROLE_ID=rp.RPM_RoleID
+			) and u.USER_ID=ur.URM_UserID and r.ROLE_ID=ur.URM_RoleID)
+		<if test="s_userOrgID!=null and s_userOrgID!='' and s_userOrgID!=0">
+		 and (org.ORG_Relation like '%,${s_userOrgID},%' or ORG_ID = ${s_userOrgID})
+		</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="userExtPhone!=null and userExtPhone!=''"> and USER_ExtPhone like '%${userExtPhone}%'</if>
+		</where>
+	</select>
+	
+	<select id="select_userinfo_by_id" resultMap="convertResultUser"
+		parameterType="param">
+		select * from SYS_User
+		<if test="userID!=null">where USER_ID='${userID}'</if>
+	</select>
+</mapper>

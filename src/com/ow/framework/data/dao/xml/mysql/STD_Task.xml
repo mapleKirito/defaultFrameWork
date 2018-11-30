@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="task">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="taskId" column="T_ID" />
+		<result property="content" column="T_Content" />
+		<result property="title" column="T_Title" />
+		<result property="replyCount" column="T_ReplyCount" />
+		<result property="viewCount" column="T_ViewCount" />
+		<result property="isTop" column="T_IsTop" />
+		<result property="isLock" column="T_IsLock" />
+		<result property="isRecommend" column="T_IsRecommend" />
+		<result property="createTime" column="T_CreateTime" />
+		<result property="operateTime" column="T_OperateTime" />
+		<result property="userId" column="T_UserID" />
+		<result property="resultId" column="T_ResultID" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="userName" column="USER_Name" />
+		<result property="userType" column="USER_Type" />					
+		<result property="type" column="T_Type" />
+		<result property="apply" column="T_Apply" />
+		<result property="teacherId" column="T_TeacherID" />
+	</resultMap>
+	
+	<resultMap type="result" id="pageSize">
+		<result property="size" column="size" />
+	</resultMap>
+	
+	<select id="select_task_org_by_task_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select distinct
+		task.T_ID,task.T_Title,task.T_Content,so.ORG_ID,so.ORG_Name,
+		DATE_FORMAT(task.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime,
+		task.T_IsLock,task.T_IsRecommend,user.USER_Name,user.USER_Account as userAccount,user.USER_Type
+		from std_task task,std_task_organization_mapper tom ,sys_organization so,sys_user user
+		<where>
+			<trim prefixOverrides="and">
+			task.T_ID=tom.TASK_ID and tom.ORG_ID=so.ORG_ID and user.USER_ID=task.T_UserID
+		 	<if test="taskId != null">
+		 	 and tom.TASK_ID=${taskId}
+			</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_task_org_by_task_class_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select distinct
+		task.T_ID,task.T_Title,task.T_Content,so.ORG_ID,so.ORG_Name,user.USER_Account as userAccount,
+		DATE_FORMAT(task.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime,
+		task.T_IsLock,task.T_IsRecommend,user.USER_Name,user.USER_Type
+		from std_task task,std_task_organization_mapper tom ,sys_organization so,sys_user user
+		<where>
+			<trim prefixOverrides="and">
+			task.T_ID=tom.TASK_ID and tom.ORG_ID=so.ORG_ID and user.USER_ID=task.T_UserID
+		 	<if test="taskId != null">
+		 	 and tom.TASK_ID=${taskId}
+			</if>
+			
+			</trim>
+		</where>
+	</select>	
+	<select id="select_page_by_userId" resultMap="convertResult" parameterType="java.util.HashMap">
+		select task.* from std_task task
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 		
+				<if test="s_userID != null and s_userID != ''">
+					and task.T_UserID=#{s_userID}
+				</if>
+				<if test="title != null and title != ''">
+					and task.T_Title like '%${title}%'
+				</if>
+			</trim>
+		</where>
+		order by task.T_CreateTime desc
+		limit ${start},${offset}			
+	</select>
+	
+	<select id="select_content_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select task.T_Content,task.T_Title from std_task task where task.T_ID=${tId}
+	</select>	
+	
+	<select id="select_task_isRecommend" resultMap="convertResult" parameterType="java.util.HashMap">
+		select distinct task.T_IsRecommend as isRecommend from std_task task
+		<where>
+			<trim prefixOverrides="and">
+			 	<if test="taskId != null">
+			 	 and task.T_ID in (${taskId})
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task task
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="s_userID != null and s_userID != ''">
+					and task.T_UserID=#{s_userID}
+				</if>
+				<if test="title != null and title != ''">
+					and task.T_Title like '%${title}%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from std_task t left join sys_user user on t.T_UserID=user.USER_ID where t.T_ID=#{taskId}
+	</select>
+	
+	<select id="select_by_id_get_title" resultMap="convertResult" parameterType="java.util.HashMap">
+		select t.T_Title as title from std_task t where t.T_ID=#{taskId}
+	</select>
+	
+	<select id="select_unfinish_task_page" resultMap="convertResult" parameterType="param">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t,Task_Finshed fis
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="s_userOrgID != null">
+					and fis.ORG_ID in (${s_userOrgID})
+				</if>
+				<if test="s_userID != null">
+					and fis.Student_ID=${s_userID}
+				</if>				
+				and t.T_ID=fis.Task_ID and (fis.status is Null or fis.status ='' or fis.status ='0')
+			</trim>		
+		</where>
+		order by t.T_CreateTime desc
+		limit ${start},${offset}
+	</select>	
+	
+	<select id="select_unfinish_task_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*)
+		from std_task t,Task_Finshed fis
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="s_userOrgID != null">
+					and fis.ORG_ID in (${s_userOrgID})
+				</if>
+				<if test="s_userID != null">
+					and fis.Student_ID=${s_userID}
+				</if>				
+				and t.T_ID=fis.Task_ID and (fis.status is Null or fis.status ='' or fis.status ='0')
+			</trim>		
+		</where>
+	</select>		
+	
+	<select id="select_task_page" resultMap="convertResult" parameterType="param">
+		select 
+			st.T_ID,st.T_Content,st.T_Title,st.T_ReplyCount,st.T_ViewCount,st.T_IsTop,st.T_IsRecommend,st.T_IsLock,
+			st.T_UserID,DATE_FORMAT(st.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task st, task_finshed tf
+		<where>
+			st.t_id=tf.task_id 
+				<if test="title!=null and title!=''"> and st.T_Title like '%${title}%'</if>
+				<if test="type!=null and type!=''"> and st.T_Type=${type}</if>	
+				<if test="isLock!=null and isLock!=''"> and st.T_IsLock=${isLock}</if>	
+				<if test="s_userID != null">
+					and tf.Student_ID =${s_userID}
+				</if>
+		</where>
+		order by T_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_task_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task st , task_finshed tf
+		<where>
+		st.t_id=tf.task_id
+			<if test="title!=null and title!=''"> and T_Title like '%${title}%'</if>	
+			<if test="type!=null and type!=''"> and T_Type=${type}</if>	
+			<if test="isLock!=null and isLock!=''"> and T_IsLock=${isLock}</if>	
+			<if test="s_userID != null">
+				and tf.Student_ID =${s_userID}
+			</if>							
+		</where>
+	</select>
+	
+	<select id="select_class_task_page" resultMap="convertResult" parameterType="param">
+		<if test="s_userType == 0">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+			</trim>
+		</where>				
+		</if>
+		<if test="s_userType != 0">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+				<if test="s_userOrgID != null">
+					and tom.ORG_ID in (${s_userOrgID})
+				</if>
+		
+				and t.T_ID=tom.TASK_ID
+			</trim>
+		</where>			
+		</if>
+		order by t.T_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_class_task_page_count" resultType="java.lang.Integer" parameterType="param">
+		<if test="s_userType == 0">
+		select count(*) from std_task t
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>				
+			</trim>
+		</where>
+		</if>
+		<if test="s_userType != 0">		
+		select count(*) from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>		
+				<if test="s_userOrgID != null">
+					and tom.ORG_ID in (${s_userOrgID})
+				</if>
+				and t.T_ID=tom.TASK_ID 
+			</trim>
+		</where>		
+		</if>
+	</select>
+	<!-- 我的提问 -->
+	<select id="select_class_question_page" resultMap="convertResult" parameterType="param">
+		<if test="s_userType == 0">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,t.T_IsRecommend,t.T_IsLock,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+			</trim>
+		</where>				
+		</if>
+		<if test="s_userType != 0">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,t.T_IsLock,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+				<if test="s_userOrgID != null">
+					and tom.ORG_ID in (${s_userOrgID})
+				</if>
+				
+				<if test="s_userID != null">
+					and t.T_UserID=${s_userID}
+				</if>
+				and t.T_ID=tom.TASK_ID
+			</trim>
+		</where>			
+		</if>
+		order by t.T_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_class_question_modify_page" resultMap="convertResult" parameterType="param">
+		<if test="s_userType != 0">
+		select distinct t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="taskId!=null and taskId !=''"> and t.T_ID=${taskId}</if>	
+				and t.T_ID=tom.TASK_ID
+			</trim>
+		</where>			
+		</if>
+	</select>
+	<!-- 同学提问 -->
+	<select id="select_class_question_page_class" resultMap="convertResult" parameterType="param">
+		<if test="s_userType == 0">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,t.T_IsRecommend,t.T_IsLock,
+			t.T_UserID,t.T_Apply,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+			</trim>
+		</where>				
+		</if>
+		<if test="s_userType != 0">
+		select 
+			t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,t.T_Apply,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+				<if test="s_userOrgID != null">
+					and tom.ORG_ID in (${s_userOrgID})
+				</if>
+				and t.T_ID=tom.TASK_ID
+				and t.T_Apply=1
+			</trim>
+		</where>			
+		</if>
+		order by t.T_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_class_question_page_count" resultType="java.lang.Integer" parameterType="param">
+		<if test="s_userType == 0">
+		select count(*) from std_task t
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>				
+			</trim>
+		</where>
+		</if>
+		<if test="s_userType != 0">		
+		select count(*) from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+				<if test="s_userOrgID != null">
+					and tom.ORG_ID in (${s_userOrgID})
+				</if>
+				
+				<if test="s_userID != null">
+					and t.T_UserID=${s_userID}
+				</if>
+				and t.T_ID=tom.TASK_ID
+			</trim>
+		</where>			
+		</if>
+	</select>
+	<select id="select_class_question_page_count_class" resultType="java.lang.Integer" parameterType="param">
+		<if test="s_userType == 0">
+		select count(*) from std_task t
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>				
+			</trim>
+		</where>
+		</if>
+		<if test="s_userType != 0">		
+		select count(*) from std_task t,std_task_organization_mapper tom
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="type!=null and type!=''"> and t.T_Type=${type}</if>	
+				<if test="apply!=null and apply!=''"> and t.T_Apply=${apply}</if>	
+				<if test="s_userOrgID != null">
+					and tom.ORG_ID in (${s_userOrgID})
+				</if>
+				and t.T_ID=tom.TASK_ID
+				and t.T_Apply=1
+			</trim>
+		</where>			
+		</if>
+	</select>
+	<select id="select_task_count_by_org_id" resultType="int" parameterType="java.util.HashMap">
+		select count(*) from std_task st join std_task_organization_mapper stom on st.T_ID = stom.TASK_ID
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 	
+				<if test="s_userID!=null">and ORG_ID=${s_userID}</if>
+				<if test="orgID!=null">and stom.ORG_ID=${orgID}</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page_by_user_id" resultMap="convertResult" parameterType="param">
+		select distinct t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,t.T_IsRecommend,t.T_IsLock,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime  from std_task t join std_task_organization_mapper stom on t.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_Type=1 
+				<if test="s_userID != null">
+					and T_UserID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+			</trim>
+		</where>
+		order by t.T_IsRecommend desc , t.T_CreateTime desc
+			limit ${start},${offset}		
+	</select>
+	<select id="select_page_by_user_id_count" resultType="int" parameterType="java.util.HashMap">
+		select distinct count(*) from std_task t join std_task_organization_mapper stom on t.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_Type=1 
+				<if test="s_userID != null">
+					and T_UserID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_apply_page_by_org_id" resultMap="convertResult" parameterType="param">
+		select distinct t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime,t.T_Apply from std_task t join std_task_organization_mapper stom on t.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_Type=2 
+				<if test="s_userOrgID != null and s_userOrgID!=''">
+					and stom.ORG_ID =${s_userOrgID}
+				</if>
+				<if test="s_userType == 2">
+					T_Apply != 1 
+					and user.USER_ID = ${s_userID}
+				</if>
+				
+			</trim>
+		</where>
+		order by t.T_CreateTime desc
+		limit ${start},${offset}		
+	</select>
+	
+	<select id="select_apply_page_by_org_id_count" resultType="int" parameterType="java.util.HashMap">
+		select  count(distinct t.T_ID) from std_task t join std_task_organization_mapper stom on t.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_Type=2
+				<if test="s_userOrgID != null and s_userOrgID!=''">
+					and stom.ORG_ID =${s_userOrgID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_apply_page_by_user_id" resultMap="convertResult" parameterType="param">
+		select distinct t.T_ID,t.T_Content,t.T_Title,t.T_ReplyCount,t.T_ViewCount,t.T_IsTop,
+			t.T_UserID,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime,t.T_Apply from std_task t join std_task_organization_mapper stom on t.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_Type=2 
+				<if test="s_userID != null">
+					and T_TeacherID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+				<if test="s_userType == 2">
+					T_Apply != 1 
+					and user.USER_ID = ${s_userID}
+				</if>
+				
+			</trim>
+		</where>
+		order by t.T_CreateTime desc
+		limit ${start},${offset}		
+	</select>
+	
+	<select id="select_apply_page_by_user_id_count" resultType="int" parameterType="java.util.HashMap">
+		select  count(distinct t.T_ID) from std_task t join std_task_organization_mapper stom on t.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_Type=2
+				<if test="s_userID != null">
+					and T_TeacherID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="unapply_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) from std_task st, std_task_organization_mapper stom 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+			st.t_type='2' and st.t_id=stom.task_id and (st.T_Apply='0' or st.T_Apply is Null or st.T_Apply='')
+				<if test="s_userID != null">
+					and st.T_TeacherID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	<select id="select_unapply_work_page_by_user_id" resultMap="convertResult" parameterType="param">
+		select distinct st.t_id,st.t_title,st.t_createTime from std_task st ,std_task_info sti,task_finshed tf, std_task_organization_mapper stom			
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix="">
+				st.t_id=sti.t_id and st.t_id=tf.task_id and st.t_id=stom.task_id and sti.ti_type='1' and tf.status='1' and (tf.ApplyStatus='0' or tf.ApplyStatus is Null or tf.ApplyStatus='')
+				<if test="s_userID != null">
+					and tf.Teacher_ID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+			</trim>
+		</where>
+			limit ${start},${offset}		
+	</select>
+	<select id="select_unapply_work_page_by_user_id_count" resultType="int" parameterType="java.util.HashMap">
+		select  count(distinct st.t_id) from std_task st ,std_task_info sti,task_finshed tf, std_task_organization_mapper stom			
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				st.t_id=sti.t_id and st.t_id=tf.task_id and st.t_id=stom.task_id and sti.ti_type='1' and tf.status='1' and (tf.ApplyStatus='0' or tf.ApplyStatus is Null or tf.ApplyStatus='')
+				<if test="s_userID != null">
+					and tf.Teacher_ID =${s_userID}
+				</if>
+				<if test="orgID != null and orgID!=''">
+					and stom.ORG_ID =${orgID}
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_top_count_by_org_id_and_user_id" resultType="int" parameterType="java.util.HashMap">
+		select count(*) from std_task st join std_task_organization_mapper stom on st.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and st.T_IsRecommend=1 and st.T_Type='1'
+				<if test="s_userID != null">
+					and st.T_UserID =${s_userID}	
+				</if>
+				<if test="orgID != null and orgID !=''">
+					and stom.ORG_ID =${orgID}
+				</if> 
+			</trim>
+		</where> 
+	</select>
+	
+	<select id="select_by_userId_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) as count_by from std_task 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and T_UserID in (${userID})
+			</trim>
+		</where> 
+	</select>
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into std_task
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="title!=null">,T_Title</if>
+			<if test="content">,T_Content</if>		
+			<if test="s_userID!=null">,T_UserID</if>	
+			<if test="type!=null">,T_Type</if>	
+			<if test="isLock!=null">,T_IsLock</if>	
+			<if test="isRecommend!=null">,T_IsRecommend</if>
+			<if test="teacherId!=null">,T_TeacherID</if>	
+				
+			,T_CreateTime,T_ReplyCount,T_ViewCount
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="title!=null">,#{title}</if>
+			<if test="content!=null">,#{content}</if>		
+			<if test="s_userID!=null">,${s_userID}</if>	
+			<if test="type!=null">,${type}</if>	
+			<if test="isLock!=null">,${isLock}</if>	
+			<if test="isRecommend!=null">,${isRecommend}</if>
+			<if test="teacherId!=null">,${teacherId}</if>	
+				
+			,now(),0,0			
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update std_task
+		<set>
+			<trim prefixOverrides=",">
+				<if test="title!=null">,T_Title=#{title}</if>
+				<if test="content!=null">,T_Content=#{content}</if>
+				,T_OperateTime = now()
+			</trim>
+		</set>
+		where T_ID=${taskId}
+	</update>
+	<update id="apply" parameterType="java.util.HashMap">
+		update std_task set T_Apply='1' where T_ID=${taskId}
+	</update>
+	<update id="update_view_count" parameterType="java.util.HashMap">
+		update std_task set T_ViewCount=T_ViewCount+1 where T_ID=${taskId}
+	</update>
+	<update id="update_reply_count" parameterType="java.util.HashMap">
+		update std_task set T_ReplyCount=T_ReplyCount+1 where T_ID=${taskId}
+	</update>	
+	<update id="update_lock_recommend_by_id" parameterType="java.util.HashMap">
+		update std_task
+		<set>
+			<trim prefixOverrides=",">
+				<if test="isLock!=null">,T_IsLock=#{isLock}</if>
+				<if test="isRecommend!=null">,T_IsRecommend=#{isRecommend}</if>
+				<if test="generatedKey!=null">,T_ResultID=#{generatedKey}</if>
+				,T_OperateTime = now()
+			</trim>
+		</set>
+		where T_ID=${taskId}
+	</update>	
+	
+	<delete id="delete_by_id" parameterType="java.util.HashMap">
+		delete from std_task where T_ID in (${taskId})
+	</delete>	
+	
+	<delete id="delete_by_userId" parameterType="java.util.HashMap">
+		delete from std_task where T_UserID in (${userID})
+	</delete>	
+</mapper>
+

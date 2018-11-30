@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+	ORG_ID bigint(20) 组织机构id
+	ORG_ParentID bigint(20) 组织机构父id
+	ORG_Relation varchar(2000) 
+	ORG_Name varchar(100) 机构名称
+	ORG_Code varchar(50) 机构代码
+	ORG_Level varchar(11) 机构等级
+	ORG_Phone varchar(30) 机构电话
+	ORG_Fax varchar(30) 机构传真
+	ORG_PostCode varchar(10) 机构邮编
+	ORG_Address varchar(500) 机构地址
+	ORG_Desc varchar(500) 机构详细
+	ORG_Status int(11) 机构状态
+	ORG_CreateTime datetime 机构创建时间
+	ORG_Creator varchar(50) 机构创建者
+	-->
+<mapper namespace="org">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="orgID" column="ORG_ID" />
+		<result property="orgParentID" column="ORG_ParentID" />
+		<result property="orgRelation" column="ORG_Relation" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="orgCode" column="ORG_Code" />
+		<result property="orgLevel" column="ORG_Level" />
+		<result property="orgPhone" column="ORG_Phone" />
+		<result property="orgFax" column="ORG_Fax" />
+		<result property="orgPostcode" column="ORG_PostCode" />
+		<result property="orgAddress" column="ORG_Address" />
+		<result property="orgDesc" column="ORG_Desc" />
+		<result property="orgStatus" column="ORG_Status" />
+		<result property="orgCreateTime" column="ORG_CreateTime" />
+		<result property="orgCreator" column="ORG_Creator" />
+		<result property="orgParentName" column="ORG_ParentName" />
+		<result property="orgIsChild" column="ORG_IsChild" />
+	</resultMap>
+	<!-- 
+	<select id="select_org_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select org.* from sys_organization org
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="s_userOrgID != null or s_userOrgID != ''">
+				  and (org.ORG_Relation like '%,${s_userOrgID},%' or org.ORG_ID=${s_userOrgID}) 
+				</if>
+			</trim>
+		</where>
+	</select>
+	 	 -->
+	 	 
+	 	 
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from sys_organization where ORG_Code=#{orgCode}
+	</select>	 	
+	
+	<select id="select_org_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.* from sys_organization o
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="id == null">
+				  o.ORG_ParentID=0 
+				</if>
+				<if test="id != null and id != ''">
+					o.ORG_ParentID=${id}
+				</if>
+				 and o.ORG_Status=1
+			</trim>
+		</where>
+	</select>	 	
+	 	
+	<select id="select_org_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.* from sys_organization o
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="orgParentID != null and orgParentID != ''">
+				  o.ORG_ID=${orgParentID} 
+				</if>
+				<if test="activeOrgId != null and activeOrgId != ''">
+				o.ORG_ID=${activeOrgId}
+				</if>
+				 and o.ORG_Status=1
+			</trim>
+		</where>
+	</select>	 	
+	 	
+	<select id="select_user_org_mapper_luid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.* from sys_organization o,sys_user_organization_mapper uom
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="s_userID != null and s_userID != ''">
+				  and uom.USER_ID=${s_userID}
+				</if>				
+				  and o.ORG_ID=uom.ORG_ID and o.ORG_Status=1
+			</trim>
+		</where>
+	</select>	 	
+	 	
+	<select id="select_user_org_mapper_uid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.* from sys_organization o,sys_user_organization_mapper uom
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="s_userType == 1">
+					<if test="s_userID != null and s_userID != ''">
+					  and uom.USER_ID=${s_userID}
+					</if>	
+				</if>
+				<if test="s_userType == 0">
+					<if test="userID != null and userID != ''">
+					  and uom.USER_ID=${userID}
+					</if>		
+				</if>					
+				<if test="s_userType == 3">
+					<if test="userID != null and userID != ''">
+					  and uom.USER_ID=${userID}
+					</if>		
+				</if>							
+				  and o.ORG_ID=uom.ORG_ID and o.ORG_Status=1
+			</trim>
+		</where>
+	</select>		 	
+	 <select id="select_only_me_org" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT * FROM sys_organization o,sys_user_organization_mapper uom WHERE o.ORG_ID=uom.ORG_ID AND o.ORG_Status=1 AND USER_ID=${idtypevalue}
+	 </select>
+	<select id="select_org_by_parentid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.ORG_ID,o.ORG_ParentID,o.ORG_IsChild,o.ORG_Relation,o.ORG_Name,o.ORG_Code,o.ORG_Level,
+		o.ORG_Phone,o.ORG_Fax,o.ORG_PostCode,o.ORG_Address,o.ORG_Desc,o.ORG_Status,
+		o.ORG_CreateTime,o.ORG_Creator from sys_organization o
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="orgParentID == null or orgParentID == ''">
+				  o.ORG_ParentID=0 
+				</if>
+				<if test="orgParentID != null and orgParentID != ''">
+					o.ORG_ParentID=${orgParentID}
+				</if>
+				 and o.ORG_Status=1
+			</trim>
+		</where>		
+	 </select>	 	
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.ORG_ID,o.ORG_ParentID,o.ORG_IsChild,o.ORG_Relation,o.ORG_Name,o.ORG_Code,o.ORG_Level,
+		o.ORG_Phone,o.ORG_Fax,o.ORG_PostCode,o.ORG_Address,o.ORG_Desc,o.ORG_Status,
+		o.ORG_CreateTime,o.ORG_Creator from sys_organization o
+		where o.ORG_Status=1	
+	 </select>	 	
+	<select id="select_org_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.ORG_ID,o.ORG_ParentID,o.ORG_IsChild,o.ORG_Relation,o.ORG_Name,o.ORG_Code,o.ORG_Level,
+		o.ORG_Phone,o.ORG_Fax,o.ORG_PostCode,o.ORG_Address,o.ORG_Desc,o.ORG_Status,
+		o.ORG_CreateTime,o.ORG_Creator from sys_organization o
+		where o.ORG_Status=1	
+		limit ${start},${offset}
+	 </select>
+	<select id="select_org_all_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from sys_organization o
+		where o.ORG_Status=1	
+	 </select>	 
+	<select id="select_org_all_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select count(*) from sys_organization o
+		where o.ORG_Status=1	
+	 </select>
+	<select id="select_org_by_oid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.ORG_ID,o.ORG_ParentID,o.ORG_Relation,o.ORG_Name,o.ORG_Code,t.ORG_Level,
+		o.ORG_Phone,o.ORG_Fax,o.ORG_PostCode,o.ORG_Address,o.ORG_Desc,o.ORG_Status,
+		o.ORG_CreateTime,o.ORG_Creator,t.ORG_Name ORG_ParentName
+		from sys_organization o 
+		left join sys_organization t on o.ORG_ParentID = t.ORG_ID
+		where o.ORG_ID=${orgID} and o.ORG_Status=1
+	 </select>
+	<select id="select_org_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select a.* from 
+		(
+			select t.* ,ROWNUM rn from
+			(
+				select ORG_ID,ORG_ParentID,ORG_Relation,ORG_Name,ORG_Code,ORG_Level,
+				ORG_Phone,ORG_Fax,ORG_PostCode,ORG_Address,ORG_Desc,ORG_Status,
+				ORG_CreateTime,ORG_Creator from sys_organization order by ORG_ID desc
+			) t
+			<where>
+			      <if test="offset!=null and offset!=''">
+			         <![CDATA[ROWNUM<=${offset}]]>
+			       </if>  
+		     </where>
+		) a
+		<where>
+		      <if test="start!=null and start!=''">
+		         rn>=${start}
+		       </if>       
+	     </where>
+	 </select> 	 
+	<select id="select_org_page_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) as count from sys_organization where ORG_Status=1
+	 </select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_organization
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="orgParentID!=null and orgParentID!=''">,ORG_ParentID</if>
+			<if test="orgName!=null and orgName!=''">,ORG_Name</if>
+			<if test="orgCode!=null and orgCode!=''">,ORG_Code</if>
+			<if test="orgLevel!=null and orgLevel!=''">,ORG_Level</if>
+			<if test="orgPhone!=null and orgPhone!=''">,ORG_Phone</if>
+			<if test="orgFax!=null and orgFax!=''">,ORG_Fax</if>
+			<if test="orgPostcode!=null and orgPostcode!=''">,ORG_PostCode</if>
+			<if test="orgAddress!=null and orgAddress!=''">,ORG_Address</if>
+			<if test="orgDesc!=null and orgDesc!=''">,ORG_Desc</if>
+			<if test="orgStatus!=null and orgStatus!=''">,ORG_Status</if>
+			,ORG_CreateTime
+			<if test="s_userLoginAccount!=null and s_userLoginAccount!=''">,ORG_Creator</if>
+			<if test="orgIsChild!=null and orgIsChild!=''">,ORG_IsChild</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="orgParentID!=null and orgParentID!=''">,${orgParentID}</if>
+			<if test="orgName!=null and orgName!=''">,#{orgName}</if>
+			<if test="orgCode!=null and orgCode!=''">,#{orgCode}</if>
+			<if test="orgLevel!=null and orgLevel!=''">,${orgLevel}</if>
+			<if test="orgPhone!=null and orgPhone!=''">,#{orgPhone}</if>
+			<if test="orgFax!=null and orgFax!=''">,#{orgFax}</if>
+			<if test="orgPostcode!=null and orgPostcode!=''">,#{orgPostcode}</if>
+			<if test="orgAddress!=null and orgAddress!=''">,#{orgAddress}</if>
+			<if test="orgDesc!=null and orgDesc!=''">,#{orgDesc}</if>
+			<if test="orgStatus!=null and orgStatus!=''">,#{orgStatus}</if>
+			,now()
+			<if test="s_userLoginAccount!=null and s_userLoginAccount!=''">,#{s_userLoginAccount}</if>
+			<if test="orgIsChild!=null and orgIsChild!=''">,${orgIsChild}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_organization
+		<set>			
+			<trim prefixOverrides=",">
+			<!--<if test="select_orgID!=null">ORG_ParentID = ${select_orgID}</if>
+				<if test="select_orgRelation!=null">,ORG_Relation = '${select_orgRelation},${orgID}'</if> -->
+				<if test="orgName!=null">,ORG_Name = #{orgName}</if>
+				<if test="orgCode!=null">,ORG_Code = #{orgCode}</if>
+				<if test="orgLevel!=null">,ORG_Level = #{orgLevel}</if>
+				<if test="orgPhone!=null">,ORG_Phone = #{orgPhone}</if>
+				<if test="orgFax!=null">,ORG_Fax = #{orgFax}</if>
+				<if test="orgPostcode!=null">,ORG_PostCode = #{orgPostcode}</if>
+				<if test="orgAddress!=null">,ORG_Address = #{orgAddress}</if>
+				<if test="orgDesc!=null">,ORG_Desc = #{orgDesc}</if>
+				<if test="orgStatus!=null">,ORG_Status = ${orgStatus}</if>
+				<if test="orgParentID!=null">,ORG_ParentID=${orgParentID}</if>
+				<if test="orgRelation!=null">,ORG_Relation=#{orgRelation}</if>
+				,ORG_CreateTime = now()
+				<if test="s_userLoginAccount!=null">,ORG_Creator = #{s_userLoginAccount}</if>
+			</trim>
+		</set>
+		 where ORG_ID=${orglID}
+	</update>
+	<!-- 
+	<update id="update_child" parameterType="java.util.HashMap">
+		update sys_organization t set 		
+			<trim prefixOverrides=",">
+				<if test="orgParentID!=null and orgParentID!='' and oldOrgParentID!=null and oldOrgParentID!=''">
+					t.ORG_Relation = replace (t.ORG_Relation,'${oldOrgParentID}','${orgParentID}')
+					,t.ORG_ParentID = ${orgParentID},
+				</if>
+			</trim>
+			t.ORG_CreateTime=now()
+		<where>
+		   <trim prefixOverrides="and">
+				<if test="orglID!=null and orglID!=''"> 
+					and t.ORG_ID = ${orglID}
+				</if>
+				<if test="oldOrgParentID!=null and oldOrgParentID!='' and orglID!=null and orglID!=''">
+					and ${orgParentID}!= ${orglID}
+				</if>
+			</trim>
+		</where>
+	</update>
+	<update id="update_under_child" parameterType="java.util.HashMap">
+		update sys_organization t set 
+			<trim prefixOverrides=",">
+				<if test="orgRelation!=null and orgRelation!=''">
+					t.ORG_Relation = replace (t.ORG_Relation,substr(t.ORG_Relation,,instr(t.ORG_Relation,'orglID,')),'${orgRelation}'),
+				</if>
+			</trim>
+			t.ORG_CreateTime= now() where t.ORG_ParentID = ${orglID}
+		<where>
+			<if test="oldOrgParentID!=null and oldOrgParentID!='' and orgID!=null and orgID!=''">
+				t.org_relation like '%${oldOrgParentID},${orglID},%' and ${orgParentID}!= ${orglID}
+			</if>
+		</where>
+	</update>	
+	-->
+	<update id="update_under_child" parameterType="java.util.HashMap">
+		update sys_organization
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orgRelation!=null and orgRelation!=''">,ORG_Relation=#{orgRelation}</if>
+				<if test="orgLevel!=null and orgLevel!=''">,ORG_Level=#{orgLevel}</if>
+					,ORG_CreateTime = now()
+		    </trim>
+		</set>
+		 where ORG_ID=${orgID}
+	</update>
+	
+	<update id="update_ischild" parameterType="java.util.HashMap">
+		update sys_organization
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orgIsChild!=null">,ORG_IsChild=#{orgIsChild}</if>
+		    </trim>
+		</set>
+		 where ORG_ID=${orgParentID}
+	</update>	
+	
+	<update id="update_relation" parameterType="java.util.HashMap">
+		update sys_organization
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="orgRelation!=null and orgRelation!=''">,ORG_Relation = #{orgRelation}</if>
+			</trim>
+		</set>
+		 where ORG_ID=${generatedKey}
+	</update>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_organization where ORG_ID in (${orgID})
+	</delete>
+	<delete id="delete_users_by_org" parameterType="java.util.HashMap">
+		delete from sys_user_organization_mapper where in (${orgID})
+	</delete>	
+	<select id="check_orgCode" resultType="java.lang.Integer"
+		parameterType="param">
+		select count(*) from sys_organization
+		where ORG_Code = #{orgCode}
+		<trim prefixOverrides="and" > 
+		<if test="orgId!=null and orgId!=''">
+			and ORG_ID != #{orgId}
+		</if>
+		 and ORG_Status=1
+		 </trim>
+	</select>	
+	
+	<select id="select_orgRelation" resultMap="convertResult" parameterType="java.util.HashMap">
+		select og.* from sys_organization og
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="select_default_value==null or select_default_value==''">
+				  and (og.ORG_Relation like '%,${s_userOrgID},%' or og.ORG_ID=${s_userOrgID}) 
+				</if>
+				<if test="select_default_value!=null and select_default_value!=''">
+				  and (og.ORG_Relation like '%,${select_default_value},%' or og.ORG_ID=${select_default_value})  
+				</if>
+				 and og.ORG_Status=1
+			</trim>
+		</where>
+		order by og.ORG_ID asc
+	</select>
+	
+	<select id="select_orgByID" resultMap="convertResult" parameterType="java.util.HashMap">
+		select t.* from sys_organization t where t.ORG_ID = ${orgID} and t.ORG_Status=1
+	</select>
+	
+	<!-- 查询上级机构的相关信息 	-->
+	<select id="select_orgByIDParentID" resultMap="convertResult" parameterType="java.util.HashMap">
+		select t.* from sys_organization t where t.ORG_ID = ${orgParentID} and t.ORG_Status=1
+	</select>
+	
+	<!-- 根据上级机构查询所有子机构 	-->
+	<select id="select_orgByParentID" resultMap="convertResult" parameterType="java.util.HashMap">
+		select t.* from sys_organization t where t.ORG_ParentID = ${orglID} and t.ORG_Status=1
+	</select>
+	
+	<!-- 根据relation模糊查询机构数量 	-->
+	<select id="select_count_by_relation" resultType="int" parameterType="java.util.HashMap">
+		select count(*)  from sys_organization t
+		<where>
+			<trim prefixOverrides="and">
+				<if test="orgParentID!=null and orgParentID!=''">
+					and t.ORG_Relation like '%,${orgParentID},%'
+				</if>
+				and t.ORG_Status=1
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_user_org_by_userid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select so.ORG_ID, so.ORG_Name from sys_organization so join sys_user_organization_mapper suom on so.ORG_ID=suom.ORG_ID 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="userID != null">
+					and USER_ID =${userID}						
+				</if>
+				and so.ORG_Status=1
+			</trim>
+		</where>
+	</select>
+</mapper>

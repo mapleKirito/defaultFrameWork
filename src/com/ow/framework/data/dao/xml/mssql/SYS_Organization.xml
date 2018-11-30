@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+	ORG_ID bigint(20) 组织机构id
+	ORG_ParentID bigint(20) 组织机构父id
+	ORG_Relation varchar(2000) 
+	ORG_Name varchar(100) 机构名称
+	ORG_Code varchar(50) 机构代码
+	ORG_Grade varchar(11) 机构等级
+	ORG_Phone varchar(30) 机构电话
+	ORG_Fax varchar(30) 机构传真
+	ORG_PostCode varchar(10) 机构邮编
+	ORG_Address varchar(500) 机构地址
+	ORG_Desc varchar(500) 机构详细
+	ORG_Status int(11) 机构状态
+	ORG_CreateTime datetime 机构创建时间
+	ORG_Creator varchar(50) 机构创建者
+	-->
+<mapper namespace="org">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="orgID" column="ORG_ID" />
+		<result property="orgParentID" column="ORG_ParentID" />
+		<result property="orgRelation" column="ORG_Relation" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="orgCode" column="ORG_Code" />
+		<result property="orgGrade" column="ORG_Grade" />
+		<result property="orgPhone" column="ORG_Phone" />
+		<result property="orgFax" column="ORG_Fax" />
+		<result property="orgPostcode" column="ORG_PostCode" />
+		<result property="orgAddress" column="ORG_Address" />
+		<result property="orgDesc" column="ORG_Desc" />
+		<result property="orgStatus" column="ORG_Status" />
+		<result property="orgCreateTime" column="ORG_CreateTime" />
+		<result property="orgCreator" column="ORG_Creator" />
+		<result property="orgParentName" column="ParentName" />
+		
+	</resultMap>
+	<select id="select_org_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.ORG_ID,(select s.ORG_Name from SYS_Organization s where  s.ORG_ID= o.ORG_ParentID) ParentName,o.ORG_ParentID,o.ORG_Relation,o.ORG_Name,o.ORG_Code,o.ORG_Grade,
+		o.ORG_Phone,o.ORG_Fax,o.ORG_PostCode,o.ORG_Address,o.ORG_Desc,o.ORG_Status,
+		o.ORG_CreateTime,o.ORG_Creator from SYS_Organization o order by ORG_CreateTime
+	 </select>
+	<select id="select_org_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select o.ORG_ID,(select s.ORG_Name from SYS_Organization s where  s.ORG_ID= o.ORG_ParentID) ParentName,o.ORG_ParentID,o.ORG_Relation,o.ORG_Name,o.ORG_Code,o.ORG_Grade,
+		o.ORG_Phone,o.ORG_Fax,o.ORG_PostCode,o.ORG_Address,o.ORG_Desc,o.ORG_Status,
+		 CONVERT(varchar, o.ORG_CreateTime, 120 ) ORG_CreateTime,o.ORG_Creator from SYS_Organization o where o.ORG_ID=${orgID}
+	 </select>
+	<select id="select_org_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select ORG_ID,ORG_ParentID,ORG_Relation,ORG_Name,ORG_Code,ORG_Grade,
+		ORG_Phone,ORG_Fax,ORG_PostCode,ORG_Address,ORG_Desc,ORG_Status,
+		ORG_CreateTime,ORG_Creator from SYS_Organization
+		limit ${start},${offset}
+	 </select> 	 
+	<select id="select_org_page_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) as count from SYS_Organization
+	 </select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into SYS_Organization
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null">ORG_ID</if>
+			<if test="select_orgID!=null">,ORG_ParentID</if>
+			<if test="select_orgRelation!=null and autoPrimaryKey!=null">,ORG_Relation</if>
+			<if test="orgName!=null">,ORG_Name</if>
+			<if test="orgCode!=null">,ORG_Code</if>
+			<if test="orgGrade!=null">,ORG_Grade</if>
+			<if test="orgPhone!=null">,ORG_Phone</if>
+			<if test="orgFax!=null">,ORG_Fax</if>
+			<if test="orgPostcode!=null">,ORG_PostCode</if>
+			<if test="orgAddress!=null">,ORG_Address</if>
+			<if test="orgDesc!=null">,ORG_Desc</if>
+			,ORG_Status,ORG_CreateTime
+			<if test="s_userLoginAccount!=null">,ORG_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="autoPrimaryKey!=null">${autoPrimaryKey}</if>
+			<if test="select_orgID!=null">,${select_orgID}</if>
+			<if test="select_orgRelation!=null and autoPrimaryKey!=null and select_orgID==0">,',${select_orgID},${autoPrimaryKey}'</if>
+			<if test="select_orgRelation!=null and autoPrimaryKey!=null and select_orgID!=0">,'${select_orgRelation},${autoPrimaryKey}'</if>
+			<if test="orgName!=null">,#{orgName}</if>
+			<if test="orgCode!=null">,#{orgCode}</if>
+			<if test="orgGrade!=null">,#{orgGrade}</if>
+			<if test="orgPhone!=null">,#{orgPhone}</if>
+			<if test="orgFax!=null">,#{orgFax}</if>
+			<if test="orgPostcode!=null">,#{orgPostcode}</if>
+			<if test="orgAddress!=null">,#{orgAddress}</if>
+			<if test="orgDesc!=null">,#{orgDesc}</if>
+			,1,getDate()
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="java.util.HashMap">
+		update SYS_Organization
+		<set>			
+			<trim prefixOverrides=",">
+			<!--<if test="select_orgID!=null">ORG_ParentID = ${select_orgID}</if>
+				<if test="select_orgRelation!=null">,ORG_Relation = '${select_orgRelation},${orgID}'</if> -->
+				<if test="orgName!=null">,ORG_Name = #{orgName}</if>
+				<if test="orgCode!=null">,ORG_Code = #{orgCode}</if>
+				<if test="orgGrade!=null">,ORG_Grade = #{orgGrade}</if>
+				<if test="orgPhone!=null">,ORG_Phone = #{orgPhone}</if>
+				<if test="orgFax!=null">,ORG_Fax = #{orgFax}</if>
+				<if test="orgPostcode!=null">,ORG_PostCode = #{orgPostcode}</if>
+				<if test="orgAddress!=null">,ORG_Address = #{orgAddress}</if>
+				<if test="orgDesc!=null">,ORG_Desc = #{orgDesc}</if>
+				<if test="orgStatus!=null">,ORG_Status = ${orgStatus}</if>
+				,ORG_CreateTime = getDate()
+				<if test="s_userLoginAccount!=null">,ORG_Creator = #{s_userLoginAccount}</if>
+			</trim>
+		</set>
+		 where ORG_ID=${orgID}
+	</update>
+
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from SYS_Organization where ORG_ID in (${orgID})
+		</trim>
+	</delete>
+	
+	<delete id="delete_users_by_org" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from SYS_User where USER_OrgID in (${orgID})
+		</trim>
+	</delete>
+	
+	<select id="check_orgCode" resultType="java.lang.Integer"
+		parameterType="param">
+		select count(*) from SYS_Organization
+		where ORG_Code = #{orgCode}
+	</select>
+</mapper>

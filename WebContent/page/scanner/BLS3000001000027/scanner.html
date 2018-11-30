@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+function loadComplete(){
+	
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+	var curWwwPath=window.document.location.href; 
+	var pathName=window.document.location.pathname; 
+	var pos=curWwwPath.indexOf(pathName); 
+	var localhostPaht=curWwwPath.substring(0,pos); 
+	var st=localhostPaht+"/dm/";
+	
+	var ug = navigator.userAgent.toLowerCase();
+	var userAgent = document.getElementById("userAgent");
+	var browserType = "";
+	var ver = "";
+	var IE = ug.match(/msie\s*\d\.\d/);
+	var isIE = check(/msie/);
+	var isPad= (ug.match(/iPad/i)=="ipad");
+	if(isIE) {
+	    $("#music").html('<embed src="" id="mp" style="height:0px;width:0px;" autostart="false" loop="true">');
+	}else{
+	 	$("#music").html('<audio src="" id="mp"></audio>');
+	}
+	    
+	//$("#pikame").PikaChoose({carousel:true});
+	    
+	//初始�?
+	$("#pikame").css({"width":$("#pikame li").length*161+"px"});
+	
+	var clickTag=true;
+	$(".clip img:first").addClass("active");
+	$(".pika-stage img").attr("src",$(".clip img:first").attr("srcs"));
+	
+	
+	$(".clip").each(function(){
+		$(this).find("img").click(function(){
+			//alert($(this).parent().parent().index());
+			$(".pika-stage img").attr("src",$(this).attr("srcs"));
+			$(".clip img").removeClass("active");
+			$(this).addClass("active");
+		});
+	})
+	
+	$(".pika-stage").on("swipeleft",function(){
+		    if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().next().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+		  }); 
+	
+	$(".pika-stage").on("swiperight",function(){
+		 if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().prev().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+	  }); 
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+  	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	$("#jump_map").click(function(){
+		
+		//window.maplistner.openMap($("#point_x").val(),$("#point_y").val());
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+		
+	})
+		
+	
+	 /* $("#pikame").on("swipeleft",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=-720;
+		    if((0-l)+720>parseInt($(this).css("width"))){
+		    	l=0-(parseInt($(this).css("width"))-720);
+		    }
+		    $(this).animate({"left":l+"px"});
+		  }); 
+	 
+	 $("#pikame").on("swiperight",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=720;
+		    if(l>0){
+		    	l=0;
+		    }
+		    $(this).animate({"left":l+"px"});
+		  });  */
+	
+		
+	$("#allmap").click(function(){
+		//alert("全屏地图");
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+	});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+function initialize() {
+    //地图
+	var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+	var point = new BMap.Point(74.404, 53.915);
+	map.centerAndZoom(point, 4);
+	map.enableScrollWheelZoom();  
+
+	var erlalo = $("#dingwei").val();
+	var erval = erlalo.split("|");
+	var ischina = true;
+
+	for (var i = 0; i < erval.length; i ++) {
+		var jing = erval[i].split(",")[0];
+		var weid = erval[i].split(",")[1];
+		
+		if(jing>=73.33 && jing<=135.05 && weid>=3.51 && weid<= 53.33){
+			ischina = false;
+		}
+	    var point = new BMap.Point(erval[i].split(",")[0], erval[i].split(",")[1]);
+	    addMarker(point);
+	}
+
+	if(ischina){
+		setTimeout(function(){
+			map.setCenter(new BMap.Point(0, 20));  
+			map.setZoom(3);    
+		}, 1500);	
+		 	
+	}    
+	
+	function addMarker(point){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	}
+	//地图结束
+}
+
+function loadScript() {
+    var script = document.createElement("script");
+    script.src = "http://api.map.baidu.com/api?v=1.5&ak=D1835706182777b6cf2e0a57846a26e8&callback=initialize";
+    document.body.appendChild(script);
+}
+ 
+window.onload = loadScript;
+
+</script>
+</head>
+<body>
+<input type="hidden" value="" id="dingwei" />
+	<table>
+		
+		<tr>
+			<td>
+			<DIV LANG="zh-CN" TEXT="#000000" LINK="#0000ff" DIR="LTR"><P CLASS="cjk" ALIGN=CENTER STYLE="margin-bottom: 0.37cm;  line-height: 0.9cm; widows: 2; orphans: 2"><FONT FACE="微软雅黑, sans-serif"><FONT SIZE=6 STYLE="font-size: 25pt">秦汉时期</FONT></FONT></P><H1 CLASS="cjk" ALIGN=CENTER STYLE="margin-top: 0cm; margin-bottom: 0cm;  font-weight: normal; line-height: 0.48cm"></H1><H2 CLASS="cjk" STYLE="text-indent: 0.74cm"><A NAME="2366791-2502629-1_1"></A><A HREF="http://baike.baidu.com/view/104626.htm" TARGET="_blank"><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN STYLE="font-weight: normal">秦汉</SPAN></FONT></FONT></A><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN STYLE="font-weight: normal">时期是<A HREF="http://baike.baidu.com/view/61891.htm" TARGET="_blank">中国</A><A HREF="http://baike.baidu.com/view/38096.htm" TARGET="_blank">秦</A><A HREF="http://baike.baidu.com/view/6607.htm" TARGET="_blank">汉</A>两朝<A HREF="http://baike.baidu.com/view/302413.htm" TARGET="_blank">大一统</A>时期的合称。公元前</SPAN></FONT><SPAN LANG="en-US"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN STYLE="font-weight: normal">221</SPAN></FONT></FONT></FONT></SPAN><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN STYLE="font-weight: normal">年<A HREF="http://baike.baidu.com/view/401979.htm" TARGET="_blank">秦灭六国</A>，首次完成了真正意义上的中国统一，<A HREF="http://baike.baidu.com/view/505532.htm" TARGET="_blank">秦王政</A>改号称<A HREF="http://baike.baidu.com/view/20013.htm" TARGET="_blank">皇帝</A>，建立起<A HREF="http://baike.baidu.com/view/4050.htm" TARGET="_blank">中国历史</A>上第一个<A HREF="http://baike.baidu.com/view/813811.htm" TARGET="_blank">中央集权制</A>的<A HREF="http://baike.baidu.com/view/6586.htm" TARGET="_blank">秦朝</A>。<A HREF="http://baike.baidu.com/view/2389.htm" TARGET="_blank">秦始皇</A>废<A HREF="http://baike.baidu.com/view/84207.htm" TARGET="_blank">封建</A>，立<A HREF="http://baike.baidu.com/view/830161.htm" TARGET="_blank">郡县</A>，开始实行全面的统一。然而由于缺乏历史经验，秦朝<A HREF="http://baike.baidu.com/view/552282.htm" TARGET="_blank">二世</A>而亡。在经过短暂的分裂之后，<A HREF="http://baike.baidu.com/view/23861.htm" TARGET="_blank">汉朝</A>继之而起，并基本延续秦的制度，史称&ldquo;<A HREF="http://baike.baidu.com/view/757386.htm" TARGET="_blank">汉承秦制</A>&rdquo;。秦汉时期是中国历史上第一个大统一时期。也是统一多民族国家的<A HREF="http://baike.baidu.com/view/613755.htm" TARGET="_blank">奠基</A>时期。。</SPAN></FONT></FONT></H2><P ALIGN=LEFT STYLE="margin-top: 0.49cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">公元前</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">221</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">年秦灭其他六国后统一了中国主体部分，成为了中国历史上第一个大一统王朝定都咸阳（今西安附近）。</FONT></FONT></FONT></P><P ALIGN=CENTER STYLE="margin-top: 0.49cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">秦始皇赢政<IMG class='b' SRC="page/scanner/BLS3000001000027/1423563647168_html_m541a1102.jpg" NAME="图形1" ALIGN=BOTTOM WIDTH=185 HEIGHT=220 BORDER=0></FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="margin-top: 0.49cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">由于秦王赢政</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[1-2] </SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">自认&ldquo;德兼三皇，功过五帝&rdquo;，于是改用皇帝称号，自封始皇帝，人称秦始皇，传位后的皇帝称二世、三世，直至千世万世。他对国家进行了许多项改革，包括了中央集权的确立，取代了周朝的诸侯分封制；统一了文字，方便官方行文；统一度量衡，便于工程上的计算。秦始皇还大力修筑驰道和直道，并连接了战国时赵国、燕国和秦国的北面围城，筑成了西起临洮、东至辽东的万里长城以抵御北方来自匈奴、东胡等游牧民族的侵袭。秦始皇推崇法治，重用法家的李斯作为丞相，并听取其意见，下令&ldquo;焚诗书&rdquo;，收缴天下兵器，役使七十万人修筑阿房宫以及自己的陵墓&mdash;&mdash;包括兵马俑等。部分史学家对以上事件存有怀疑，认为由于秦始皇的一系列激进改革得罪了贵族，平民无法适应，才在史书上留此一笔。</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[3]</SPAN></FONT></FONT></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">前</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">210</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">年秦始皇病死于出巡途中，秦二世</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">(</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">胡亥</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">)</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">杀害太子扶苏即位。但十个月后，陈胜、吴广在大泽乡揭竿而起，包括六国遗臣等野心家乘势作乱，前</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">206</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">年刘邦围攻咸阳，秦王子婴自缚出城投降，秦亡。此后，汉王刘邦与西楚霸王项羽展开了争夺天下的楚汉战争。前</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">202</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">年十二月，项羽被汉军围困于垓下</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">(</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">今安徽灵璧</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">)</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">，四面楚歌。项羽在乌江自刎而死。楚汉之争至此结束。汉高祖刘邦登基，定都长安</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">(</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">今陕西西安</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">)</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">，西汉开始。到了汉武帝时，西汉到达鼎盛。并与罗马、安息</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">(</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">帕提亚）、贵霜并称为四大帝国。汉武帝实行推恩令，彻底削弱了封国势力，强化监察制度，实现中央集权；他派遣卫青、霍去病、李广等大将北伐，成功地击溃了匈奴，控制了西域，还派遣张骞出使西域，开拓了著名的丝绸之路，发展了对外贸易，使中国真正了解了外面的世界，促进中西文化交流。儒家学说也被确立为官方的主流意识形态，成为了占统治地位的思想。其他艺术与文化也蒸蒸日上。同时期还出现了第一部通史性质的巨著&mdash;&mdash;《史记》，同时这时的中国出现造纸术，大大推动了文化发展。</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[3]</SPAN></FONT></FONT></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=LEFT STYLE="margin-left: 11.85cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">摘自</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">:</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">百度百科</FONT></P></DIV>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/pause.png");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

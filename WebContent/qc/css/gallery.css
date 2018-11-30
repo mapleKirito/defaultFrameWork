@@ -1,0 +1,43 @@
+.mem_class{
+position: relative;
+text-align: center;
+}
+.mem_remove{
+position: absolute;
+right: 6px;
+top: 4px;
+color: #ea183f;
+font-size: 12px;
+cursor:pointer;
+}
+.mem_share{
+position: absolute;
+right: 6px;
+top: 26px;
+color: #ea183f;
+font-size: 12px;
+cursor:pointer;
+}
+.imgDiv{
+position: relative;
+left: 45px;
+margin:0 auto;
+width: 128px;
+height: 100px;
+background: #f3f3f3;
+border: 1px solid #504538;
+
+/*非IE的主流浏览器识别的垂直居中的方法*/ 
+display: table-cell; 
+vertical-align:middle; 
+/*设置水平居中*/ 
+text-align:center; 
+/* 针对IE的Hack */ 
+*display: block; 
+*font-size: 175px;/*约为高度的0.873，200*0.873 约为175*/ 
+*font-family:Arial;/*防止非utf-8引起的hack失效问题，如gbk编码*/ 
+}
+.imgDiv img{
+/*设置图片垂直居中*/ 
+vertical-align:middle; 
+}

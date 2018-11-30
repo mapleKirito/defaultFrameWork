@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+	RR_ID bigint(20) 组织机构id
+	RR_Broom varchar(200) 被关联的资源室名
+	RR_Bid varchar(200)  被关联的资源室内id
+	RR_Aroom varchar(200) 关联的资源室名
+	RR_Aname varchar(200)  被关联的资源室内id
+	-->
+	
+<mapper namespace="relate">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="rrID" column="RR_ID" />
+		<result property="rrBroom" column="RR_Broom" />
+		<result property="rrBid" column="RR_Bid" />
+		<result property="rrAroom" column="RR_Aroom" />
+		<result property="rrAname" column="RR_Aname" />	
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+		relate.RR_ID,relate.RR_Broom,relate.RR_Bid,relate.RR_Aroom,relate.RR_Aname		
+		from 
+		res_relate relate
+	</select>	
+	<select id="select_name_keyword" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+		relate.RR_ID,relate.RR_Broom,relate.RR_Bid,relate.RR_Aroom,relate.RR_Aname		
+		from 
+		res_relate relate 
+		where relate.RR_Aname = '${keyword}'
+	</select>	
+	<select id="select_name" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+		relate.RR_ID,relate.RR_Broom,relate.RR_Bid,relate.RR_Aroom,relate.RR_Aname		
+		from 
+		res_relate relate 
+		where relate.RR_Aname = '${Aname}'
+	</select>	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_relate
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="Broom!=null">,RR_Broom</if>
+			<if test="Bid!=null">,RR_Bid</if>
+			<if test="Aroom!=null">,RR_Aroom</if>
+			<if test="Aname!=null">,RR_Aname</if>	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="Broom!=null">,#{Broom}</if>
+			<if test="Bid!=null">,#{Bid}</if>
+			<if test="Aroom!=null">,#{Aroom}</if>
+			<if test="Aname != null">,#{Aname}</if>	
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_relate
+		<set>
+			<trim prefixOverrides=",">
+				<if test="rrBroom!=null">,RR_Broom=#{Broom}</if>
+				<if test="rrBid!=null">,RR_Bid=#{Bid}</if>
+				<if test="rrAroom!=null">,RR_Aroom=#{Aroom}</if>
+				<if test="rrAname != null">,RR_Aname=#{Aname}</if>	
+			</trim>
+		</set>
+		where RR_ID=${rrID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_relate			
+			where  RR_Broom=#{Broom} and RR_Aroom=#{Aroom} and RR_Aname=#{Aname}and RR_Bid=#{Bid}
+			
+		</trim>
+	</delete>
+</mapper>
+

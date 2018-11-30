@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="histaskmapper">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="htaskID" column="HTASK_ID" />
+		<result property="htaskUserCreate" column="HTASK_USERCREATE" />									
+		<result property="htaskIsAnswerOnly" column="HTASK_ISANWSERONLY" />			
+		<result property="isAnswer" column="isAnswer" />					
+	</resultMap>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from his_task_answeronly_mapper where HTASK_ID = ${htaskID} and HTASK_USERCREATE = ${s_userID}
+	</select>
+	<select id="select_answer_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from his_task_answeronly_mapper where HTASK_ID = ${htaskID} and HTASK_USERCREATE = ${s_userID}
+	</select>
+	<select id="select_answer_count_mession" resultMap="convertResult" parameterType="java.util.HashMap">
+		select HTASK_ID,count(*) as isAnswer from his_task_answeronly_mapper where HTASK_ID in (select ht.HTASK_ID from his_task ht where ht.HTASK_SPLITID=${htaskID}) and HTASK_USERCREATE = ${s_userID} group by HTASK_ID
+	</select>
+	<select id="select_isinsert_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from his_task_answeronly_mapper where HTASK_ID = ${taHtaskID} and HTASK_USERCREATE = ${s_userID}
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into his_task_answeronly_mapper
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taHtaskID !=null">,HTASK_ID</if>
+			<if test="taUserID !=null">,HTASK_USERCREATE</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taHtaskID !=null">,#{taHtaskID}</if>
+			<if test="taUserID !=null">,#{taUserID}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	<update id="update_htaskIsAnswer" parameterType="java.util.HashMap">
+		update his_task_answeronly_mapper set HTASK_ISANWSERONLY = 1 where HTASK_ID = ${taHtaskID} and HTASK_USERCREATE = ${taUserID}
+	</update>
+	<delete id="delete_htask_ID" parameterType="java.util.HashMap">
+		delete from his_task_answeronly_mapper where HTASK_ID in (${htaskSplitID})
+	</delete>	
+</mapper>

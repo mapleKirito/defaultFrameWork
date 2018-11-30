@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="areaDistri">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="areaDistriID" column="AreaDistriID" />
+		<result property="areaDistriResID" column="AreaDistri_ResID" />	
+		<result property="areaDistriResName" column="AreaDistri_ResName" />	
+		<result property="areaDistriName" column="AreaDistri_Name" />
+		<result property="areaDistriLongitude" column="AreaDistri_Longitude" />
+		<result property="areaDistriLatitude" column="AreaDistri_Latitude" />
+	</resultMap>
+	
+	<select id="select_areaDistri" resultMap="convertResult" parameterType="param">
+		select * from sys_areadistri 
+		<where>
+		 	<if test="areaDistriResID != null">
+		 	 AreaDistri_ResID=${areaDistriResID}
+			</if>
+		</where>
+	 </select>
+	 <select id="select_lola" resultMap="convertResult" parameterType="param">
+		SELECT * FROM sys_areadistri WHERE AreaDistri_ResID IN (${areaDistriResID})
+	 </select>
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_areadistri
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="areaDistriResID !=null">AreaDistri_ResID</if>
+			<if test="areaDistriResName !=null">AreaDistri_ResName</if>
+			<if test="areaDistriName !=null">,AreaDistri_Name</if>
+			<if test="areaDistriLongitude !=null">,AreaDistri_Longitude</if>
+			<if test="areaDistriLatitude !=null">,AreaDistri_Latitude</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="areaDistriResID !=null">${areaDistriResID}</if>
+			<if test="areaDistriResName !=null">${areaDistriResName}</if>
+			<if test="areaDistriName !=null">,#{areaDistriName}</if>
+			<if test="areaDistriLongitude !=null">,#{areaDistriLongitude}</if>
+			<if test="areaDistriLatitude !=null">,#{areaDistriLatitude}</if>
+		</trim>
+	 </insert>
+	
+	 <delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_areadistri where AreaDistri_ResID in (${areaDistriResID})
+	 </delete>	 
+</mapper>

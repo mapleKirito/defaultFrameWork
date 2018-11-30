@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="grade">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="grID" column="GR_ID" />
+		<result property="grGrade" column="GR_Grade" />
+		<result property="grResourceType" column="GR_ResourceType" />
+		<result property="grResourceID" column="GR_ResourceID" />
+		<result property="grName" column="GR_Name" />
+		<result property="grThumbnail" column="GR_Thumbnail" />
+		<result property="grInThum" column="GR_InThum" />
+		<result property="grAudio" column="GR_Audio" />
+		<result property="grUpload" column="GR_Upload" />
+		<result property="grType" column="GR_Type" />
+		<result property="grUserID" column="GR_UserID" />
+		<result property="grUserAccount" column="GR_UserAccount" />
+		<result property="grOperateTime" column="GR_OperateTime" />
+		<result property="grCreateTime" column="GR_CreateTime" />
+		<result property="grCreator" column="GR_Creator" />
+		<result property="grIsShare" column="GR_IsShare" />
+		<result property="grJieIDSelf" column="GR_JieIDSelf" />
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			grade.GR_ID, grade.GR_Grade, grade.GR_ResourceType, grade.GR_ResourceID,grade.GR_Upload,
+			grade.GR_Name, grade.GR_UserID, grade.GR_UserAccount,grade.GR_Type,
+			grade.GR_OperateTime, grade.GR_CreateTime, grade.GR_Creator,
+			grade.GR_Thumbnail ,grade.GR_InThum 
+		from res_grade_relationship grade
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			grade.GR_ID, grade.GR_Grade, grade.GR_ResourceType, grade.GR_ResourceID,grade.GR_Upload,
+			grade.GR_Name, grade.GR_UserID, grade.GR_UserAccount,grade.GR_Type,
+			grade.GR_OperateTime, grade.GR_CreateTime, grade.GR_Creator,
+			grade.GR_Thumbnail ,grade.GR_InThum 
+		from res_grade_relationship grade
+		where grade.GR_ID = ${grID}
+	</select>
+	<!-- 根据所属资源类别和资源ID查询适用学段、年级，不是唯一的 	-->
+	<select id="select_by_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			grade.GR_ID, grade.GR_Grade, grade.GR_ResourceType, grade.GR_ResourceID,grade.GR_Upload,
+			grade.GR_Name, grade.GR_UserID, grade.GR_UserAccount,grade.GR_Type,
+			grade.GR_OperateTime, grade.GR_CreateTime, grade.GR_Creator,
+			grade.GR_Thumbnail ,grade.GR_InThum 
+		from res_grade_relationship grade
+		where grade.GR_ResourceType = '${grResourceType}' and grade.GR_ResourceID = ${grResourceID}
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			grade.GR_ID, grade.GR_JieIDSelf,grade.GR_Grade, grade.GR_ResourceType, grade.GR_ResourceID,grade.GR_Upload,
+			grade.GR_Name, grade.GR_UserID, grade.GR_UserAccount,grade.GR_Type,grade.GR_InThum,
+			grade.GR_OperateTime, grade.GR_CreateTime, grade.GR_Creator,
+			grade.GR_Thumbnail,grade.GR_Audio,grade.GR_InThum 
+		from res_grade_relationship grade
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="grName != null and grName != ''">
+					and grade.GR_Name like '%${grName}%'
+				</if>
+				<if test="grGrade != null and grGrade != ''">
+					and grade.GR_Grade = '${grGrade}'
+				</if>
+				<if test="grJieIDSelf != null and grJieIDSelf != ''">
+					and grade.GR_JieIDSelf = '${grJieIDSelf}'
+				</if>
+				<if test="resTypeName != null and resTypeName != ''">
+					<if test="resTypeName == 'kejian'">
+					and grade.GR_Type in ('2041','2033','2055')
+					</if>
+					<if test="resTypeName =='sucai'">
+					and grade.GR_Type not in ('2041','2033','2055')
+					</if>
+				</if>
+				    and grade.GR_IsShare=1
+			</trim>
+		</where>
+		order by grade.GR_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_grade_relationship grade
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="grName != null and grName != ''">
+				and grade.GR_Name like '%${grName}%'
+				</if>
+				<if test="grGrade != null and grGrade != ''">
+					and grade.GR_Grade = '${grGrade}'
+				</if>
+				<if test="grJieIDSelf != null and grJieIDSelf != ''">
+					and grade.GR_JieIDSelf = '${grJieIDSelf}'
+				</if>
+				<if test="resTypeName != null and resTypeName != ''">
+					<if test="resTypeName == 'kejian'">
+					and grade.GR_Type in ('2041','2033','2055')
+					</if>
+					<if test="resTypeName =='sucai'">
+					and grade.GR_Type not in ('2041','2033','2055')
+					</if>
+				</if>
+				and grade.GR_IsShare=1
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_grade_relationship
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="grGrade != null">,GR_Grade</if>
+			<if test="grResourceType != null">,GR_ResourceType</if>
+			<if test="grResourceID != null">,GR_ResourceID</if>
+			<if test="grName != null">,GR_Name</if>
+			<if test="s_userID != null">,GR_UserID</if>
+			<if test="s_userLoginAccount != null">,GR_UserAccount</if>
+			<if test="grJieIDSelf != null">,GR_JieIDSelf</if>
+			<if test="grAudio != null">,GR_Audio</if>
+			,GR_OperateTime
+			,GR_CreateTime
+			<if test="s_userLoginAccount != null">,GR_Creator</if>
+			<if test="grThumbnail != null">,GR_Thumbnail</if>
+			<if test="grUpload != null">,GR_Upload</if>
+			<if test="grType != null">,GR_Type</if>
+			<if test="grInThum != null">,GR_InThum</if> 
+			<if test="grIsShare != null">,GR_IsShare</if> 
+			
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="grGrade != null">,#{grGrade}</if>
+			<if test="grResourceType != null">,#{grResourceType}</if>
+			<if test="grResourceID != null">,#{grResourceID}</if>
+			<if test="grName != null">,#{grName}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="grJieIDSelf != null">,#{grJieIDSelf}</if>
+			<if test="grAudio != null">,#{grAudio}</if>
+			,now()
+			,now()
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="grThumbnail != null">,#{grThumbnail}</if>
+			<if test="grUpload != null">,#{grUpload}</if>
+			<if test="grType != null">,#{grType}</if>
+			<if test="grInThum != null">,#{grInThum}</if>
+			<if test="grIsShare != null">,#{grIsShare}</if>  
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_grade_relationship
+		<set>
+			<trim prefixOverrides=",">
+				<if test="grGrade != null">,GR_Grade = #{grGrade}</if>
+				<if test="grResourceType != null">,GR_ResourceType = #{grResourceType}</if>
+				<if test="grResourceID != null">,GR_ResourceID = #{grResourceID}</if>
+				<if test="grName != null">,GR_Name = #{grName}</if>
+				<if test="s_userID != null">,GR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,GR_UserAccount = #{s_userLoginAccount}</if>
+				,GR_OperateTime = now()
+				<if test="grThumbnail != null">,GR_Thumbnail = #{grThumbnail}</if>
+				<if test="grUpload != null">,GR_Upload = #{grUpload}</if>
+				<if test="grType != null">,GR_Type = #{grType}</if>
+				<if test="grInThum != null">,GR_InThum = #{grInThum}</if>
+				<if test="grIsShare != null">,GR_IsShare = #{grIsShare}</if>
+			</trim>
+		</set>
+		where GR_ID=${grID}
+	</update>
+	
+	<update id="update_res" parameterType="java.util.HashMap">
+		update res_grade_relationship
+		<set>
+			<trim prefixOverrides=",">
+				<if test="grGrade != null">,GR_Grade = #{grGrade}</if>
+				<if test="grName != null">,GR_Name = #{grName}</if>
+				<if test="s_userID != null">,GR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,GR_UserAccount = #{s_userLoginAccount}</if>
+				,GR_OperateTime = now()
+				<if test="grThumbnail != null">,GR_Thumbnail = #{grThumbnail}</if>
+				<if test="grInThum != null">,GR_InThum = #{grInThum}</if>
+				<if test="grUpload != null">,GR_Upload = #{grUpload}</if>
+				<if test="grType != null">,GR_Type = #{grType}</if>
+			</trim>
+		</set>
+		where GR_ResourceID = ${grResourceID} and GR_ResourceType = '${grResourceType}'
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_grade_relationship where GR_ID in (${grID})
+		</trim>
+	</delete>
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_grade_relationship
+		set GR_IsShare = ${grIsShare}
+		where  GR_ResourceType = #{grResourceType}  and GR_ResourceID= #{grResourceID}
+	</update>
+	
+	
+	<!-- 删除资源相关所有适用学段、年级信息		 -->
+	<delete id="delete_res" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_grade_relationship where GR_ResourceID in (${grResourceID}) and GR_ResourceType = '${grResourceType}'
+		</trim>
+	</delete>
+</mapper>

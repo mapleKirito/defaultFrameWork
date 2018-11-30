@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"   "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="sr">
+	<resultMap id="convertResult" type="result">
+		<result property="srID" column="SR_ID" />
+		<result property="srUserID" column="SR_USERID" />
+		<result property="srContent" column="SR_CONTENT" />
+		<result property="srTime" column="SR_TIME" />
+		<result property="srReplyID" column="SR_ReplyID" />
+		<result property="srPtype" column="SR_PTYPE" />
+		<result property="srPID" column="SR_PID" />
+		<result property="srCheck" column="SR_Check" />
+		<result property="srUserName" column="user_name" />
+		<result property="srNewsTitle" column="newstitle" />
+		<result property="srSpaceImg" column="space_img" />
+		<result property="srSpaceName" column="Space_Name" />
+		<result property="userType" column="user_Type" />
+		<result property="resName" column="rname" />
+		<result property="srResUrl" column="SR_RESURL" />
+	</resultMap>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from sys_review sr where sr.sr_id=${srID}
+	</select>	
+	
+	<select id="select_by_userid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select sr.sr_id,su.user_name,sr_content,sr_time,rt.rname,sr_check from sys_review sr ,sys_user su,res_table rt
+        where sr.sr_userid=su.user_id and sr.sr_pid=rt.id and sr.sr_ptype=rt.rtable and su.user_id=#{s_userID}
+		order by sr.sr_id desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select sr.sr_id,sr.SR_PTYPE,sr.SR_PID,su.user_name,sr_content,DATE_FORMAT(sr_time,'%Y-%m-%d') as sr_time,rt.rname,sr.SR_RESURL,sr_check from sys_review sr ,sys_user su,res_table rt
+	<where>
+		<trim prefix="" prefixOverrides="and" suffix=""> 
+			and sr.sr_userid=su.user_id 
+			and sr.sr_pid=rt.id 
+			and sr.sr_ptype=rt.rtable
+			<if test="s_userID != null and s_userID != '' ">
+				and sr.sr_userid = ${s_userID}
+			</if>
+			<if test="resName != null and resName != '' ">
+				and rt.rname like '${resName}%' 
+			</if>
+		</trim>
+	</where>
+		order by sr.sr_id desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(sr.sr_id) from sys_review sr ,sys_user su,res_table rt
+	<where>
+		<trim prefix="" prefixOverrides="and" suffix=""> 
+			and sr.sr_userid=su.user_id 
+			and sr.sr_pid=rt.id 
+			and sr.sr_ptype=rt.rtable
+			<if test="s_userID != null and s_userID != '' ">
+				and sr.sr_userid = ${s_userID}
+			</if>
+			<if test="resName != null and resName != '' ">
+				and rt.rname like '${resName}%' 
+			</if>
+		</trim>
+	</where>
+		order by sr.sr_id desc
+	</select>
+	
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select sr.sr_id,su.user_name,sr_content,sr_time,rt.rname,sr_check from sys_review sr ,sys_user su,res_table rt
+	where
+			sr.sr_userid=su.user_id 
+			and sr.sr_pid=rt.id 
+			and sr.sr_ptype=rt.rtable
+		order by sr.sr_id desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(sr.sr_id) from sys_review sr ,sys_user su,res_table rt
+where sr.sr_userid=su.user_id and sr.sr_pid=rt.id and sr.sr_ptype=rt.rtable
+	</select>
+	
+	<select id="select_check_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select sr_check from sys_review sr where SR_ID in (${srID}) 
+	</select>
+	
+	<select id="select_by_res" resultMap="convertResult" parameterType="param">
+		select sr.*,su.user_name,su.user_Type,si.user_img from sys_review sr,sys_user su,sys_user_info si
+		where sr.sr_check=1 and sr.sr_userid=su.user_id and sr.sr_userid=si.user_id
+		<if test="srPtype != null and srPtype != '' ">
+				and sr.sr_ptype=#{srPtype}
+		</if>
+		<if test="srPID != null and srPID != '' ">
+				 and sr.sr_pid=${srPID}
+		</if>
+		order by sr.sr_id asc
+	</select>	
+	
+	<select id="select_by_res_last" resultMap="convertResult" parameterType="java.util.HashMap">
+		select sr.*,su.user_name,su.user_Type,si.user_img from sys_review sr,sys_user su,sys_user_info si
+		where sr.sr_check=1 and sr.sr_userid=su.user_id and sr.sr_userid=si.user_id
+		<if test="srPtype != null and srPtype != '' ">
+				and sr.sr_ptype=#{srPtype}
+		</if>
+		<if test="srPID != null and srPID != '' ">
+				 and sr.sr_pid=${srPID}
+		</if>
+		order by sr.sr_id desc
+		limit 0,1
+	</select>	
+	
+	<select id="select_by_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select sr.*,su.user_name,su.Space_Name,su.user_Type,si.user_img from sys_review sr,sys_user su,sys_user_info si
+		where sr.sr_check=1 and sr.sr_userid=su.user_id and sr.sr_userid=si.user_id
+		<if test="srPtype != null and srPtype != '' ">
+				and sr.sr_ptype=#{srPtype}
+		</if>
+		<if test="srPID != null and srPID != '' ">
+				 and sr.sr_pid=${srPID}
+		</if>
+		order by sr.sr_id desc
+		limit ${start_num},${offset_num}
+	</select>	
+	
+	<select id="select_by_res_count"  resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(SR_ID) from sys_review sr 
+		where sr.sr_check=1
+		<if test="srPtype != null and srPtype != ''">
+				and sr.sr_ptype=#{srPtype}
+		</if>
+		<if test="srPID != null and srPID != ''">
+				 and sr.sr_pid=${srPID}
+		</if>
+		
+	</select>
+	<select id="select_by_res_info"  resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from sys_review sr 
+		where sr.sr_check=1
+		<if test="srPtype != null and srPtype != ''">
+				and sr.sr_ptype=#{srPtype}
+		</if>
+		<if test="srPID != null and srPID != ''">
+				 and sr.sr_pid=${srPID}
+		</if>
+		limit 0,1
+	</select>	
+	
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_review
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="srUserID!=null">,SR_USERID</if>
+			<if test="srReplyID!=null">,SR_ReplyID</if>
+			<if test="srContent!=null">,SR_CONTENT</if>
+			<if test="srPtype!=null">,SR_PTYPE</if>
+			<if test="srPID!=null">,SR_PID</if>
+			<if test="srCheck!=null">,SR_Check</if>
+			<if test="srResUrl!=null">,SR_RESURL</if>
+			,SR_TIME
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="srUserID!=null">,${srUserID}</if>
+			<if test="srReplyID!=null">,${srReplyID}</if>
+			<if test="srContent!=null">,#{srContent}</if>
+			<if test="srPtype!=null">,#{srPtype}</if>
+			<if test="srPID!=null">,${srPID}</if>
+			<if test="srCheck!=null">,${srCheck}</if>
+			<if test="srResUrl!=null">,#{srResUrl}</if>
+			,now()			
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_review
+		<set>			
+			<trim prefixOverrides=",">
+			<if test="srUserID!=null and srUserID!='' ">,SR_USERID=${srUserID}</if>
+			<if test="srContent!=null and srContent!='' ">,SR_CONTENT=#{srContent}</if>
+			<if test="srReplyID!=null and srReplyID!='' ">,SR_ReplyID=#{srReplyID}</if>
+			<if test="srPtype!=null and srPtype!='' ">,SR_PTYPE=#{srPtype}</if>
+			<if test="srPID!=null and srPID!='' ">,SR_PID=#{srPID}</if>
+			<if test="srCheck!=null and srCheck!='' ">,SR_Check=${srCheck}</if>
+			<if test="srResUrl!=null and srResUrl!='' ">,SR_RESURL=${srResUrl}</if>
+			</trim>
+		</set>
+		 where SR_ID=${srID}
+	</update>
+	
+	<update id="check" parameterType="java.util.HashMap">
+		update sys_review
+		<set>			
+			<trim prefixOverrides=",">
+			<if test="srCheck!=null and srCheck!='' ">,SR_Check=${srCheck}</if>
+			,SR_TIME=now()
+			</trim>
+		</set>
+		 where SR_ID in (${srID})
+	</update>
+	
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+			delete from sys_review where SR_ID in (${srID})
+			or SR_ReplyID in (${srID})
+			<if test="srUserID!=null and srUserID!='' ">
+		 	and SR_USERID=${srUserID}
+			</if>
+	</delete>
+	
+	<delete id="delete_follow" parameterType="java.util.HashMap">
+			delete from sys_review where SR_PID =${srPID} and SR_PTYPE=#{srPtype}
+	</delete>
+
+</mapper>
+

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="userRole">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="urmUserID" column="URM_UserID" />
+		<result property="urmRoleID" column="URM_RoleID" />
+		<result property="roleID" column="ROLE_ID" />
+		<result property="roleParentID" column="ROLE_ParentID" />
+		<result property="roleRelation" column="ROLE_Relation" />
+		<result property="roleName" column="ROLE_Name" />
+		<result property="roleDesc" column="ROLE_Desc" />
+		<result property="roleIsChildNode" column="ROLE_IsChildNode" />
+		<result property="roleStatus" column="ROLE_Status" />	
+		<result property="roleCreateTime" column="ROLE_CreateTime" />
+		<result property="roleCreator" column="ROLE_Creator" />			
+	</resultMap>
+	<select id="select_user_role_mapper" resultMap="convertResult" parameterType="param">
+		select sr.*
+		<if test="s_userType!=0">
+			,surm.URM_UserID,surm.URM_RoleID from SYS_UserRoleMapper surm ,SYS_Role sr
+			surm.URM_UserID=${s_userID} and surm.URM_RoleID=sr.Role_ID 
+		</if>
+		<if test="s_userType==0">
+			from SYS_Role sr 
+		</if>
+			order by sr.ROLE_CreateTime
+	 </select>
+	<select id="select_user_role_selected" resultMap="convertResult" parameterType="param">
+		select URM_UserID,URM_RoleID from SYS_UserRoleMapper where URM_UserID=${userID}
+	 </select>	 
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into SYS_UserRoleMapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="urmRoleID!=null">URM_RoleID</if>
+			<if test="userID!=null">,URM_UserID</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="urmRoleID!=null">${urmRoleID}</if>
+			<if test="userID!=null">,${userID}</if>
+		</trim>
+	 </insert>
+	 
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from SYS_UserRoleMapper
+		<where>
+		 	<if test="roleID">
+		 	 URM_UserID=#{userID}
+			</if>
+		</where>		
+	</delete>	 
+</mapper>

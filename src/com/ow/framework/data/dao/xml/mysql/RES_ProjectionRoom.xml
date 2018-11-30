@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="projection">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="prID" column="PR_ID" />
+		<result property="prName" column="PR_Name" />
+		<result property="prChar" column="PR_Char" />
+		<result property="prNO" column="PR_NO" />
+		<result property="prRecommen" column="PR_Recommen" />
+		<result property="prType" column="PR_Type" />
+		<result property="prUpload" column="PR_Upload" />
+		<result property="prFileSwf" column="PR_FileSwf" />
+		<result property="prThumbnail" column="PR_Thumbnail" />
+		<result property="prInThum" column="PR_InThum" />
+		<result property="prCategory" column="PR_Category" />
+		<result property="prCategoryName" column="PR_Category_Name" />
+		
+		<result property="prCateTwLevel" column="PR_CateTwLevel" />
+		<result property="prCateTwLevelName" column="PR_CateTwLevel_Name" />
+		
+		<!-- <result property="prOutline" column="PR_Outline" /> -->
+		<result property="prIsGrade" column="PR_IsGrade" />  
+		<result property="prGrade" column="PR_Grade" />
+		<result property="prContent" column="PR_Content" />
+		<result property="prContentPath" column="PR_ContentPath" />
+		<result property="prContest" column="PR_Contest" />
+		<result property="prUserID" column="PR_UserID" />
+		<result property="prUserAccount" column="PR_UserAccount" />
+		<result property="prOperateTime" column="PR_OperateTime" />
+		<result property="prCreateTime" column="PR_CreateTime" />
+		<result property="prCreator" column="PR_Creator" />
+		<result property="prState" column="PR_State" />
+		<result property="prStoryState" column="PR_StoryState" />
+		<result property="prKeywords" column="PR_Keywords" />
+		<result property="prCountLike" column="PR_CountLike" />
+		<result property="prIsShare" column="PR_IsShare" />
+		<result property="prAbout" column="PR_About" />
+		<result property="prRelation" column="PR_Relation" />
+	</resultMap>
+<!-- 修改 -->
+	<select id="select_by_name" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select
+			DISTINCT ( projection.PR_Name )
+		from
+			res_projection_room projection
+		where
+			projection.PR_Name like '${erName}%' or projection.PR_Name like '${erName}%'
+	</select>	
+<!-- 修改 -->
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_InThum,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime, '%Y-%m-%d')  PR_CreateTime,projection.PR_Creator ,projection.PR_IsGrade, projection.PR_Grade , projection.PR_About ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select c.CATE_Sign,
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_About,projection.PR_Relation,
+			projection.PR_Category_Name,projection.PR_Contest,
+			DATE_FORMAT(projection.PR_CreateTime, '%Y-%m-%d')  PR_CreateTime,projection.PR_Creator  ,projection.PR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+	</select>
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select c.CATE_Sign,
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_About,projection.PR_Relation,
+			projection.PR_Category_Name,projection.PR_Contest,
+			DATE_FORMAT(projection.PR_CreateTime, '%Y-%m-%d')  PR_CreateTime,projection.PR_Creator  ,projection.PR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		where projection.PR_NO = '${code}'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select c.CATE_Sign,
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Keywords,
+			projection.PR_Category_Name,projection.PR_Contest,projection.PR_About,projection.PR_Relation,projection.PR_IsShare,
+			DATE_FORMAT(projection.PR_CreateTime, '%Y-%m-%d')  PR_CreateTime,projection.PR_Creator  ,projection.PR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		where projection.PR_ID = ${prID}
+	</select>
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_InThum,projection.PR_About,projection.PR_Relation,
+			projection.PR_Category_Name,
+			DATE_FORMAT(projection.PR_CreateTime, '%Y-%m-%d')  PR_CreateTime,projection.PR_Creator  ,projection.PR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		where projection.PR_ID in (${prID})
+	</select>
+	<select id="select_count_by_category" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_projection_room projection
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,projection.PR_InThum,	
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_About,projection.PR_Relation,
+			projection.PR_Category_Name,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_Category
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prName != null and prName != ''">
+				and projection.PR_Name like '%${prName}%'
+				</if>
+				<if test="prIsGrade != null">
+				and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '%${keyword}%'
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and projection.PR_IsShare = ${IsShare}</if>
+				<if test="prNO != null and prNO != '' "> and projection.PR_NO = '${prNO}'</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+		
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<if test="prCateTwLevelName != null and prCateTwLevelName != '' "> and projection.PR_CateTwLevel_Name = '${prCateTwLevelName}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+		ORDER BY projection.PR_ID desc
+		 
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_projection_room projection left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prName != null and prName != ''">
+				and projection.PR_Name like '%${prName}%'
+				</if>
+				<if test="prIsGrade != null">
+				and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '%${keyword}%'
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and projection.PR_IsShare = ${IsShare}</if>
+				<if test="prNO != null and prNO != '' "> and projection.PR_NO = '${prNO}'</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,projection.PR_InThum,	
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_About,projection.PR_Relation,
+			projection.PR_Category_Name,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prName != null and prName != ''">
+				and projection.PR_Name like '${prName}%'
+				</if>
+				<if test="prIsGrade != null">
+				and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '%${keyword}%'
+				</if>
+				<if test="prNO != null and prNO != '' "> and projection.PR_NO = '${prNO}'</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+		
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<if test="prCateTwLevelName != null and prCateTwLevelName != '' "> and projection.PR_CateTwLevel_Name = '${prCateTwLevelName}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+		
+		 ORDER BY projection.PR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_quick_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_projection_room projection left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prName != null and prName != ''">
+				and projection.PR_Name like '${prName}%'
+				</if>
+				<if test="prIsGrade != null">
+				and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '%${keyword}%'
+				</if>
+				<if test="prNO != null and prNO != '' "> and projection.PR_NO = '${prNO}'</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_OZOO_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_Contest,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '${keyword}%' order by projection.PR_Name desc
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_recom_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_Contest,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '%${keyword}%' 
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_smallselect" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_Contest,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name,
+			(select c.CATE_Path from res_category c where projection.PR_CateTwLevel=c.CATE_ID ) as  prPath
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+		<if test="keyword != '' and keyword != null ">order by projection.PR_Name='${keyword}' desc,projection.PR_Name</if>
+	</select>
+	<select id="select_page_other" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_Contest,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prName != null and prName != ''">
+				and projection.PR_Name like '${prName}'
+				</if>
+				<if test="prIsGrade != null">
+				and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and projection.PR_Name = '${keyword}'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> and projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+		
+		 
+	</select>
+	<select id="select_page_other_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,c.CATE_Path as prPath, projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_Contest,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != '' and flag == 'animal'">
+					and ( projection.PR_Name like '${keyword}%'  and  PR_CateTwLevel='5872' )
+				</if>
+				<if test="flag == 'plant' and keyword != '' and keyword != null">
+					and ( projection.PR_Name like '${keyword}%' and  PR_CateTwLevel='5873'  )
+				</if>
+				<if test="flag == 'other' and keyword != '' and keyword != null">
+					and ( projection.PR_Name like '${keyword}%'  )
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_other_about_manager" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,c.CATE_Path as prPath, projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_InThum,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,projection.PR_Contest,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != '' and flag == 'plant'">
+					and ( projection.PR_Name like '${keyword}%'  and  PR_CateTwLevel='5872'  and  projection.PR_Name != '${keyword}')
+				</if>
+				<if test="flag == 'animal' and keyword != '' and keyword != animal">
+					and ( projection.PR_Name like '${keyword}%' and  PR_CateTwLevel='5873'  and  projection.PR_Name != '${keyword}' )
+				</if>
+				<if test="flag == 'other' and keyword != '' and keyword != null">
+					and ( projection.PR_Name like '${keyword}%'  and  projection.PR_Name != '${keyword}' )
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,c.CATE_Path as path,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type, projection.PR_InThum,projection.PR_About,projection.PR_Relation,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade ,projection.PR_Contest,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' ">and (projection.PR_UserID != '${s_userID}' or projection.PR_UserID is null)</if> 
+				${values}
+
+
+		</where>
+		ORDER BY projection.PR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' ">and (projection.PR_UserID != '${s_userID}' or projection.PR_UserID is null)</if> 
+				${values}
+
+		</where>
+	</select>
+	
+	
+	<select id="select_teacher_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,c.CATE_Path as path,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type, projection.PR_InThum,projection.PR_About,projection.PR_Relation,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade ,projection.PR_Contest,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,projection.PR_IsShare,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and projection.PR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and projection.PR_UserID = '${userID}'</if>
+				<if test="prName != null and prName != ''">
+					and projection.PR_Name like '${prName}%'
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and projection.PR_IsShare = ${isShare}
+				</if>
+				<if test="prIsGrade != null">
+					and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and projection.PR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+		 ORDER BY projection.PR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_teacher_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_projection_room projection left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and projection.PR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and projection.PR_UserID = '${userID}'</if> 
+				<if test="prName != null and prName != ''">
+					and projection.PR_Name like '${prName}%'
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and projection.PR_IsShare = ${isShare}
+				</if>
+				<if test="prIsGrade != null">
+					and projection.PR_IsGrade = ${prIsGrade}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and projection.PR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="prID != null and prID != '' "> projection.PR_ID = ${prID}</if>
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<!-- <if test="prOutline != null and prOutline != '' "> and projection.PR_Outline = '${prOutline}'</if> -->
+				<if test="prUserID != null and prUserID != '' "> and projection.PR_UserID = '${prUserID}'</if>
+				<if test="prUserAccount != null and prUserAccount != '' "> and projection.PR_UserAccount = '${prUserAccount}'</if>
+				<if test="prOperateTime != null and prOperateTime != '' "> and projection.PR_OperateTime = '${prOperateTime}'</if>
+				<if test="prCreateTime != null and prCreateTime != '' "> and projection.PR_CreateTime = '${prCreateTime}'</if>
+				<if test="prCreator != null and prCreator != '' "> and projection.PR_Creator = '${prCreator}'</if>
+				<if test="prIsGrade != null and prIsGrade != '' "> and projection.PR_IsGrade = '${prIsGrade}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '${prType}'</if>
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_projection_room
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="prNO != null">,PR_NO</if>
+			<if test="prName != null">,PR_Name</if>
+			<if test="prChar != null">,PR_Char</if>
+			<if test="prType != null">,PR_Type</if>
+			<if test="prRecommen != null">,PR_Recommen</if>
+			
+			<if test="prUpload != null">,PR_Upload</if>
+			<if test="prFileSwf != null">,PR_FileSwf</if>
+			
+			<if test="prState != null">,PR_State</if>
+			<if test="prStoryState != null">,PR_StoryState</if>
+			<if test="prCategory != null">,PR_Category</if>
+			<if test="prCategoryName != null">,PR_Category_Name</if>
+			
+			<if test="prCateTwLevel != null">,PR_CateTwLevel</if>
+			<if test="prCateTwLevelName != null">,PR_CateTwLevel_Name</if>
+			<!-- <if test="prOutline != null">,PR_Outline</if> -->
+			<if test="prThumbnail != null">,PR_Thumbnail</if>
+			<if test="prInThum != null">,PR_InThum</if>
+			<if test="s_userID != null">,PR_UserID</if>
+			<if test="s_userLoginAccount != null">,PR_UserAccount</if>
+			,PR_OperateTime
+			<if test="prCreateTime != null and prCreateTime != '' ">,PR_CreateTime</if>
+			<if test="s_userLoginAccount != null">,PR_Creator</if>
+			<if test="prGrade != null">,PR_Grade</if>
+			<if test="prContest != null">,PR_Contest</if>
+			<if test="prContent != null">,PR_Content</if>
+			<if test="prContentPath != null">,PR_ContentPath</if>
+			<if test="prIsGrade != null">,PR_IsGrade</if>
+			<if test="prKeywords != null">,PR_Keywords</if>
+			<if test="prIsShare != null">,PR_IsShare</if>	
+			<if test="prAbout != null">,PR_About</if>	
+			<if test="prRelation != null">,PR_Relation</if>	
+			
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="prNO != null">,#{prNO}</if>
+			<if test="prName != null">,#{prName}</if>
+			<if test="prChar != null">,#{prChar}</if>
+			<if test="prType != null">,#{prType}</if>
+			<if test="prRecommen != null">,#{prRecommen}</if>
+			
+			<if test="prUpload != null">,#{prUpload}</if>
+			<if test="prFileSwf != null">,#{prFileSwf}</if>
+			
+			<if test="prState != null">,#{prState}</if>
+			<if test="prStoryState != null">,#{prStoryState}</if>
+			<if test="prCategory != null">,#{prCategory}</if>			
+			<if test="prCategoryName != null">,#{prCategoryName}</if>
+			
+			<if test="prCateTwLevel != null">,#{prCateTwLevel}</if>			
+			<if test="prCateTwLevelName != null">,#{prCateTwLevelName}</if>
+			
+			<!-- <if test="prOutline != null">,#{prOutline}</if> -->
+			<if test="prThumbnail != null">,#{prThumbnail}</if>
+			<if test="prInThum != null">,#{prInThum}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="prCreateTime != null and prCreateTime != '' ">,#{prCreateTime}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="prGrade != null">,#{prGrade}</if>
+			<if test="prContest != null">,#{prContest}</if>
+			<if test="prContent != null">,#{prContent}</if>
+			<if test="prContentPath != null">,#{prContentPath}</if>
+			<if test="prIsGrade != null">,#{prIsGrade}</if>
+			<if test="prKeywords != null">,#{prKeywords}</if>
+			<if test="prIsShare != null">,#{prIsShare}</if>
+			<if test="prAbout != null">,#{prAbout}</if>		
+			<if test="prRelation != null">,#{prRelation}</if>	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prName != null">,PR_Name = #{prName}</if>
+				<if test="prChar != null">,PR_Char = #{prChar}</if>
+				<if test="prNO != null">,PR_NO = #{prNO}</if>
+				<if test="prType != null">,PR_Type = #{prType}</if>
+				<if test="prRecommen != null">,PR_Recommen = #{prRecommen}</if>				
+				<if test="prUpload != null">,PR_Upload = #{prUpload}</if>
+				<if test="prFileSwf != null">,PR_FileSwf = #{prFileSwf}</if>
+				<if test="prKeywords != null">,PR_Keywords = #{prKeywords}</if>
+				
+				<if test="prState != null">,PR_State = #{prState}</if>
+				<if test="prCategory != null">,PR_Category = #{prCategory}</if>
+				<if test="prCategoryName != null">,PR_Category_Name = #{prCategoryName}</if>
+				
+				<if test="prCateTwLevel != null">,PR_CateTwLevel = #{prCateTwLevel}</if>
+				<if test="prCateTwLevelName != null">,PR_CateTwLevel_Name = #{prCateTwLevelName}</if>
+				
+				<!-- <if test="prOutline != null">,PR_Outline = #{prOutline}</if> -->
+				<if test="prThumbnail != null">,PR_Thumbnail = #{prThumbnail}</if>
+				<if test="prInThum != null">,PR_InThum = #{prInThum}</if>				
+				<if test="s_userID != null">,PR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,PR_UserAccount = #{s_userLoginAccount}</if>
+				,PR_OperateTime = now()
+				<if test="prCreateTime != null and prCreateTime != '' ">,PR_CreateTime = #{prCreateTime}</if>
+				<if test="prGrade != null">,PR_Grade = #{prGrade}</if>
+				<if test="prContest != null">,PR_Contest = #{prContest}</if>
+				<if test="prContent != null">,PR_Content = #{prContent}</if>
+				<if test="prContentPath != null">,PR_ContentPath = #{prContentPath}</if>
+				
+				<if test="prIsGrade != null">,PR_IsGrade = #{prIsGrade}</if>
+				<if test="prAbout != null">,PR_About = #{prAbout}</if>	
+				<if test="prIsShare != null">,PR_IsShare = #{prIsShare}</if>	
+				<if test="prRelation != null">,PR_Relation = #{prRelation}</if>
+			</trim>
+		</set>
+		where PR_ID=${prID}
+	</update>
+	
+	<select id="select_state" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select PR_State from res_projection_room
+		<where>
+		    <trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prUpload != null">and PR_Upload = #{prUpload}</if>
+				<if test="prFileSwf != null">and PR_FileSwf = #{prFileSwf}</if>
+				<if test="prID != null">and PR_ID = ${prID}</if>
+			</trim>
+		</where>
+	</select>
+	
+	<update id="update_state" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prState != null">,PR_State = #{prState}</if>
+
+				,PR_OperateTime = now()
+			</trim>
+		</set>
+		<where>
+		    <trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prUpload != null">and PR_Upload = #{prUpload}</if>
+				<if test="prFileSwf != null">and PR_FileSwf = #{prFileSwf}</if>
+				<if test="prID != null">and PR_ID = ${prID}</if>
+			</trim>
+		</where>
+	</update>
+	
+	<update id="update_upload" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prUpload != null">,PR_Upload = #{prUpload}</if>
+				<if test="prFileSwf != null">,PR_FileSwf = #{prFileSwf}</if>
+				<if test="s_userID != null">,PR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,PR_UserAccount = #{s_userLoginAccount}</if>
+				,PR_OperateTime = now()
+			</trim>
+		</set>
+		where PR_ID=${prID}
+	</update>
+	
+	<update id="update_is_grade" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prIsGrade != null">,PR_IsGrade = #{prIsGrade}</if>
+				<if test="s_userID != null">,PR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,PR_UserAccount = #{s_userLoginAccount}</if>
+				,PR_OperateTime = now()
+			</trim>
+		</set>
+		where PR_ID=${prID}
+	</update>
+
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_projection_room where PR_ID in (${prID})
+		</trim>
+	</delete>
+	<select id="select_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_InThum,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime, '%Y-%m-%d')  PR_CreateTime,projection.PR_Creator ,projection.PR_IsGrade, projection.PR_Grade , projection.PR_About ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+			
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+					and projection.PR_Name like '%${keyword}%' and projection.PR_Category='${prCategory}'
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	<select id="select_storystate" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select PR_StoryState from res_projection_room
+		where  PR_Upload = #{prUpload}
+	</select>
+	
+	<update id="update_storystate" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prStoryState != null">,PR_StoryState = #{prStoryState}</if>
+				,PR_OperateTime = now()
+			</trim>
+		</set>
+		where  PR_Upload = '${prUpload}'
+	</update>
+
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prIsShare != null">,PR_IsShare = ${prIsShare}</if>
+			</trim>
+		</set>
+		where  PR_ID = ${prID}
+	</update>
+
+	<update id="update_clickLile" parameterType="java.util.HashMap">
+		update res_projection_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="prCountLike != null">,PR_CountLike = #{prCountLike}</if>
+			</trim>
+		</set>
+		where  PR_id = '${prID}'
+	</update>
+	<select id="select_page_category" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,projection.PR_InThum,	
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name,
+				(select c.CATE_Path from res_category c where projection.PR_Category=c.CATE_ID ) as  pr_Path
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '1011'</if>
+			
+			</trim>
+		</where>
+		ORDER BY projection.PR_ID desc
+	</select>
+	<select id="select_page_category_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,projection.PR_InThum,	
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name,
+				(select c.CATE_Path from res_category c where projection.PR_Category=c.CATE_ID ) as  pr_Path
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="prCategory != null and prCategory != '' "> and projection.PR_Category = '${prCategory}'</if>
+				<if test="prCateTwLevel != null and prCateTwLevel != '' "> and projection.PR_CateTwLevel = '${prCateTwLevel}'</if>
+				<if test="prType != null and prType != '' "> and projection.PR_Type = '1011'</if>
+			
+			</trim>
+		</where>
+		ORDER BY projection.PR_ID desc
+		limit ${start},${offset}
+	</select>
+	
+		<select id="select_page_keywords" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_CountLike,projection.PR_Keywords,projection.PR_ContentPath,projection.PR_StoryState,projection.PR_NO,projection.PR_Content,projection.PR_CateTwLevel_Name,projection.PR_CateTwLevel, projection.PR_State, projection.PR_Recommen, projection.PR_Upload, projection.PR_Name, projection.PR_Category,projection.PR_FileSwf,
+			 projection.PR_Thumbnail, projection.PR_UserID,projection.PR_Type,projection.PR_Contest,projection.PR_InThum,	
+			projection.PR_UserAccount, projection.PR_OperateTime,projection.PR_Grade,
+			projection.PR_Category_Name,projection.PR_About,projection.PR_Relation,
+			DATE_FORMAT(projection.PR_CreateTime,'%Y-%m-%d') PR_CreateTime , projection.PR_Creator  ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as PR_Category_Name,
+				(select c.CATE_Path from res_category c where projection.PR_Category=c.CATE_ID ) as  pr_Path
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		where ${sqlParampr} and PR_ID not in(#{notInID})
+		ORDER BY projection.PR_ID desc
+	</select>
+	<select id="select_page_keywords_little" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			projection.PR_ID,projection.PR_Name,
+				(select c.CATE_Path from res_category c where projection.PR_Category=c.CATE_ID ) as  pr_Path
+		from
+			res_projection_room projection
+			left join res_category c on c.CATE_ID = projection.PR_CateTwLevel
+		where ${sqlParampr} and PR_ID not in(#{notInID})
+		ORDER BY projection.PR_ID desc
+	</select>
+</mapper>

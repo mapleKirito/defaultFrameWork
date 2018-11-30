@@ -1,0 +1,28 @@
+body { font: 14px/24px arial, "\5b8b\4f53", sans-serif, "Microsoft YaHei", tahoma; color: #333; }
+dl,dt,dd,ul,ol,li,pre { margin: 0; padding: 0; }
+h1,.h1 { font: 700 16px/26px "Microsoft YaHei", SimHei, arial; }
+h2,.h2 { font: 700 15px/24px "Microsoft YaHei", SimHei, arial; }
+.grid { display: inline; float: left; }
+.grid-r { display: inline; }
+Inherited from div#ask-info.line.f-aid.mb-10 .f-aid,a.f-aid { font-size: 12px; color: #999; }
+a:link,a:visited { color: #2d64b3; text-decoration: none; }
+a:link,a:visited { color: #2d64b3; text-decoration: none; }
+pre { white-space: pre-wrap; word-wrap: break-word; }
+#answer-bar-editor,#shmt-5 { margin-top: 5px; }
+pre { white-space: pre-wrap; word-wrap: break-word; }
+pre p {margin: 0;}
+.f-aid, a.f-aid ,.pos-time{ font-size: 12px; color: #999; }
+.f-blue, a.f-blue { color: #2d64b3; cursor: pointer; }
+.btn-32-green, a.btn-32-green, .btn-32-green:link, a.btn-32-green:link, .btn-32-green:visited, a.btn-32-green:visited { color: #fff; text-decoration: none; }
+.btn-32-green, a.btn-32-green {float: right; border: 0; padding: 0; cursor: pointer; display: inline-block; text-align: center; border: 1px solid transparent; -webkit-border-radius: 2px;margin: 10px 0px;
+-moz-border-radius: 2px; border-radius: 2px; height: 30px; line-height: 30px; font-family: "Microsoft Yahei"; font-size: 15px; padding: 0 15px; background: #e64747;}
+#body{background-color: #fff}
+#tags ul li{width:77px; height:36px; float:left; display:block; cursor:pointer;line-height: 36px;text-align: center; font-size: 14px;}
+#tags ul .li_1{background:url(../../images/main/ima_8_1.jpg);color: black;padding: 0;}
+#tags ul .li_2{background:url(../../images/main/ima_8_1.jpg);color: black;padding: 0;}
+#tags ul .li_3{background:url(../../images/main/ima_8_1.jpg);color: black;padding: 0;}
+#tags ul .li_4{background:url(../../images/main/ima_8_1.jpg);color: black;padding: 0;}
+#tags ul #li_1.li_1.selected{background:url(../../images/main/ima_7_1.jpg);border: 0px;color: white;padding: 0;}
+#tags ul #li_2.li_2.selected{background:url(../../images/main/ima_7_1.jpg);border: 0px;color: white;padding: 0;}
+#tags ul #li_3.li_3.selected{background:url(../../images/main/ima_7_1.jpg);border: 0px;color: white;padding: 0;}
+#tags ul #li_4.li_4.selected{background:url(../../images/main/ima_7_1.jpg);border: 0px;color: white;padding: 0;}

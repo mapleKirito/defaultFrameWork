@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+   TIS_ID               bigint not null,
+   TI_ID                bigint,
+   TIS_Good             int,
+   TIS_Medium           int,
+   TIS_Differential     int,
+   TIS_UserID           bigint,
+   TIS_CommentTime      datetime,
+	-->
+	
+<mapper namespace="taskInfoScore">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="tisId" column="TIS_ID" />
+		<result property="tiId" column="TI_ID" />
+		<result property="tisGood" column="TIS_Good" />
+		<result property="tisMedium" column="TIS_Medium" />
+		<result property="tisDifferential" column="TIS_Differential" />
+		<result property="tisUserID" column="TIS_UserID" />
+		<result property="tisCommentTime" column="TIS_CommentTime" />
+		<result property="userName" column="USER_Name" />
+	</resultMap>
+	
+	<select id="select_by_user_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tis.* from std_task_info_score tis where tis.TIS_UserID=#{s_userID} and tis.TI_ID=${tiId}
+	</select>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from std_task_info_score tis left join sys_user user on tis.TIS_UserID=user.USER_ID where tis.TIS_ID=#{tiId}
+	</select>
+	
+	<select id="select_content_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select tis.TI_Content from std_task_info_score tis where tis.TIS_ID=${tisId}
+	</select>	
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into std_task_info_score
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tiId!=null">,TI_ID</if>
+			<if test="tisGood!=null">,TIS_Good</if>
+			<if test="tisMedium!=null">,TIS_Medium</if>
+			<if test="tisDifferential!=null">,TIS_Differential</if>
+			<if test="s_userID!=null">,TIS_UserID</if>
+			,TIS_CommentTime	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tiId!=null">,${tiId}</if>
+			<if test="tisGood!=null">,${tisGood}</if>
+			<if test="tisMedium!=null">,${tisMedium}</if>
+			<if test="tisDifferential!=null">,${tisDifferential}</if>
+			<if test="s_userID!=null">,${s_userID}</if>
+			,now()
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update std_task_info_score
+		<set>
+			<trim prefixOverrides=",">
+			<if test="tiId!=null">,TI_ID=${tiId}</if>
+			<if test="tisGood!=null">,TIS_Good=${tisGood}</if>
+			<if test="tisMedium!=null">,TIS_Medium=${tisMedium}</if>
+			<if test="tisDifferential=null">,TIS_Differential=${tisDifferential}</if>
+			<if test="s_userID!=null">,TIS_UserID=${s_userID}</if>
+			<if test="tisCommentTime!=null">,now()</if>	
+			</trim>
+		</set>
+		where TIS_ID=${tisId}
+	</update>
+	
+	<delete id="delete_by_id" parameterType="java.util.HashMap">
+		delete from std_task_info_score where TIS_ID in (${tisId})
+	</delete>
+	<delete id="delete_by_tid" parameterType="java.util.HashMap">
+		delete from std_task_info_score where TI_ID=${tiId}
+	</delete>	
+</mapper>
+

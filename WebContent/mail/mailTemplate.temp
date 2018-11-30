@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分生成成功</title>
+<style type="text/css">
+.ok
+{
+	border:1px solid #ffe2b0;
+    border-width:1px 1px 1px 1px;
+    margin:5px 0 5px 0;
+	}
+.oo
+{
+	border:1px solid #E3E3E3;
+    border-width:1px 1px 1px 1px;
+    margin:5px 0 15px 0;
+	}
+
+.chala-corner{width:608px;font-size:12px;background-color:#FCFCE2; margin:auto; text-align:center;}
+.chala-content{height:50px;line-height:25px;text-align:left;padding:0px 5px;background-color:#FCFCE2;border-left:1px solid #ffe2b0;border-right:1px solid #ffe2b0}
+.chala{display:block;background-color:#FCFCE2}
+.chala *{display:block;height:1px;overflow:hidden;background-color:#FCFCE2}
+.chala1{margin:0px 2px;border-left:1px solid #ffedcb;border-right:1px solid #ffedcb;padding:0px 1px;background-color:#ffe2b0}
+.chala2{margin:0px 1px;border-left:1px solid #ffe2b0;border-right:1px solid #ffe2b0}
+.chala3{margin:0px 0px;border-left:1px solid #ffedcb;border-right:1px solid #ffedcb}
+.chala4{margin:0px 0px;border-left:1px solid #ffe2b0;border-right:1px solid #ffe2b0}
+.STYLE1 {color: #0000FF}
+.STYLE2 {
+	color: #FF0000;
+	font-weight: bold;
+}
+.STYLE3 {color: #FF0000}
+body{
+	BACKGROUND-COLOR: #ffffff;
+	SCROLLBAR-FACE-COLOR: #eeeeee; 
+	SCROLLBAR-HIGHLIGHT-COLOR:#ffffff; 
+	SCROLLBAR-SHADOW-COLOR: #aaaaaa; 
+	SCROLLBAR-3DLIGHT-COLOR: #ffffff; 
+	SCROLLBAR-ARROW-COLOR: #666666; 
+	SCROLLBAR-TRACK-COLOR: #ffffff; 
+	SCROLLBAR-DARKSHADOW-COLOR: #ffffff;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+	
+}
+.gg-font{
+color:#6c643a;
+font-size:12px;
+line-height:20px;
+}
+.lp-font{	font:12px;line-height:18px;color:#404040;
+}
+.tablek4
+{
+	border:1px solid #ffe2b0;
+    border-width:1px 1px 1px 1px;
+    margin:2px 0 2px 0;
+
+    border-collapse:collapse;
+	td border:1px solid #ddd;	
+}
+</style>
+</head>
+<body>
+<table width="608" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td width="160" rowspan="2" valign="bottom"><a href="@{mailShopURL}" target="_blank"><img src="@{mailLogo}" width="160" height="53" border="0" /></a></td>
+      <td height="35" align="right"><table width="50%" border="1" cellspacing="0" cellpadding="0" class="tablek4" bgcolor="#FCFCE2" bordercolor="#ffe2b0">
+        <tr>
+          <td width="55%" height="20" align="center"><a href="@{mailLoginURL}" class="gg-font">登录你的商城账户</a></td>
+          <td width="45%" align="center"><a href="@{mailShopURL}" class="gg-font">进入商城</a></td>
+        </tr>
+      </table></td>
+    </tr>
+    <tr>
+      <td height="21" align="left" valign="bottom" style="background-color:#F5D75F; line-height:21px;font:12px">&nbsp;&nbsp;&nbsp;&nbsp;请保管好您的邮箱，避免xxxx积分商城账户被他人盗用 </td>
+    </tr>
+  </tbody>
+</table>
+<table width="608" border="0" align="center" cellpadding="0" cellspacing="0" class="ok">
+  <tr>
+    <td><table cellspacing="0" cellpadding="0" width="100%" align="center">
+      <tbody>
+        <tr>
+          <td height="40" style="line-height:40px;font:12px">&nbsp;&nbsp;<strong>尊敬的客户：</strong></div></td>
+        </tr>
+        <tr>
+          <td valign="top">
+	          <table cellspacing="0" cellpadding="0" width="570" align="center" class="oo">
+					<tr>
+						<td style="font:12px">&nbsp;&nbsp;&nbsp;&nbsp;您好，系统为您生成积分：@{point}分，关联保单号为：@{policyno}。<br />
+	                  </td>
+					</tr>
+	          </table>
+          </td>
+        </tr>
+      </tbody>
+    </table></td>
+  </tr>
+</table>
+<table width="608" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td><div class="chala-corner">
+ <b class="chala">
+ <b class="chala1"></b>
+ <b class="chala2"></b>
+ <b class="chala3"></b>
+ <b class="chala4"></b></b>
+ <div class="chala-content">此信由xxxx积分商城系统发出，系统不接收回信，请勿直接回复。<br />
+如有任何疑问,可访问 <a href="@{mailShopURL}" class="gg-font">xxxx积分商城</a> 与我们取得联系。</div>
+ <b class="chala">
+ <b class="chala4"></b>
+ <b class="chala3"></b>
+ <b class="chala2"></b>
+ <b class="chala1"></b></b>
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>
+</body>
+</html>

@@ -1,0 +1,112 @@
+/*------------------------*/
+/*--------琛ㄦ牸鏍峰紡---------*/
+/*------------------------*/
+
+/**琛ㄦ牸澶栧眰table鏍峰紡*/
+.gridTreeTable {
+	background-color: #B5B5B5;
+}
+.gridTreeTable tr td a span{color: #000000;}
+.gridTreeTable tr td span{color: #606373;}
+/**琛ㄦ牸澶碩head鏍峰紡*/
+.gridTreeHeadThead {
+	
+}
+
+/**琛ㄦ牸澶碩r鏍峰紡*/
+.gridTreeHeadTr {
+	background: #E7E7E7;
+	background-repeat: repeat-x;
+	height: 30;
+}
+/**琛ㄦ牸澶碩h鏍峰紡*/
+.gridTreeHeadTh {
+	height: 25;
+	font-size: 12px;
+	color: #000000;
+}
+
+/**琛ㄦ牸浣揟body鏍峰紡*/
+.gridTreeTbody {
+	
+}
+
+/**琛ㄦ牸浣揟r榧犳爣鎮仠锛坥ver锛夋牱寮�/
+.gridTreeBodyTrOver{
+	background-color: #EFEFFF;
+	height: 20px;
+	width:100%;
+}
+/**琛ㄦ牸浣揟r榧犳爣绂诲紑濂囨暟琛岋紙out锛夋牱寮�/
+.gridTreeBodyTrOutOdd{
+	background-color: #FEFFFF;
+	height: 20px;
+	width:100%;
+}
+/**琛ㄦ牸浣揟r榧犳爣绂诲紑鍋舵暟琛岋紙out锛夋牱寮�/
+.gridTreeBodyTrOutEven{
+	background-color: #FEFFFF;
+	height: 20px;
+	width:100%;
+}
+
+/**琛ㄦ牸浣揟d鏍峰紡*/
+.gridTreeBodyTd {
+	height: 20px;
+	font-size: 12px;
+	cursor: default;
+	line-height: 20px;
+	text-indent: 0px;
+	padding: 0 0 0 0;
+	border-bottom: 1px dashed #cdcdcd;
+}
+
+.gridTreeTable tr td img,.gridTreeTable tr td input,.gridTreeTable tr td span,.gridTreeTable tr td a span
+	{
+	vertical-align: middle;
+}
+
+.gridTreeTable tr td a span {
+	margin: 0 5
+}
+
+.table_yj tr td a div#create_1_div span {
+	color: #ffffff;
+	font-size: 14px;
+}
+
+.table_yj tr td a div#create_1_div img,.table_yj tr td a div#create_1_div span {
+	vertical-align: middle;
+	background: #606373;
+}
+
+.table_yj #create_1_div {
+	background: #606373;
+	padding: 4px 15px;
+	float: left;
+}
+
+
+.table_yj tr td a div{margin-left: 5px;}
+.table_yj tr td a div#create_2_div span{color: #ffffff;font-size: 14px;}
+.table_yj tr td a div#create_2_div img,.table_yj tr td a div#create_2_div span{vertical-align: middle;background: #606373;}
+.table_yj #create_2_div{background: #606373;padding: 4px 15px;float: left;}
+.table_yj tr td a div#create_3_div span{color: #ffffff;font-size: 14px;}
+.table_yj tr td a div#create_3_div img,.table_yj tr td a div#create_3_div span{vertical-align: middle;background: #606373;}
+.table_yj #create_3_div{background: #606373;padding: 4px 15px;float: left;}
+
+
+
+
+
+.jq_treeCNodeEventImg {
+	cursor: pointer;
+}
+
+.jq_treePNodeEventImg {
+	cursor: pointer;
+}
+
+.jq_columnA {
+	text-align: right;
+}

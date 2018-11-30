@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="newsbigclass">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="bigClassID" column="BigClassID" />
+		<result property="bigClassName" column="BigClassName" />
+		<result property="bigClassInfo" column="BigClassInfo" />
+		<result property="addTime" column="AddTime" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_news_bigclass news_title
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="bigClassName != null and bigClassName != ''"> news_title.BigClassName like '${bigClassName}%' </if>
+			</trim>
+		</where>
+		order by news_title.AddTime desc limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from sys_news_bigclass news_title
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="bigClassName != null and bigClassName != ''"> news_title.BigClassName like '${bigClassName}%'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select *  from sys_news_bigclass news_big where news_big.BigClassID = ${bigClassID}
+	</select>
+	<select id="select_news_class_id_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select count(*) as class_count  from sys_news_news where BigClassID in (${bigClassID})
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_news_bigclass
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="bigClassName!=null">,BigClassName</if>
+			<if test="bigClassInfo!=null">,BigClassInfo</if>
+			,AddTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="bigClassName!=null">,#{bigClassName}</if>
+			<if test="bigClassInfo!=null">,#{bigClassInfo}</if>
+			,now()
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_news_bigclass
+		<set>
+			<trim prefixOverrides=",">
+				<if test="bigClassName!=null">,BigClassName = #{bigClassName}</if>
+				<if test="bigClassInfo!= null">,BigClassInfo = #{bigClassInfo}</if>
+				,AddTime = now()
+			</trim>
+		</set>
+		where BigClassID=${bigClassID}
+	</update>
+	<delete id="delete_by_Id" parameterType="java.util.HashMap">
+		delete from sys_news_bigclass where BigClassID in (${bigClassID})
+	</delete>
+</mapper>

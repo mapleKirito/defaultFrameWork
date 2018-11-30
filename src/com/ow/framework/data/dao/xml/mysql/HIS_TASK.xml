@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="histask">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="htaskID" column="HTASK_ID" />
+		<result property="htaskTitle" column="HTASK_TITLE" />									<!-- 问题 标题 -->
+		<result property="htaskWealthval" column="HTASK_Wealthval" />							<!-- 问题 财富值 -->
+		<result property="htaskContent" column="HTASK_CONTENT" />								<!-- 问题 内容-->
+		<result property="htaskKeywords" column="HTASK_KEYWORDS" />								<!-- 问题 关键词 -->
+		<result property="htaskBestAnswer" column="HTASK_BestAnswer" />								<!-- 问题 是否关闭 -->
+		<result property="htaskCreatetime" column="HTASK_CREATETIME" />							<!-- 问题 创建时间 -->
+		<result property="htaskIssplit" column="HTASK_ISSPLIT" />								<!-- 问题 是否拆分成多个小问题 1、0 -->
+		<result property="htaskSplitID" column="HTASK_SPLITID" />								<!-- 问题 被拆分成多个的小问题的父问题ID -->
+		<result property="htaskUserCreate" column="HTASK_USERCREATE" />							<!-- 创建问题的用户ID -->
+		<result property="htaskAccpetTime" column="HTASK_ACCPETTIME" />	
+		<result property="htaskIsAccept" column="HTASK_IsAccept" />
+		<result property="htaskSplitIndex" column="HTASK_SPLITINDEX" />
+		<result property="htaskCreaterName" column="USER_Name" />
+		<result property="htaskLock" column="HTASK_Lock" />
+		<result property="htaskIsReview" column="HTASK_IsReview" />
+		<result property="htaskTeam" column="HTASK_TEAM" />
+		<result property="htaskClass" column="HTASK_CLASS" />
+	</resultMap>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_Wealthval,
+		histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_KEYWORDS, histask_mapper.HTASK_BestAnswer,
+		histask_mapper.HTASK_ISSPLIT,histask_mapper.HTASK_SPLITID, 
+		histask_mapper.HTASK_USERCREATE,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d %H:%i:%s')  HTASK_CREATETIME , (select HTASK_ISANWSERONLY from his_task_answeronly_mapper where HTASK_ID = ${htaskID} and HTASK_USERCREATE = ${s_userID} ) as htaskIsAnswer
+		,(SELECT b.USER_Account FROM sys_user b WHERE histask_mapper.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount 
+		from his_task histask_mapper where histask_mapper.HTASK_ID = ${htaskID}
+	</select>
+	
+	<select id="select_by_id_rightdetail" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT * FROM his_task a 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and a.HTASK_ID !=${htaskID}
+				and a.HTASK_SPLITID=0
+				<if test="keywords != null and keywords != '' ">  and ${keywords} </if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_by_id_rightdetail_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task a 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				1 = 1
+				<if test="keywords != null and keywords != '' ">  and a.HTASK_KEYWORDS like "%${htaskKeywords}%" </if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_orderby_click" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE HTASK_SPLITID = 0 and HTASK_IsAccept = 1
+		 ORDER BY HTASK_Click DESC
+		 limit 20
+	</select>
+	
+	<select id="select_orderby_ans" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE HTASK_SPLITID = 0 and HTASK_IsAccept = 1 ORDER BY HTASK_Click DESC
+	</select>
+	
+	<select id="select_end_max" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT MAX(a.HTASK_SPLITINDEX) FROM his_task a WHERE a.HTASK_SPLITID = ${htaskID}
+	</select>
+	
+	<select id="select_histask_sort" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT * FROM his_task a WHERE a.HTASK_SPLITID = ${htaskID} order by a.HTASK_SPLITINDEX asc
+	</select>
+	
+	<select id="select_by_splitid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  his_task histask_mapper where histask_mapper.HTASK_SPLITID = ${htaskID}
+	</select>
+	
+	<select id="select_by_squareTopTitle" resultMap="convertResult" parameterType="java.util.HashMap">
+		<!-- SELECT * FROM his_task a WHERE a.HTASK_ID = 246; -->
+		SELECT * FROM his_task a WHERE a.HTASK_ISSPLIT = 1 and a.HTASK_IsAccept = 0 LIMIT 0,1
+	</select>
+	
+	<select id="select_by_squareTopTitle_team" resultMap="convertResult" parameterType="java.util.HashMap">
+		<!-- SELECT * FROM his_task a WHERE a.HTASK_ID = 246; -->
+		SELECT * FROM his_task a WHERE a.HTASK_TEAM=${tID} and a.HTASK_SPLITID = 1 and a.HTASK_IsAccept = 0 LIMIT 0,1;
+	</select>
+	
+	<select id="select_by_squareList_team" resultMap="convertResult" parameterType="java.util.HashMap">
+		<!-- SELECT * FROM his_task a WHERE a.HTASK_SPLITID = 246; -->
+		SELECT * FROM his_task a WHERE a.HTASK_TEAM=${tID} and a.HTASK_SPLITID = (SELECT a.HTASK_ID FROM his_task a WHERE a.HTASK_SPLITID = 1 and a.HTASK_IsAccept = 0 LIMIT 0,1) order by a.HTASK_SPLITINDEX asc;
+	</select>
+	
+	<select id="select_by_squareList" resultMap="convertResult" parameterType="java.util.HashMap">
+		<!-- SELECT * FROM his_task a WHERE a.HTASK_SPLITID = 246; -->
+		SELECT * FROM his_task a WHERE a.HTASK_SPLITID = (SELECT a.HTASK_ID FROM his_task a WHERE a.HTASK_ISSPLIT = 1 and a.HTASK_IsAccept = 0 LIMIT 0,1) order by a.HTASK_SPLITINDEX asc;
+	</select>
+	
+	<select id="select_isAccpet_end_list" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a 
+		
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				a.HTASK_IsAccept = 1 AND a.HTASK_SPLITID = 0
+				<if test="htaskTitle != null and htaskTitle != '' "> and a.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		order by a.HTASK_CREATETIME desc limit ${start},${offset};
+	</select>
+	
+	<select id="select_isAccpet_end_list_search" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a 
+		
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				a.HTASK_IsAccept = 1 AND a.HTASK_SPLITID = 0
+				<if test="keyword != null and keyword != '' "> and a.HTASK_TITLE like '%${keyword}%'</if>
+			</trim>
+		</where>
+		order by a.HTASK_CREATETIME desc 
+	</select>
+	
+	<select id="select_task_by_splitidis0_search" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b 
+		
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+		 and  a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,
+		(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE a.HTASK_SPLITID = 0 and HTASK_IsReview = 1
+	     and a.HTASK_IsAccept = 0
+		       <if test="keyword != null and keyword != ''">
+				and a.HTASK_TITLE like '%${keyword}%'
+			 </if>
+		    </trim>
+		</where>
+	
+		 
+		
+		 
+		 
+		order by a.HTASK_ID DESC 
+	</select>
+	
+	<select id="select_isAccpet_end_list_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task a 
+		
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				a.HTASK_IsAccept = 1 AND a.HTASK_SPLITID = 0
+				<if test="htaskTitle != null and htaskTitle != '' "> and a.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		
+	</select>
+	
+	<select id="select_manytask_by_index" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_Wealthval,
+		histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_KEYWORDS, histask_mapper.HTASK_BestAnswer,
+		histask_mapper.HTASK_ISSPLIT,histask_mapper.HTASK_SPLITID, 
+		histask_mapper.HTASK_USERCREATE,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d %H:%i:%s')  HTASK_CREATETIME 
+		from his_task histask_mapper where histask_mapper.HTASK_SPLITID = ${htaskID} and histask_mapper.HTASK_SPLITINDEX = ${htaskSplitIndex}
+	</select>
+	
+	<select id="select_noAccept_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_ISSPLIT,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,u.user_name,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from sys_user u, his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE = -
+				
+				 and histask_mapper.HTASK_IsAccept=0 and histask_mapper.HTASK_USERCREATE=u.user_id
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_isAccept_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_ISSPLIT,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,u.user_name,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from sys_user u, his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0  and histask_mapper.HTASK_IsAccept=1 and histask_mapper.HTASK_USERCREATE=u.user_id
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+	    limit ${start},${offset}
+<!-- 		limit ${start},${offset} -->
+	</select>
+	<select id="select_isAccept_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(histask_mapper.HTASK_ID) from sys_user u, his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE = ${s_userID} and histask_mapper.HTASK_IsAccept=1 and histask_mapper.HTASK_USERCREATE=u.user_id
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+<!-- 		limit ${start},${offset} -->
+	</select>
+	
+	<select id="select_task_pageAll" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,
+		(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE a.HTASK_SPLITID = 0 and HTASK_IsReview = 1
+		 and a.HTASK_IsAccept = 0
+		order by a.HTASK_ID DESC limit ${start},${offset} 
+	</select>
+	
+	<select id="select_task_pageAll_page" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(a.HTASK_ID) FROM his_task a WHERE a.HTASK_SPLITID = 0 and HTASK_IsReview = 1
+		 and a.HTASK_IsAccept = 0
+	</select>
+	
+	<select id="select_task_by_splitidis0" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE b.TA_HtaskID in (select c.HTASK_ID from his_task c where c.HTASK_SPLITID=a.HTASK_ID) or b.TA_HtaskID=a.HTASK_ID AND b.TA_ParentsID = 0 ) AS htaskhdCount,
+		(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE a.HTASK_SPLITID = 0 and HTASK_IsReview = 1
+		and a.HTASK_CLASS = ${htaskClass} and a.HTASK_IsAccept = 0
+		order by a.HTASK_ID DESC limit ${start},${offset} 
+	</select>
+	
+	<select id="select_task_by_splitidis0_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task a WHERE a.HTASK_SPLITID = 0 and a.HTASK_IsReview = 1 and a.HTASK_CLASS = ${htaskClass} and a.HTASK_IsAccept = 0
+	</select>
+	
+	<select id="select_task_by_splitidis0_community" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,
+		(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE a.HTASK_SPLITID = 0 and HTASK_IsReview = 1
+		and a.HTASK_IsAccept = 0
+		order by a.HTASK_ID DESC limit ${start},${offset} 
+	</select>
+	
+	<select id="select_task_by_splitidis0_count_community" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task a WHERE a.HTASK_SPLITID = 0 and a.HTASK_IsReview = 1 and a.HTASK_IsAccept = 0
+	</select>
+	
+	<select id="select_task_by_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,
+		(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount
+		 FROM his_task a 
+		 <where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				a.HTASK_SPLITID = 0   and a.HTASK_IsAccept = 0
+				<if test="htaskTitle != null and htaskTitle != '' "> and a.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		order by a.HTASK_ID DESC limit ${start},${offset} 
+	</select>
+	
+	<select id="select_task_by_all_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT count(*) FROM his_task a 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				a.HTASK_SPLITID = 0 and a.HTASK_IsReview = 1  and a.HTASK_IsAccept = 0
+				<if test="htaskTitle != null and htaskTitle != '' "> and a.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_task_by_hdnumcount" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.*,(SELECT COUNT(b.TA_HtaskID) FROM his_task_answer b WHERE a.HTASK_ID = b.TA_HtaskID AND b.TA_ParentsID = 0 ) AS htaskhdCount,
+		(SELECT b.USER_Account FROM sys_user b WHERE a.HTASK_USERCREATE = b.USER_ID ) AS htaskUserAccount FROM his_task a WHERE a.HTASK_SPLITID = 0 AND HTASK_IsReview = 1 and HTASK_IsAccept = 1
+		ORDER BY htaskhdCount DESC
+			limit 20
+	</select>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_ISSPLIT,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE = ${s_userID}
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page2" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE = ${uID}
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(histask_mapper.HTASK_ID) from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE = ${s_userID}
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE = '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page_admin" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_admin_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(histask_mapper.HTASK_ID) from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE = '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page_wdhd_team" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE != ${s_userID}
+				and histask_mapper.HTASK_TEAM=${tID}
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+		limit ${start},${offset}
+	</select>
+	
+	
+	<select id="select_page_wdhd" resultMap="convertResult" parameterType="java.util.HashMap">
+		select histask_mapper.HTASK_ID,histask_mapper.HTASK_ISSPLIT,histask_mapper.HTASK_CLASS,histask_mapper.HTASK_TEAM,histask_mapper.HTASK_IsReview,histask_mapper.HTASK_Click,histask_mapper.HTASK_Lock,histask_mapper.HTASK_SPLITINDEX,DATE_FORMAT(histask_mapper.HTASK_ACCPETTIME,'%Y-%m-%d %H:%i:%s')  HTASK_ACCPETTIME ,histask_mapper.HTASK_IsAccept,histask_mapper.HTASK_USERCREATE,histask_mapper.HTASK_CONTENT,histask_mapper.HTASK_TITLE,histask_mapper.HTASK_KEYWORDS,DATE_FORMAT(histask_mapper.HTASK_CREATETIME,'%Y-%m-%d')  HTASK_CREATETIME from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE != ${s_userID}
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE like '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+		ORDER BY histask_mapper.HTASK_ID DESC
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_wdhd_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(histask_mapper.HTASK_ID) from his_task histask_mapper
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				histask_mapper.HTASK_SPLITID = 0 and histask_mapper.HTASK_USERCREATE != ${s_userID}
+				<if test="htaskTitle != null and htaskTitle != '' "> and histask_mapper.HTASK_TITLE = '%${htaskTitle}%'</if>
+			</trim>
+		</where>
+	</select>
+
+	
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into his_task
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="htaskTitle !=null">,HTASK_TITLE</if>
+			<if test="htaskWealthval !=null">,HTASK_Wealthval</if>
+			<if test="htaskKeywords !=null">,HTASK_KEYWORDS</if>	
+			<if test="htaskBestAnswer !=null">,HTASK_BestAnswer</if>
+			<if test="htaskIssplit !=null">,HTASK_ISSPLIT</if>
+			<if test="htaskContent !=null">,HTASK_CONTENT</if>
+			<if test="htaskSplitID !=null">,HTASK_SPLITID</if>
+			<if test="htaskUserCreate !=null">,HTASK_USERCREATE</if>
+			<if test="htaskSplitIndex !=null">,HTASK_SPLITINDEX</if>
+			<if test="htaskClass !=null">,HTASK_CLASS</if>
+			<if test="htaskIsReview !=null">,HTASK_IsReview</if>
+			,HTASK_CREATETIME		
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="htaskTitle !=null">,#{htaskTitle}</if>
+			<if test="htaskWealthval !=null">,#{htaskWealthval}</if>
+			<if test="htaskKeywords !=null">,#{htaskKeywords}</if>	
+			<if test="htaskBestAnswer !=null">,#{htaskBestAnswer}</if>
+			<if test="htaskIssplit !=null">,#{htaskIssplit}</if>
+			<if test="htaskContent !=null">,#{htaskContent}</if>
+			<if test="htaskSplitID !=null">,#{htaskSplitID}</if>
+			<if test="htaskUserCreate !=null">,#{htaskUserCreate}</if>
+			<if test="htaskSplitIndex !=null">,#{htaskSplitIndex}</if>
+			<if test="htaskClass !=null">,#{htaskClass}</if>
+			<if test="htaskIsReview !=null">,#{htaskIsReview}</if>
+			,now()	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update his_task
+		<set>
+			<trim prefixOverrides=",">
+				<if test="htaskTitle !=null">,HTASK_TITLE=#{htaskTitle}</if>
+				<if test="htaskContent !=null">,HTASK_CONTENT=#{htaskContent}</if>
+				<if test="htaskWealthval !=null">,HTASK_Wealthval=#{htaskWealthval}</if>
+				<if test="htaskBestAnswer !=null">,HTASK_BestAnswer=#{htaskBestAnswer}</if>
+				<if test="htaskIssplit !=null">,HTASK_ISSPLIT=#{htaskIssplit}</if>
+				<if test="htaskKeywords !=null">,HTASK_KEYWORDS=#{htaskKeywords}</if>
+				<if test="htaskClass !=null">,HTASK_CLASS=#{htaskClass}</if>
+			</trim>
+		</set>
+		where HTASK_ID=${htaskID}
+	</update>
+	
+	<update id="update_click" parameterType="java.util.HashMap">
+		update his_task set HTASK_Click = HTASK_Click + 1 where HTASK_ID=${htaskID}
+	</update>
+	
+	<update id="update_isAccpet_end" parameterType="java.util.HashMap">
+		update his_task set HTASK_IsAccept = 1 where HTASK_ID=${htaskID}
+	</update>
+	
+	<update id="update_isAccpet" parameterType="java.util.HashMap">
+		update his_task set HTASK_IsAccept = 1 where HTASK_SPLITID=${htaskID} and HTASK_SPLITINDEX=${htaskSplitIndex}
+	</update>
+	
+	<update id="update_isAccpet_o" parameterType="java.util.HashMap">
+		update his_task set HTASK_IsAccept = 1 where HTASK_ID=${htaskID} and HTASK_SPLITINDEX=${htaskSplitIndex}
+	</update>
+	
+	<update id="update_isLock" parameterType="java.util.HashMap">
+		update his_task set HTASK_Lock = 0 where HTASK_SPLITID=${htaskID} and HTASK_SPLITINDEX=${htaskSplitIndex}
+	</update>
+	
+	<update id="update_accpetTime" parameterType="java.util.HashMap">
+		update his_task set HTASK_ACCPETTIME = now() where HTASK_ID=${htaskID}
+	</update>
+	
+	<update id="update_isReview" parameterType="java.util.HashMap">
+		update his_task set HTASK_IsReview = 1 where HTASK_ID in (${htaskID})
+	</update>
+	<update id="update_isResult" parameterType="java.util.HashMap">
+		update his_task set HTASK_IsAccept = 0 where HTASK_ID in (${htaskID})
+	</update>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from his_task where HTASK_ID in (${htaskID})
+	</delete>	
+	
+	<delete id="delete_splitid" parameterType="java.util.HashMap">
+		delete from his_task where HTASK_SPLITID in (${htaskSplitID}) and HTASK_USERCREATE = ${s_userID}
+	</delete>
+	
+	<delete id="delete_splitid_by_htask" parameterType="java.util.HashMap">
+		delete from his_task where HTASK_SPLITID in (${htaskID}) and HTASK_USERCREATE = ${s_userID}
+	</delete>	
+		
+</mapper>

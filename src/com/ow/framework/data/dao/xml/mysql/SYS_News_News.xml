@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="newsnews">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="newsID" column="NewsID" />
+		<result property="newsNum" column="NewsNum" />
+		<result property="newsTitle" column="NewsTitle" />
+		<result property="newsContent" column="NewsContent" />
+		<result property="newsTime" column="NewsTime" />
+		<result property="bigClassID" column="BigClassID" />
+		<result property="isHot" column="IsHot" />
+		<result property="newsInfo" column="NewsInfo" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select news_bigclass.BigClassName, news.NewsID,news.NewsNum,news.NewsTitle,news.NewsContent,news.NewsTime,
+		news.BigClassID, news.IsHot,news.NewsInfo from  sys_news_news news left join sys_news_bigclass news_bigclass on news.BigClassID = news_bigclass.BigClassID
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="newsTitle != null and newsTitle != ''"> news.NewsTitle like '${newsTitle}%'</if>
+			</trim>
+		</where>
+		order by news.NewsID desc limit ${start},${offset}
+	</select>
+	<select id="select_page_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select news_bigclass.BigClassName, news.NewsID,news.NewsNum,news.NewsTitle,news.NewsContent,news.NewsTime,
+		news.BigClassID, news.IsHot,news.NewsInfo from  sys_news_news news left join sys_news_bigclass news_bigclass on news.BigClassID = news_bigclass.BigClassID
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="newsTitle != null and newsTitle != ''"> news.NewsTitle like '${newsTitle}%'</if>
+			</trim>
+		</where>
+		order by news.NewsID asc 
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_news_news news left join sys_news_bigclass news_bigclass on news.BigClassID = news_bigclass.BigClassID
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="newsTitle != null and newsTitle != ''"> news.NewsTitle like '${newsTitle}%'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select news_bigclass.BigClassName, news.NewsID,news.NewsNum,news.NewsTitle,news.NewsContent,news.NewsTime,
+		news.BigClassID, news.IsHot,news.NewsInfo
+		from 
+			sys_news_news news left join sys_news_bigclass news_bigclass on news.BigClassID = news_bigclass.BigClassID
+		<where>
+			news.IsHot='Yes' 
+		</where>
+	</select>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_news_news news
+		where news.NewsID = ${newsID}
+	</select>
+	<select id="select_one_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  * from sys_news_news news
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="id != null and id != ''">
+				  news.NewsID=${id} 
+				</if>
+			</trim>
+		</where>	
+	</select>	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_news_news
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="bigClassID != null">,BigClassID</if>
+			<if test="isHot != null">,IsHot</if>
+			<if test="newsNum != null">,NewsNum</if>
+			<if test="newsTitle != null">,NewsTitle</if>
+			<if test="newsInfo != null">,NewsInfo</if>
+			<if test="newsContent != null">,NewsContent</if>
+			,NewsTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="bigClassID != null">,#{bigClassID}</if>
+			<if test="isHot != null">,#{isHot}</if>
+			<if test="newsNum != null">,#{newsNum}</if>
+			<if test="newsTitle != null">,#{newsTitle}</if>
+			<if test="newsInfo != null">,#{newsInfo}</if>
+			<if test="newsContent != null">,#{newsContent}</if>
+			,now()
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_news_news
+		<set>
+			<trim prefixOverrides=",">
+				<if test="bigClassID != null">,BigClassID = #{bigClassID}</if>
+				<if test="isHot != null">,IsHot = #{isHot}</if>
+				<if test="newsTitle != null">,NewsTitle = #{newsTitle}</if>
+				<if test="newsInfo != null">,NewsInfo = #{newsInfo}</if>
+				<if test="newsContent != null">,NewsContent = #{newsContent}</if>
+				,NewsTime = now()
+			</trim>
+		</set>
+		where NewsID=${newsID}
+	</update>
+	<delete id="delete_by_Id" parameterType="java.util.HashMap">
+		delete from sys_news_news where NewsID in (${newsID})
+	</delete>
+	<delete id="delete_by_bigClassID" parameterType="java.util.HashMap">
+		delete from sys_news_news where BigClassID in (${bigClassID})
+	</delete>
+</mapper>

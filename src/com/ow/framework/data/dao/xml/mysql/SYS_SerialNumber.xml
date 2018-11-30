@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="serial">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="snID" column="SN_ID" />
+		<result property="snName" column="SN_Name" />
+		<result property="snCNName" column="SN_CNName" />
+		<result property="snNO" column="SN_NO" />
+		<result property="snUserID" column="SN_UserID" />
+		<result property="snUserAccount" column="SN_UserAccount" />
+		<result property="snOperateTime" column="SN_OperateTime" />
+		<result property="snCreateTime" column="SN_CreateTime" />
+		<result property="snCreator" column="SN_Creator" />
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			serial.SN_ID, serial.SN_Name, serial.SN_CNName, serial.SN_NO, serial.SN_UserID,
+			serial.SN_UserAccount, serial.SN_OperateTime, serial.SN_CreateTime,
+			serial.SN_Creator 
+		from sys_serial_number serial
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			serial.SN_ID, serial.SN_Name, serial.SN_CNName, serial.SN_NO, serial.SN_UserID,
+			serial.SN_UserAccount, serial.SN_OperateTime, serial.SN_CreateTime,
+			serial.SN_Creator 
+		from 
+			sys_serial_number serial
+		where 
+			serial.SN_ID = ${snID}
+	</select>
+	<select id="select_by_name" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			serial.SN_ID, serial.SN_Name, serial.SN_CNName, serial.SN_NO, serial.SN_UserID,
+			serial.SN_UserAccount, serial.SN_OperateTime, serial.SN_CreateTime,
+			serial.SN_Creator 
+		from 
+			sys_serial_number serial
+		where 
+			serial.SN_Name = '${snName}'
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			serial.SN_ID, serial.SN_Name, serial.SN_CNName, serial.SN_NO, serial.SN_UserID,
+			serial.SN_UserAccount, serial.SN_OperateTime, serial.SN_CreateTime,
+			serial.SN_Creator 
+		from 
+			sys_serial_number serial
+		where
+			<if test="snID != null and snID != '' "> serial.SN_ID = ${snID}</if>
+			<if test="snName != null and snName != '' "> and serial.SN_Name = '${snName}'</if>
+			<if test="snCNName != null and snCNName != '' "> and serial.SN_CNName = '${snCNName}'</if>
+			<if test="snNO != null and snNO != '' "> and serial.SN_NO = '${snNO}'</if>
+			<if test="snUserID != null and snUserID != '' "> and serial.SN_UserID = '${snUserID}'</if>
+			<if test="snUserAccount != null and snUserAccount != '' "> and serial.SN_UserAccount = '${snUserAccount}'</if>
+			<if test="snOperateTime != null and snOperateTime != '' "> and serial.SN_OperateTime = '${snOperateTime}'</if>
+			<if test="snCreateTime != null and snCreateTime != '' "> and serial.SN_CreateTime = '${snCreateTime}'</if>
+			<if test="snCreator != null and snCreator != '' "> and serial.SN_Creator = '${snCreator}'</if>
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select count(*) from sys_serial_number serial
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_serial_number
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="snName != null">,SN_Name</if>
+			<if test="snCNName != null">,SN_CNName</if>
+			<if test="snNO != null">,SN_NO</if>
+			<if test="s_userID != null">,SN_UserID</if>
+			<if test="s_userLoginAccount != null">,SN_UserAccount</if>
+			,SN_OperateTime
+			,SN_CreateTime
+			<if test="s_userLoginAccount != null">,SN_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="snName != null">,#{snName}</if>
+			<if test="snCNName != null">,#{snCNName}</if>
+			<if test="snNO != null">,#{snNO}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			,now()
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_serial_number
+		<set>
+			<trim prefixOverrides=",">
+				<if test="snName != null">,SN_Name = #{snName}</if>
+				<if test="snCNName != null">,SN_CNName = #{snCNName}</if>
+				<if test="snNO != null">,SN_NO = #{snNO}</if>
+				<if test="s_userID != null">,SN_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,SN_UserAccount = #{s_userLoginAccount}</if>
+				,SN_OperateTime = now()
+			</trim>
+		</set>
+		where SN_ID=${snID}
+	</update>
+	<!-- 修改序号 	-->
+	<update id="update_no" parameterType="java.util.HashMap">
+		update sys_serial_number
+		<set>
+			<trim prefixOverrides=",">
+				,SN_NO = SN_NO + 1
+				<if test="s_userID != null">,SN_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,SN_UserAccount = #{s_userLoginAccount}</if>
+				,SN_OperateTime = now()
+			</trim>
+		</set>
+		where SN_Name = '${snName}'
+	</update>
+</mapper>

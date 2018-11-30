@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="rolepms">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="rpmRoleID" column="RPM_RoleID" />
+		<result property="rpmPmsCode" column="RPM_PmsCode" />
+	</resultMap>
+	
+	<select id="select_role_pms_mapper" resultMap="convertResult" parameterType="param">
+		select * from sys_role_permission_mapper 
+		<where>
+		 	<if test="roleID != null">
+		 	 RPM_RoleID=${roleID}
+			</if>
+		</where>
+	 </select>
+	<select id="select_role_select_mapper" resultMap="convertResult" parameterType="param">
+		select * from sys_role_permission_mapper 
+		<where>
+		 	<if test="roleID">
+		 	 RPM_RoleID in (${roleRelation}) and RPM_RoleID != ${roleID}
+			</if>
+		</where>
+	 </select>
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_role_permission_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="roleID!=null">RPM_RoleID</if>
+			<if test="rpmPmsCode!=null">,RPM_PmsCode</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="roleID!=null">${roleID}</if>
+			<if test="rpmPmsCode!=null">,#{rpmPmsCode}</if>
+		</trim>
+	 </insert>
+	 <insert id="insert_default" parameterType="java.util.HashMap">
+	 	insert into sys_role_permission_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="roleID!=null">RPM_RoleID</if>
+			<if test="acode!=null">,RPM_PmsCode</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="roleID!=null">${roleID}</if>
+			<if test="acode!=null">,#{acode}</if>
+		</trim>
+	 </insert>
+	 	 
+	<delete id="delete_sub_pms" parameterType="java.util.HashMap">
+		delete from sys_role_permission_mapper 
+		where RPM_RoleID in (select ROLE_ID from SYS_Role 
+		where ROLE_ID != ${roleID} and ROLE_Relation like '%,${roleID},%')
+		and sys_role_permission_mapper.RPM_PmsCode in(${treeUncheckedVal})	
+	</delete>		 
+	 
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_role_permission_mapper where RPM_RoleID in (${roleID})
+	</delete>	 
+</mapper>

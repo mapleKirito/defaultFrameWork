@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<data>
+<loginUrl>http://127.0.0.1:8080/dm/ajaxAction.action</loginUrl>
+<chuceUrl>http://127.0.0.1:8080/dm/commonForwardAction.action?code=-1501</chuceUrl>
+<askUrl>http://127.0.0.1:8080/dm/commonForwardAction.action?code=-1401</askUrl>
+<mainUrl>http://127.0.0.1:8080/dm/forwardAction.action?code=-1700</mainUrl>
+</data>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="res">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="rrID" column="RR_ID" />
+		<result property="rrResourceType" column="RR_ResourceType" />
+		<result property="rrResourceID" column="RR_ResourceID" />
+		<result property="rrName" column="RR_Name" />
+		<result property="rrThumbnail" column="RR_Thumbnail" />
+		<result property="rrInThum" column="RR_InThum" />
+		<result property="rrUpload" column="RR_Upload" />
+		<result property="rrType" column="RR_Type" />
+		<result property="rrUserID" column="RR_UserID" />
+		<result property="rrUserAccount" column="RR_UserAccount" />
+		<result property="rrOperateTime" column="RR_OperateTime" />
+		<result property="rrCreateTime" column="RR_CreateTime" />
+		<result property="rrCreator" column="RR_Creator" />   
+		<result property="rrAudio" column="RR_Audio" />
+		<result property="rrFileSwf" column="rr_fileswf" />
+		<result property="rrZip" column="rr_zip" />
+		<result property="rrIsShare" column="RR_IsShare" />
+		<result property="rrModel" column="rr_model" />
+		<result property="rrFileSwfPath" column="RR_FileSwfPath" />
+		<result property="rrFileSwf" column="RR_FileSwf" />
+	</resultMap>
+	<select id="select_static_imglist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_inthum,rr_thumbnail from res_resource where rr_type='1011' and rr_name like '%${name}%'
+	</select>
+	<select id="select_static_imglist_scanner" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_inthum,rr_thumbnail from res_resource where rr_type='1011' and rr_name = '${name}'
+	</select>
+	<select id="select_static_videolist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_thumbnail,rr_upload from res_resource where rr_type='1084' and rr_name like '%${name}%'
+	</select>
+	<select id="select_static_pptlist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf from res_resource where rr_type='2041' and rr_name like '%${name}%'
+	</select>
+	<select id="select_static_pdflist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf from res_resource where rr_type='2055' and rr_name like '%${name}%'
+	</select>
+	<select id="select_static_doclist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf from res_resource where rr_type='2033' and rr_name like '%${name}%'
+	</select>
+	<select id="select_static_duoweilist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf,rr_zip,rr_model,rr_thumbnail from res_resource where rr_type='4033' and rr_name like '%${name}%'
+	</select>
+	<select id="select_static_img" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_inthum,rr_thumbnail from res_resource where rr_type='1011' and rr_resourceType = '${resType}' and rr_resourceId= '${id}'
+	</select>
+	<select id="select_static_video" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_thumbnail,rr_upload from res_resource where rr_type='1084' and rr_resourceType = '${resType}' and rr_resourceId= '${id}'
+	</select>
+	<select id="select_static_ppt" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf from res_resource where rr_type='2041' and rr_resourceType = '${resType}' and rr_resourceId= '${id}'
+	</select>
+	<select id="select_static_pdf" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf from res_resource where rr_type='2055' and rr_resourceType = '${resType}' and rr_resourceId= '${id}'
+	</select>
+	<select id="select_static_doc" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf from res_resource where rr_type='2033' and rr_resourceType = '${resType}' and rr_resourceId= '${id}'
+	</select>
+	<select id="select_static_duowei" resultMap="convertResult" parameterType="java.util.HashMap">
+		select rr_name,rr_fileswf,rr_zip,rr_model,rr_thumbnail from res_resource where rr_type='4033' and rr_resourceType = '${resType}' and rr_resourceId= '${id}'
+	</select>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			res.RR_ID,res.RR_FileSwfPath,res.RR_FileSwf, res.RR_ResourceType, res.RR_ResourceID, res.RR_Name,res.RR_Type,
+			res.RR_Thumbnail, res.RR_Upload, res.RR_UserID, res.RR_UserAccount,
+			res.RR_OperateTime, res.RR_CreateTime, res.RR_Creator, res.RR_Audio from
+		res_resource res
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			res.RR_ID,res.RR_FileSwfPath,res.RR_FileSwf, res.RR_ResourceType, res.RR_ResourceID, res.RR_Name,res.RR_Type,
+			res.RR_Thumbnail, res.RR_Upload, res.RR_UserID, res.RR_UserAccount,res.RR_InThum,
+			res.RR_OperateTime, res.RR_CreateTime, res.RR_Creator, res.RR_Audio from
+		res_resource res
+		where res.RR_ID = ${rrID} 
+	</select>
+	<select id="select_by_resid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			res.RR_ID,res.RR_FileSwfPath,res.RR_FileSwf, res.RR_ResourceType, res.RR_ResourceID, res.RR_Name,res.RR_Type,
+			res.RR_Thumbnail, res.RR_Upload, res.RR_UserID, res.RR_UserAccount,res.RR_InThum,
+			res.RR_OperateTime, res.RR_CreateTime, res.RR_Creator, res.RR_Audio from
+		res_resource res
+		where res.RR_ResourceID = '${rrResourceID}' and res.RR_ResourceType = '${rrResourceType}'
+	</select>
+	<select id="select_by_resid_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_resource res where res.RR_ResourceID = ${rrResourceID} and res.RR_ResourceType = '${rrResourceType}'
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			res.RR_ID,res.RR_FileSwfPath,res.RR_FileSwf, res.RR_ResourceType, res.RR_ResourceID, res.RR_Name,res.RR_Type,res.RR_InThum,
+			res.RR_Thumbnail, res.RR_Upload, res.RR_UserID, res.RR_UserAccount,
+			res.RR_OperateTime, res.RR_CreateTime, res.RR_Creator, res.RR_Audio from
+		res_resource res
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="rrType != null and rrType != '' ">
+					<if test="rrType == '1073' ">
+						and res.RR_Type = '1073' or res.RR_Audio != ''
+					</if>
+					<if test="rrType != '1073'">
+						and res.RR_Type = ${rrType}
+					</if>
+					    and res.RR_IsShare = 1
+				</if>
+			</trim>
+		</where>
+		ORDER BY res.RR_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_resource res
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="rrType != null and rrType != '' and rrType != '1073'">
+					and res.RR_Type = ${rrType}
+				</if>
+				<if test="rrType == '1073'">
+					and res.RR_Type = '1073' or res.RR_Audio != ''	
+				</if>		
+				 and res.RR_IsShare = 1	
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_resource
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="rrResourceType != null">,RR_ResourceType</if>
+			<if test="rrResourceID != null">,RR_ResourceID</if>
+			<if test="rrName != null">,RR_Name</if>
+			<if test="rrThumbnail != null">,RR_Thumbnail</if>
+			<if test="rrUpload != null">,RR_Upload</if>
+			<if test="rrAudio != null">,RR_Audio</if>
+			<if test="rrType != null">,RR_Type</if>
+			<if test="s_userID != null">,RR_UserID</if>
+			<if test="s_userLoginAccount != null">,RR_UserAccount</if>
+			<if test="rrInThum != null">,RR_InThum</if>
+			,RR_OperateTime
+			,RR_CreateTime
+			<if test="s_userLoginAccount != null">,RR_Creator</if>
+			<if test="rrFileSwfPath != null">,RR_FileSwfPath</if>
+			<if test="rrFileSwf != null">,RR_FileSwf</if>
+			<if test="rrIsShare != null">,RR_IsShare</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="rrResourceType != null">,#{rrResourceType}</if>
+			<if test="rrResourceID != null">,#{rrResourceID}</if>
+			<if test="rrName != null">,#{rrName}</if>
+			<if test="rrThumbnail != null">,#{rrThumbnail}</if>
+			<if test="rrUpload != null">,#{rrUpload}</if>
+			<if test="rrAudio != null">,#{rrAudio}</if>
+			<if test="rrType != null">,#{rrType}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="rrInThum != null">,#{rrInThum}</if>
+			
+			,now()
+			,now()
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="rrFileSwfPath != null">,#{rrFileSwfPath}</if>
+			<if test="rrFileSwf != null">,#{rrFileSwf}</if>
+			<if test="rrIsShare != null">,#{rrIsShare}</if>
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_resource
+		<set>
+			<trim prefixOverrides=",">
+				<if test="rrResourceType != null">,RR_ResourceType = #{rrResourceType}</if>  
+				<if test="rrResourceID != null">,RR_ResourceID = #{rrResourceID}</if>
+				<if test="rrName != null">,RR_Name = #{rrName}</if>
+				<if test="rrInThum != null">,RR_InThum = #{rrInThum}</if>  
+				<if test="rrThumbnail != null">,RR_Thumbnail = #{rrThumbnail}</if>
+				<if test="rrUpload != null">,RR_Upload = #{rrUpload}</if>
+				<if test="rrFileSwfPath != null">,RR_FileSwfPath = #{rrFileSwfPath}</if>
+				<if test="rrFileSwf != null">,RR_FileSwf = #{rrFileSwf}</if>
+				<if test="rrType != null">,RR_Type = #{rrType}</if>
+				<if test="s_userID != null">,RR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,RR_UserAccount = #{s_userLoginAccount}</if>
+				<if test="rrIsShare != null">,RR_IsShare = #{rrIsShare}</if>
+				,RR_OperateTime = now()
+			</trim>
+		</set>
+		where RR_ID=${rrID}
+	</update>
+	<update id="update_res" parameterType="java.util.HashMap">
+		update res_resource
+		<set>
+			<trim prefixOverrides=",">
+				<if test="rrName != null">,RR_Name = #{rrName}</if>
+				<if test="rrThumbnail != null">,RR_Thumbnail = #{rrThumbnail}</if>
+				<if test="rrInThum != null">,RR_InThum = #{rrInThum}</if>  
+				<if test="rrUpload != null">,RR_Upload = #{rrUpload}</if>
+				<if test="rrAudio != null">,RR_Audio = #{rrAudio}</if> 
+				<if test="rrType != null">,RR_Type = #{rrType}</if>
+				<if test="s_userID != null">,RR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,RR_UserAccount = #{s_userLoginAccount}</if>
+				<if test="rrIsShare != null">,RR_IsShare = #{rrIsShare}</if>
+				,RR_OperateTime = now()
+			</trim>
+		</set>
+		where RR_ResourceID = ${rrResourceID} and RR_ResourceType = '${rrResourceType}'
+	</update>
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_resource where RR_ID in (${rrID})
+		</trim>
+	</delete>
+	<delete id="delete_by_resid" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_resource where RR_ResourceID in (${rrResourceID}) and RR_ResourceType = '${rrResourceType}'
+		</trim>
+	</delete>
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_resource
+		set RR_IsShare = ${rrIsShare}
+		where  RR_ResourceType = #{rrResourceType}  and RR_ResourceID= #{rrResourceID}
+	</update>
+</mapper>

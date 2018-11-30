@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="refer">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="referID" column="Refer_ID" />
+		<result property="referName" column="Refer_Name" />
+		<result property="referReferType" column="Refer_ReferType" />
+		<result property="referReferID" column="Refer_ReferID" />
+		<result property="referThumbnail" column="Refer_Thumbnail" />
+		<result property="referInthum" column="Refer_Inthum" />
+		<result property="referUpload" column="Refer_Upload" />
+		<result property="referFileSwf" column="Refer_FileSwf" />
+		<result property="referFileSwfPath" column="Refer_FileSwfPath" />
+		<result property="referType" column="Refer_Type" />
+	
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			refer.Refer_ID,refer.Refer_FileSwf,refer.Refer_FileSwfPath, refer.Refer_ReferType, refer.Refer_ReferID, refer.Refer_Name,refer.Refer_Type,
+			refer.Refer_Thumbnailrefer.Refer_Upload 
+			from  res_refersouce refer
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			refer.Refer_ID,refer.Refer_FileSwf,refer.Refer_FileSwfPath, refer.Refer_ReferType, refer.Refer_ReferID, refer.Refer_Name,refer.Refer_Type,
+			refer.Refer_Thumbnail, refer.Refer_Upload
+			from res_refersouce refer
+		where refer.Refer_ID = ${referID}
+	</select>
+	<select id="select_by_upload" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			refer.Refer_ID,refer.Refer_FileSwf,refer.Refer_FileSwfPath, refer.Refer_ReferType, refer.Refer_ReferID, refer.Refer_Name,refer.Refer_Type,
+			refer.Refer_Thumbnail, refer.Refer_Upload
+			from res_refersouce refer
+		where refer.Refer_Upload = '${referUpload}'
+	</select>
+	<select id="select_by_resid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			refer.Refer_ID,refer.Refer_FileSwf,refer.Refer_FileSwfPath, refer.Refer_ReferType, refer.Refer_ReferID, refer.Refer_Name,refer.Refer_Type,
+			refer.Refer_Thumbnail, refer.Refer_Upload
+			from res_refersouce refer
+		where refer.Refer_ReferID = '${referReferID}' and refer.Refer_ReferType = '${referReferType}'
+	</select>
+	<select id="select_by_resid_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select count(*) from res_refersouce refer where refer.Refer_ReferID = '${referReferID}' and refer.Refer_ReferType = '${referReferType}'
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			refer.Refer_ID,refer.Refer_FileSwf,refer.Refer_FileSwfPath, refer.Refer_ReferType, refer.Refer_ReferID, refer.Refer_Name,refer.Refer_Type,res.Refer_Inthum,
+			refer.Refer_Thumbnail, refer.Refer_Upload 
+			from res_refersouce refer limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_refersouce refer limit ${start},${offset}	
+	</select>
+	<select id="select_refertype_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select distinct Refer_Type from res_refersouce where Refer_ReferID =${referReferID} and Refer_ReferType = '${referReferType}'
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_refersouce
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="referReferType != null">,Refer_ReferType</if>
+			<if test="referReferID != null">,Refer_ReferID</if>
+			<if test="referName != null">,Refer_Name</if>
+			<if test="referThumbnail != null">,Refer_Thumbnail</if>
+			<if test="referInthum != null">,Refer_Inthum</if>
+			<if test="referUpload != null">,Refer_Upload</if>
+			<if test="referFileSwf != null">,Refer_FileSwf</if>
+			<if test="referFileSwfPath != null">,Refer_FileSwfPath</if>
+			<if test="referType != null">,Refer_Type</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="referReferType != null">,#{referReferType}</if>
+			<if test="referReferID != null">,#{referReferID}</if>
+			<if test="referName != null">,#{referName}</if>
+			<if test="referThumbnail != null">,#{referThumbnail}</if>
+			<if test="referInthum != null">,#{referInthum}</if>
+			<if test="referUpload != null">,#{referUpload}</if>
+			<if test="referFileSwf != null">,#{referFileSwf}</if>
+			<if test="referFileSwfPath != null">,#{referFileSwfPath}</if>
+			<if test="referType != null">,#{referType}</if>
+		</trim>
+	</insert>  
+	<update id="update" parameterType="java.util.HashMap">
+		update res_refersouce
+		<set>
+			<trim prefixOverrides=",">
+				<if test="referReferType != null">,Refer_ReferType = #{referReferType}</if>  
+				<if test="referReferID != null">,Refer_ReferID = #{referReferID}</if>
+				<if test="referName != null">,Refer_Name = #{referName}</if>
+				<if test="referInthum != null">,Refer_Inthum = #{referInthum}</if>  
+				<if test="referThumbnail != null">,Refer_Thumbnail = #{referThumbnail}</if>
+				<if test="referUpload != null">,Refer_Upload = #{referUpload}</if>
+				<if test="referFileSwf != null">,Refer_FileSwf = #{referFileSwf}</if>
+				<if test="referFileSwfPath != null">,Refer_FileSwfPath =#{referFileSwfPath}</if>
+			</trim>
+		</set>
+		where RR_ID=${referID}
+	</update>
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_refersouce where Refer_ID in (${referID})
+		</trim>
+	</delete>
+	<delete id="delete_by_resid" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_refersouce where Refer_ReferID in (${referReferID}) and Refer_ReferType = '${referReferType}'
+		</trim>
+	</delete>
+</mapper>

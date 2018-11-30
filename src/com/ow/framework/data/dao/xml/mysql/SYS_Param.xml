@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="param">
+	<!--
+	   PAR_ID           系统参数primary key  
+	   PAR_Name         系统参数名称
+	   PAR_Value        系统参数值        
+	-->
+	<resultMap id="convertResultParam" type="result">
+		<result property="parID" column="PAR_ID" />
+		<result property="parName" column="PAR_Name" />
+		<result property="parDesc" column="PAR_Desc" />		
+		<result property="parValue" column="PAR_Value"  jdbcType="CLOB" javaType="java.lang.String"/>
+	</resultMap>
+	<select id="all_page" resultMap="convertResultParam" parameterType="param">
+		select PAR_ID,PAR_Desc,PAR_Name,PAR_Value from sys_parameter 
+	 </select>
+	<select id="all_page_count"  resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_parameter 
+	 </select>	 
+	 <select id="select_role_by_id" resultMap="convertResultParam" parameterType="param">
+	 	select PAR_ID,PAR_Name,PAR_Desc,PAR_Value from sys_parameter 
+	 		<if test="parID!=null">
+	 			PARID=#{parID}
+	 		</if>
+	 </select>
+	 <select id="select_role_by_name" resultMap="convertResultParam" parameterType="param">
+	 	select PAR_ID,PAR_Name,PAR_Desc,PAR_Value from sys_parameter 
+	 	where PAR_Name=#{parName}
+	 </select>
+	 <select id="select_by_name" resultMap="convertResultParam" parameterType="param">
+	 	select *  from sys_parameter 
+	 	where PAR_Name=#{parName}
+	 </select>	 
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_parameter
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="parName!=null">,PAR_Name</if>
+			<if test="parDesc!=null">,PAR_Desc</if>			
+			<if test="parValue!=null">,PAR_Value</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="parName!=null">,#{parName}</if>
+			<if test="parDesc!=null">,#{parDesc}</if>			
+			<if test="parValue!=null">,#{parValue}</if>
+		</trim>
+	 </insert>
+	<delete id="delete_all" parameterType="java.util.HashMap">
+		delete from sys_parameter
+	</delete>	 
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_parameter where PAR_ID in (${parID})
+	</delete>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_parameter
+		<set>
+			<if test="parName!=null">PAR_Name = #{parName}</if>
+			<if test="parValue!=null">,PAR_Value = #{parValue}</if>
+		</set>
+		 where PAR_ID=${key}
+	</update>
+	
+	<select id="check_parDesc" resultType="java.lang.Integer"
+		parameterType="param">
+		select count(*) from sys_parameter
+		where PAR_Desc = #{parDesc}
+	</select>
+</mapper>

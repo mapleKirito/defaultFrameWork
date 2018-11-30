@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="role">
+	<!--
+   ROLE_ID              bigint not null,
+   ROLE_ParentID        bigint comment '父角色ID：存储上一级角色ID，例如　232353，544243，123412',
+   ROLE_Relation        varchar(1000),
+   ROLE_Name            varchar(50),
+   ROLE_Desc            varchar(500),
+   ROLE_Status          smallint comment '角色状态：0：开启
+                                1：禁用',
+   ROLE_CreateTime      datetime,
+   ROLE_Creator         varchar(50),
+	-->
+	<resultMap id="convertResultRole" type="result">
+		<result property="roleID" column="ROLE_ID" />
+		<result property="roleParentID" column="ROLE_ParentID" />
+		<result property="roleRelation" column="ROLE_Relation" />
+		<result property="roleName" column="ROLE_Name" />
+		<result property="roleDesc" column="ROLE_Desc" />
+		<result property="roleIsChildNode" column="ROLE_IsChildNode" />
+		<result property="roleStatus" column="ROLE_Status" />
+	</resultMap>
+	<resultMap id="convertResultById" type="result">
+		<result property="roleID" column="ROLE_ID" />
+		<result property="roleParentID" column="ROLE_ParentID" />
+		<result property="roleRelation" column="ROLE_Relation" />
+		<result property="roleName" column="ROLE_Name" />
+		<result property="roleDesc" column="ROLE_Desc" />
+		<result property="roleCreateTime" column="ROLE_CreateTime" />
+		<result property="roleIsChildNode" column="ROLE_IsChildNode" />
+		<result property="roleStatus" column="ROLE_Status" />
+		<result property="roleCreator" column="ROLE_Creator" />
+	</resultMap>
+	<resultMap id="convertResultRoleALL" type="result">
+		<result property="roleID" column="ROLE_ID" />
+		<result property="parentName" column="parentName"/>
+		<result property="roleParentID" column="ROLE_ParentID" />
+		<result property="roleRelation" column="ROLE_Relation" />
+		<result property="roleName" column="ROLE_Name" />
+		<result property="roleDesc" column="ROLE_Desc" />
+		<result property="roleIsChildNode" column="ROLE_IsChildNode" />
+		<result property="roleStatus" column="ROLE_Status" />
+	</resultMap>	
+	<select id="select_all" resultMap="convertResultRole" parameterType="param">
+		select * from SYS_Role 
+		<where>
+		 	<if test="roleParentID!=null">
+		 	 ROLE_ParentID=#{roleParentID}
+			</if>
+		</where>
+		 order by ROLE_CreateTime
+	 </select>
+	<select id="select_all_info" resultMap="convertResultRoleALL" parameterType="param">
+		select o.*,(select s.ROLE_Name from SYS_Role s where s.ROLE_ID = o.ROLE_ParentID ) parentName from SYS_Role o
+		<where>
+		 	<if test="roleParentID!=null">
+		 	 o.ROLE_ParentID=#{roleParentID}
+			</if>
+		</where>
+		 order by o.ROLE_CreateTime
+	 </select>	 
+	 <select id="select_role_by_id" resultMap="convertResultById" parameterType="param">
+	 	select ROLE_ID,
+	 	ROLE_ParentID,
+	 	ROLE_Relation,
+	 	ROLE_Name,
+	 	ROLE_Desc,
+	 	ROLE_Status,
+	 	date_format(ROLE_CreateTime,'%Y-%m-%d %H:%i:%s') ROLE_CreateTime,
+	 	ROLE_Creator 
+	 	from SYS_Role where ROLE_ID=${roleID} order by ROLE_ID
+	 </select>
+	 <select id="select_role_by_name" resultMap="convertResultRole" parameterType="param">
+	 	select * from SYS_Role 
+	 	<where>
+		 	<if test="roleName!=null">
+		 	 ROLE_Name like '%${roleName}%'
+			</if>
+		</where>
+	 </select>
+	 <insert id="insert" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+	 	insert into SYS_Role
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="select_roleID!=null">,ROLE_ParentID</if>
+			<if test="roleName!=null">,ROLE_Name</if>
+			<if test="roleDesc!=null">,ROLE_Desc</if>
+			<if test="roleStatus!=null">,ROLE_Status</if>
+			,ROLE_CreateTime
+			<if test="s_userLoginAccount!=null">,ROLE_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="select_roleID!=null">,${select_roleID}</if>
+			<if test="roleName!=null">,#{roleName}</if>
+			<if test="roleDesc!=null">,#{roleDesc}</if>
+			<if test="roleStatus!=null">,${roleStatus}</if>
+			,now()
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+		</trim>
+	 </insert>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from SYS_Role where ROLE_ID in (${roleID})
+	</delete>
+	<update id="update_relation" parameterType="java.util.HashMap">
+		update SYS_Role
+		<set>
+			<if test="select_roleRelation !=null and select_roleRelation!=''">ROLE_Relation='${select_roleRelation},${id}'</if>
+			<if test="select_roleRelation == null or  select_roleRelation == ''">ROLE_Relation=',0,${id}'</if>
+		</set>
+		 where ROLE_ID=${id}
+	</update>	
+	<update id="update" parameterType="java.util.HashMap">
+		update SYS_Role
+		<set>
+			<if test="roleName!=null">ROLE_Name = #{roleName}</if>
+			<if test="roleDesc!=null">,ROLE_Desc = #{roleDesc}</if>
+			<if test="roleStatus!=null">,ROLE_Status = ${roleStatus}</if>
+			<if test="roleCreatetime!=null">,ROLE_Createtime = #{currentDate}</if>
+			<if test="s_userLoginAccount!=null">,ROLE_Creator = #{s_userLoginAccount}</if>
+		</set>
+		 where ROLE_ID=${key}
+	</update>
+	 <!-- 
+		用户已选角色查询语句.
+		author:成生	 
+		select sr.*,sug.UG_Name 
+		from SYS_Role sr,SYS_UgroupRoleMapper surm ,SYS_UserGroup sug 
+		where sug.UG_ID = surm.URM_UgroupID and surm.URM_RoleID=sr.ROLE_ID 
+	  -->
+	  	<select id="select_role_group_select" resultMap="convertResultRoleALL" parameterType="param">
+			select sr.*,sug.UG_Name 
+			from SYS_Role sr,SYS_UgroupRoleMapper surm ,SYS_UserGroup sug 
+			where sug.UG_ID = surm.URM_UgroupID and surm.URM_RoleID=sr.ROLE_ID 
+	 </select>	
+	  <!--用户已选角色查询语句结束 -->
+</mapper>

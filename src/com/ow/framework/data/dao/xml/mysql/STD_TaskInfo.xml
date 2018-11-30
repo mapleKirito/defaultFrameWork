@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="taskInfo">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="tiID" column="TI_ID" />
+		<result property="tID" column="T_ID" />
+		<result property="tiGoodScore" column="TI_GoodScore" />
+		<result property="tiMediumScore" column="TI_MediumScore" />
+		<result property="tiDifferentialScore" column="TI_DifferentialScore" />
+		<result property="tiIP" column="TI_IP" />
+		<result property="tiContent" column="TI_Content" />
+		<result property="tiComment" column="TI_Comment" />
+		<result property="tiBestAnswer" column="TI_BestAnswer" />
+		<result property="tiExcellent" column="TI_Excellent" />
+		<result property="tiTop" column="TI_Top" />
+		<result property="tiType" column="TI_Type" />
+		<result property="tiQuotePath" column="TI_QuotePath" />
+		<result property="tiQuoteOfName" column="TI_QuoteOfName" />
+		<result property="tiUserID" column="TI_UserID" />
+		<result property="tiUserAccount" column="TI_UserAccount" />
+		<result property="tiCreateTime" column="TI_CreateTime" />
+		<result property="tiCommentTime" column="TI_CommentTime" />
+		<result property="tiOperateTime" column="TI_OperateTime" />
+		<result property="userName" column="USER_Name" />
+	    <result property="tiApply" column="TI_Apply" />
+	    <result property="userType" column="USER_Type" />
+	</resultMap>
+	<select id="select_by_tid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select task.* from std_task_info task where task.T_ID=#{taskId}
+	</select>	
+	<select id="select_by_userId" resultMap="convertResult" parameterType="java.util.HashMap">
+		select task.* from std_task_info task where task.TI_UserID=#{s_userID}
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from std_task_info t left join sys_user user on t.TI_UserID=user.USER_ID where t.TI_ID=#{tiId}
+	</select>
+	<select id="select_content_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select ti.TI_Content,ti.TI_UserAccount from std_task_info ti where ti.TI_ID=${tiId}
+	</select>	
+	<select id="select_array_by_userID" resultMap="convertResult" parameterType="java.util.HashMap">
+		select distinct T_ID as tiID from std_task_info where TI_UserID in (${userID}) group by TI_ID
+	</select>	
+	<select id="select_task_page" resultMap="convertResult" parameterType="param">
+		select 
+		ti.TI_ID,ti.TI_IP,ti.TI_BestAnswer,ti.TI_QuotePath,ti.TI_QuoteOfName,
+		ti.TI_Excellent,ti.TI_Top,ti.TI_Type,ti.TI_UserID,ti.TI_Comment,user.USER_Account as userAccount,
+		ti.TI_GoodScore,ti.TI_MediumScore,ti.TI_DifferentialScore,
+		ti.TI_Content,DATE_FORMAT(ti.TI_CreateTime,'%Y-%m-%d %H:%i:%s') TI_CreateTime ,
+		DATE_FORMAT(ti.TI_CommentTime,'%Y-%m-%d %H:%i:%s') TI_CommentTime ,user.USER_Name,user.USER_Type
+		from std_task_info ti,std_task t,sys_user user
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="taskId!=null and taskId!=''"> 
+					and ti.T_ID =#{taskId}
+				</if>
+				<if test="tiType!=null and tiType!=''"> 
+					and ti.TI_Type =${tiType}
+				</if>						
+				and ti.T_ID=t.T_ID and ti.TI_UserID=user.User_ID
+			</trim>
+		</where>
+		order by ti.TI_Excellent desc,ti.TI_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_task_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task_info ti,std_task t,sys_user user
+		<where>
+			<trim prefix="(" prefixOverrides="and" suffix=")"> 
+				<if test="s_userID!=null and s_userID!=''"> 
+					and ti.TI_UserID =#{s_userID}
+				</if>	
+				<if test="tiType!=null and tiType!=''"> 
+					and ti.TI_Type =${tiType}
+				</if>				
+				and ti.T_ID=t.T_ID and ti.TI_UserID=user.User_ID
+			</trim>
+		</where>
+	</select>
+	<select id="select_unapply_work_page_by_user_id" resultMap="convertResult" parameterType="param">
+		select sti.* from std_task_info sti join std_task st on sti.T_ID=st.T_ID join std_task_organization_mapper stom on sti.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and sti.TI_Type!=1 and sti.TI_Apply!=1
+				<if test="s_userID != null">
+					and st.T_Creator =${s_userID}
+				</if>
+				<if test="orgID != null">
+					and stom.ORG_ID =${orgID}
+				</if>
+			</trim>
+		</where>
+			limit ${start},${offset}		
+	</select>
+	<select id="select_unapply_work_page_by_user_id_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) from std_task_info sti join std_task st on sti.T_ID=st.T_ID join std_task_organization_mapper stom on sti.T_ID=stom.TASK_ID
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and sti.TI_Type!=1 and sti.TI_Apply!=1
+				<if test="s_userID != null">
+					and st.T_Creator =${s_userID}
+				</if>
+				<if test="orgID != null">
+					and stom.ORG_ID =${orgID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_by_userId_count" resultType="int" parameterType="java.util.HashMap">
+		select count(*) as count_by from std_task_info 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and TI_UserID=${userID}
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into std_task_info
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taskId!=null">,T_ID</if>
+			<if test="s_userLoginIP!=null">,TI_IP</if>
+			<if test="tiContent!=null">,TI_Content</if>
+			<if test="tiQuotePath!=null">,TI_QuotePath</if>
+			<if test="tiQuoteOfName !=null">,TI_QuoteOfName</if>
+			<if test="tiBestAnswer!=null">,TI_BestAnswer</if>
+			<if test="tiExcellent!=null">,TI_Excellent</if>
+			<if test="tiTop!=null">,TI_Top</if>
+			<if test="tiType!=null">,TI_Type</if>															
+			<if test="s_userID!=null">,TI_UserID</if>
+			<if test="s_userLoginAccount!=null">,TI_UserAccount</if>	
+			,TI_CreateTime
+			,TI_OperateTime
+			,TI_GoodScore
+			,TI_MediumScore
+			,TI_DifferentialScore
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taskId!=null">,${taskId}</if>
+			<if test="s_userLoginIP!=null">,#{s_userLoginIP}</if>
+			<if test="tiContent!=null">,#{tiContent}</if>
+			<if test="tiQuotePath!=null">,#{tiQuotePath}</if>
+			<if test="tiQuoteOfName !=null">,#{tiQuoteOfName}</if>
+			<if test="tiBestAnswer!=null">,#{tiBestAnswer}</if>
+			<if test="tiExcellent!=null">,#{tiExcellent}</if>
+			<if test="tiTop!=null">,#{tiTop}</if>
+			<if test="tiType!=null">,#{tiType}</if>															
+			<if test="s_userID!=null">,#{s_userID}</if>
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>	
+			,now(),now(),0,0,0
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update std_task_info
+		<set>
+			<trim prefixOverrides=",">
+				<if test="tiGoodScore!=null">,TI_GoodScore=${tiGoodScore}</if>
+				<if test="tiMediumScore!=null">,TI_MediumScore=${tiMediumScore}</if>
+				<if test="tiDifferentialScore!=null">,TI_DifferentialScore=${tiDifferentialScore}</if>
+				<if test="s_userLoginIP!=null">,TI_IP=#{s_userLoginIP}</if>
+				<if test="tiBestAnswer!=null">,TI_BestAnswer=#{tiBestAnswer}</if>
+				<if test="tiExcellent!=null">,TI_Excellent=#{tiExcellent}</if>
+				<if test="tiContent!=null">,TI_Content=#{tiContent}</if>
+				<if test="tiComment!=null">,TI_Comment=#{tiComment}</if>
+				<if test="tiTop!=null">,TI_Top#{tiTop}</if>
+				<if test="tiType!=null">,TI_Type=#{tiType}</if>															
+				<!-- <if test="s_userID!=null">,TI_UserID=#{s_userID}</if> -->
+				<if test="s_userLoginAccount!=null">,TI_UserAccount=#{s_userLoginAccount}</if>	
+				<if test="tiComment!=null">,TI_CommentTime=now()</if>
+				,TI_OperateTime = now()
+			</trim>
+		</set>
+		where TI_ID=${tiId}
+	</update>
+	<update id="update_score" parameterType="java.util.HashMap">
+		update std_task_info
+		<set>
+			<trim prefixOverrides=",">
+				<if test="tiGoodScore!=null">,TI_GoodScore=TI_GoodScore+1</if>
+				<if test="tiMediumScore!=null">,TI_MediumScore=TI_MediumScore+1</if>
+				<if test="tiDifferentialScore!=null">,TI_DifferentialScore=TI_DifferentialScore+1</if>
+			</trim>
+		</set>
+		where TI_ID=${tiId}
+	</update>	
+	<delete id="delete_by_id" parameterType="java.util.HashMap">
+		delete from std_task_info where T_ID in (${tiID})
+	</delete>
+	<delete id="delete_by_taskId" parameterType="java.util.HashMap">
+		delete from std_task_info where T_ID in (${taskId})
+	</delete>
+	<delete id="delete_by_tid" parameterType="java.util.HashMap">
+		delete from std_task_info where T_ID=${taskId}
+	</delete>	
+	<delete id="delete_by_userId" parameterType="java.util.HashMap">
+		delete from std_task_info where TI_UserID=${userID}
+	</delete>
+</mapper>

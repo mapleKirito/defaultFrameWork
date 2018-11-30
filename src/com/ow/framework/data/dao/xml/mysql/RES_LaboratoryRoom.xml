@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+      
+<mapper namespace="laboratory"> 
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="lrID" column="LR_ID" />
+		<result property="lrNO" column="LR_NO" />
+		<result property="lrName" column="LR_Name" />
+		<result property="lrChar" column="LR_Char" />
+		<result property="lrRecommen" column="LR_Recommen" />
+		<result property="lrIsRefer" column="LR_IsRefer" />
+		<result property="lrType" column="LR_Type" />
+		<result property="lrUpload" column="LR_Upload" />
+		<result property="lrFileSwf" column="LR_FileSwf" />
+		<result property="lrFileSwfPath" column="LR_FileSwfPath" />
+		<result property="lrThumbnail" column="LR_Thumbnail" />
+		<result property="lrInThum" column="LR_InThum" />
+		<result property="lrReferType" column="LR_ReferType" />
+		<result property="lrCategory" column="LR_Category" />
+		<result property="lrCategoryName" column="LR_CategoryName" /> 
+		<result property="lrCateTwLevel" column="LR_CateTwLevel" />
+		<result property="lrCateTwLevelName" column="LR_CateTwLevel_Name" />
+		<result property="lrIsGrade" column="LR_IsGrade" />
+		<result property="lrGrade" column="LR_Grade" />
+		<result property="lrContest" column="LR_Contest" />
+		<result property="lrExperimentSupplies" column="LR_ExperimentSupplies" />
+		<result property="lrDetailInfo" column="LR_DetailInfo" />
+		<result property="lrContent" column="LR_Content" />
+		<result property="lrContentPath" column="LR_ContentPath" />
+		<result property="lrUserID" column="LR_UserID" />
+		<result property="lrUserAccount" column="LR_UserAccount" />
+		<result property="lrOperateTime" column="LR_OperateTime" />
+		<result property="lrCreateTime" column="LR_CreateTime" />
+		<result property="lrCreator" column="LR_Creator" />
+		<result property="lrState" column="LR_State" />
+		<result property="lrStoryState" column="LR_StoryState" />
+		<result property="lrKeywords" column="LR_Keywords" />
+		<result property="lrCountLike" column="LR_CountLike" />
+		<result property="lrIsShare" column="LR_IsShare" />
+		<result property="lrAbout" column="LR_About" />
+		<result property="lrRelation" column="LR_Relation" />
+		<result property="lrRemarks" column="LR_Remarks" />
+	</resultMap>
+<!-- 修改 -->
+	<select id="select_by_name" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select
+			DISTINCT ( laboratory.LR_Name )
+		from
+			res_laboratory_room laboratory
+		where
+			laboratory.LR_Name like '${erName}%' or laboratory.LR_Char like '${erName}%'
+	</select>	
+<!-- 修改 -->
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_State, laboratory.LR_Recommen, laboratory.LR_Contest,laboratory.LR_NO, laboratory.LR_CateTwLevel,laboratory.LR_CateTwLevel_Name,laboratory.LR_Category,laboratory.LR_CategoryName,laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,
+			laboratory.LR_UserAccount, laboratory.LR_OperateTime,laboratory.LR_About,laboratory.LR_Relation,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_IsGrade ,laboratory.LR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_CateTwLevel,laboratory.LR_CateTwLevel_Name,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,laboratory.LR_InThum,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Content,
+			laboratory.LR_UserAccount, laboratory.LR_OperateTime,laboratory.LR_About,laboratory.LR_Relation,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,
+			(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+	</select>
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_CateTwLevel,laboratory.LR_CateTwLevel_Name,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,laboratory.LR_InThum,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Content,
+			laboratory.LR_UserAccount, laboratory.LR_OperateTime,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,
+			(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		where laboratory.LR_NO = '${code}'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  
+			laboratory.LR_Remarks,laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_CateTwLevel,laboratory.LR_CateTwLevel_Name,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,laboratory.LR_InThum,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Keywords,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Content,
+			laboratory.LR_UserAccount, laboratory.LR_OperateTime,laboratory.LR_About,laboratory.LR_Relation,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_Grade ,laboratory.LR_IsShare,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,
+			(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		where laboratory.LR_ID = ${lrID}
+	</select>
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_State, laboratory.LR_Recommen, laboratory.LR_Contest,laboratory.LR_NO, laboratory.LR_Upload,laboratory.LR_CateTwLevel,laboratory.LR_CateTwLevel_Name,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Content,
+			laboratory.LR_UserAccount, laboratory.LR_OperateTime,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		where laboratory.LR_ID in (${lrID})
+	</select>
+	<select id="select_count_by_category" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_laboratory_room laboratory
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail,laboratory.Lr_InThum, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrName != null and lrName != ''">
+				and laboratory.LR_Name like '%${lrName}%'
+				</if>
+				<if test="lrIsGrade != null">
+				and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%'
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and laboratory.LR_IsShare = ${IsShare}</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="lrID != null and lrID != '' "> laboratory.LR_ID = ${lrID}</if>
+				<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+		
+		ORDER BY laboratory.LR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_laboratory_room laboratory left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrName != null and lrName != ''">
+				and laboratory.LR_Name like '%${lrName}%'
+				</if>
+				<if test="lrIsGrade != null ">
+				and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%'
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and laboratory.LR_IsShare = ${IsShare}</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="lrID != null and lrID != '' "> laboratory.LR_ID = ${lrID}</if>
+				<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail,laboratory.Lr_InThum, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrName != null and lrName != ''">
+				and laboratory.LR_Name like '%${lrName}%'
+				</if>
+				<if test="lrIsGrade != null">
+				and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="lrID != null and lrID != '' "> laboratory.LR_ID = ${lrID}</if>
+				<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+		
+		ORDER BY laboratory.LR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_quick_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_laboratory_room laboratory left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrName != null and lrName != ''">
+				and laboratory.LR_Name like '%${lrName}%'
+				</if>
+				<if test="lrIsGrade != null ">
+				and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="lrID != null and lrID != '' "> laboratory.LR_ID = ${lrID}</if>
+				<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_OZOO_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_InThum,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen, laboratory.LR_Contest,laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '${keyword}%' order by laboratory.LR_Name desc
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_recom_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_InThum,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen, laboratory.LR_Contest,laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%' 
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_smallselect" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_InThum,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen, laboratory.LR_Contest,laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name,
+			(select c.CATE_Path from res_category c where laboratory.LR_CateTwLevel=c.CATE_ID ) as  lrPath
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+		<if test="keyword != '' and keyword != null ">order by laboratory.LR_Name='${keyword}' desc,laboratory.LR_Name</if>
+	</select>
+	<select id="select_page_other" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_InThum,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,laboratory.LR_Content,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name
+			(select c.CATE_Path from res_category c where laboratory.OR_CateTwLevel=c.CATE_ID ) as orPath
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrName != null and lrName != ''">
+				and laboratory.LR_Name like '${lrName}'
+				</if>
+				<if test="lrIsGrade != null">
+				and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+			 	<if test="lrID != null and lrID != '' "> and laboratory.LR_ID = ${lrID}</if>
+			 	<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+	</select>
+ 	<select id="select_page_other_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,c.CATE_Path as lrPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_InThum,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,laboratory.LR_Content,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '${keyword}%'
+				</if>		
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_other_about_manager" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,c.CATE_Path as lrPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_InThum,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,laboratory.LR_Content,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and laboratory.LR_Name like '%${keyword}%'  and laboratory.LR_Name != '${keyword}' 
+				</if>				
+			</trim>
+		</where>
+	</select>
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,c.CATE_Path as path,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State,  laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (laboratory.LR_UserID != '${s_userID}' or laboratory.LR_UserID is null)</if>
+				${values}
+
+		</where>
+		ORDER BY laboratory.LR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (laboratory.LR_UserID != '${s_userID}' or laboratory.LR_UserID is null)</if>
+				${values}
+
+		</where>
+	</select>
+	
+	
+	<select id="select_teacher_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,c.CATE_Path as path,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State,  laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,laboratory.LR_About,laboratory.LR_Relation,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_IsShare ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and exhibition.ER_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and laboratory.LR_UserID = '${userID}'</if>
+				<if test="lrName != null and lrName != ''">
+					and laboratory.LR_Name like '${lrName}%'
+				</if>
+				<if test="lrIsGrade != null">
+					and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and laboratory.LR_IsShare = ${isShare}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and laboratory.LR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="lrID != null and lrID != '' "> laboratory.LR_ID = ${lrID}</if>
+				<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+		 ORDER BY laboratory.LR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_teacher_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_laboratory_room laboratory left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and laboratory.LR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and laboratory.LR_UserID = '${userID}'</if>
+				<if test="lrName != null and lrName != ''">
+					and laboratory.LR_Name like '${lrName}%'
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and laboratory.LR_IsShare = ${isShare}
+				</if>
+				<if test="lrIsGrade != null ">
+					and laboratory.LR_IsGrade = ${lrIsGrade}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and laboratory.LR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="lrID != null and lrID != '' "> laboratory.LR_ID = ${lrID}</if>
+				<if test="lrNO != null and lrNO != '' "> and laboratory.LR_NO = '${lrNO}'</if>
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrExperimentSupplies != null and lrExperimentSupplies != '' "> and laboratory.LR_ExperimentSupplies like '${lrExperimentSupplies}%'</if>
+				<if test="lrUserID != null and lrUserID != '' "> and laboratory.LR_UserID = '${lrUserID}'</if>
+				<if test="lrUserAccount != null and lrUserAccount != '' "> and laboratory.LR_UserAccount = '${lrUserAccount}'</if>
+				<if test="lrOperateTime != null and lrOperateTime != '' "> and laboratory.LR_OperateTime = '${lrOperateTime}'</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' "> and laboratory.LR_CreateTime = '${lrCreateTime}'</if>
+				<if test="lrCreator != null and lrCreator != '' "> and laboratory.LR_Creator = '${lrCreator}'</if>
+				<if test="lrIsGrade != null and lrIsGrade != '' "> and laboratory.LR_IsGrade = '${lrIsGrade}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '${lrType}'</if>
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_laboratory_room
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="lrNO != null">,LR_NO</if>
+			<if test="lrUpload != null">,LR_Upload</if>
+			<if test="lrFileSwf != null">,LR_FileSwf</if>
+			<if test="lrFileSwfPath != null">,LR_FileSwfPath</if>
+			<if test="lrType != null">,LR_Type</if>
+			<if test="lrName != null">,LR_Name</if>
+			<if test="lrChar != null">,LR_Char</if>
+			<if test="lrRecommen != null">,LR_Recommen</if>
+			<if test="lrIsRefer != null">,LR_IsRefer</if>
+			<if test="lrReferType != null">,LR_ReferType</if>
+			
+			<if test="lrState != null">,LR_State</if>
+			<if test="lrStoryState != null">,LR_StoryState</if>
+			<if test="lrCategory != null">,LR_Category</if>
+			<if test="lrCategoryName != null">,LR_CategoryName</if>  
+			<if test="lrCateTwLevel != null">,LR_CateTwLevel</if>
+			<if test="lrCateTwLevelName != null">,LR_CateTwLevel_Name</if>  
+
+			<if test="lrExperimentSupplies != null">,LR_ExperimentSupplies</if>
+			<if test="lrDetailInfo != null">,LR_DetailInfo</if>
+			<if test="lrThumbnail != null">,LR_Thumbnail</if>
+			<if test="lrInThum != null">,LR_InThum</if>
+			<if test="s_userID != null">,LR_UserID</if>
+			<if test="s_userLoginAccount != null">,LR_UserAccount</if>
+			,LR_OperateTime
+			<if test="lrCreateTime != null and lrCreateTime != '' ">,LR_CreateTime</if>
+			<if test="s_userLoginAccount != null">,LR_Creator</if>
+			<if test="lrGrade != null">,LR_Grade</if>
+			<if test="lrContent != null">,LR_Content</if>
+			<if test="lrContentPath != null">,LR_ContentPath</if>
+			<if test="lrContest != null">,LR_Contest</if>
+			<if test="lrIsGrade != null">,LR_IsGrade</if>
+			<if test="lrKeywords != null">,LR_Keywords</if>
+			<if test="lrIsShare != null">,LR_IsShare</if>	
+			<if test="lrAbout != null">,LR_About</if>	
+			<if test="lrRelation != null">,LR_Relation</if>	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="lrNO != null">,#{lrNO}</if>
+			<if test="lrUpload != null">,#{lrUpload}</if>
+			<if test="lrFileSwf != null">,#{lrFileSwf}</if>
+			<if test="lrFileSwfPath != null">,#{lrFileSwfPath}</if>
+			<if test="lrType != null">,#{lrType}</if>
+			<if test="lrName != null">,#{lrName}</if>
+			<if test="lrChar != null">,#{lrChar}</if>
+			<if test="lrRecommen != null">,#{lrRecommen}</if>
+			<if test="lrIsRefer != null">,#{lrIsRefer}</if>
+			<if test="lrReferType != null">,#{lrReferType}</if>
+			
+			<if test="lrState != null">,#{lrState}</if>
+			<if test="lrStoryState != null">,#{lrStoryState}</if>
+			<if test="lrCategory != null">,#{lrCategory}</if>
+			<if test="lrCategoryName != null">,#{lrCategoryName}</if> 
+			<if test="lrCateTwLevel != null">,#{lrCateTwLevel}</if>
+			<if test="lrCateTwLevelName != null">,#{lrCateTwLevelName}</if> 
+			
+			<if test="lrExperimentSupplies != null">,#{lrExperimentSupplies}</if>
+			<if test="lrDetailInfo != null">,#{lrDetailInfo}</if>
+			<if test="lrThumbnail != null">,#{lrThumbnail}</if>
+			<if test="lrInThum != null">,#{lrInThum}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="lrCreateTime != null and lrCreateTime != '' ">,#{lrCreateTime}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="lrGrade != null">,#{lrGrade}</if>
+			<if test="lrContent != null">,#{lrContent}</if>
+			<if test="lrContentPath != null">,#{lrContentPath}</if>
+			<if test="lrContest != null">,#{lrContest}</if>
+			<if test="lrIsGrade != null">,#{lrIsGrade}</if>
+			<if test="lrKeywords != null">,#{lrKeywords}</if>
+			<if test="lrIsShare != null">,#{lrIsShare}</if>		
+			<if test="lrAbout != null">,#{lrAbout}</if>		
+			<if test="lrRelation != null">,#{lrRelation}</if>	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrNO != null">,LR_NO = #{lrNO}</if>
+				<if test="lrUpload != null">,LR_Upload = #{lrUpload}</if>
+				<if test="lrFileSwf != null">,LR_FileSwf = #{lrFileSwf}</if>
+				<if test="lrFileSwfPath != null">,LR_FileSwfPath = #{lrFileSwfPath}</if>
+				<if test="lrType != null">,LR_Type = #{lrType}</if>
+				<if test="lrName != null">,LR_Name = #{lrName}</if>
+				<if test="lrChar != null">,LR_Char = #{lrChar}</if>
+				<if test="lrRecommen != null">,LR_Recommen = #{lrRecommen}</if>
+				<if test="lrIsRefer != null">,LR_IsRefer = #{lrIsRefer}</if>
+				<if test="lrReferType != null">,LR_ReferType = #{lrReferType}</if>
+				<if test="lrKeywords != null">,LR_Keywords = #{lrKeywords}</if>
+				
+				<if test="lrState != null">,LR_State=#{lrState}</if>
+				<if test="lrCategory != null">,LR_Category = #{lrCategory}</if>
+				<if test="lrCategoryName != null">,LR_CategoryName = #{lrCategoryName}</if>
+				<if test="lrCateTwLevel != null">,LR_CateTwLevel = #{lrCateTwLevel}</if>
+				<if test="lrCateTwLevelName != null">,LR_CateTwLevel_Name = #{lrCateTwLevelName}</if>
+				
+				<if test="lrExperimentSupplies != null">,LR_ExperimentSupplies = #{lrExperimentSupplies}</if>
+				<if test="lrDetailInfo != null">,LR_DetailInfo = #{lrDetailInfo}</if>
+				<if test="lrThumbnail != null">,LR_Thumbnail = #{lrThumbnail}</if>
+				<if test="lrInThum != null">,LR_InThum = #{lrInThum}</if>
+				<if test="s_userID != null">,LR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,LR_UserAccount = #{s_userLoginAccount}</if>
+				<if test="lrCreateTime != null and lrCreateTime != '' ">,LR_CreateTime = #{lrCreateTime}</if>
+				,LR_OperateTime = now()
+				<if test="lrGrade != null">,LR_Grade = #{lrGrade}</if>
+				<if test="lrContent != null">,LR_Content = #{lrContent}</if>
+				<if test="lrContentPath != null">,LR_ContentPath = #{lrContentPath}</if>
+				<if test="lrContest != null">,LR_Contest = #{lrContest}</if>
+				<if test="lrIsGrade != null">,LR_IsGrade = #{lrIsGrade}</if>
+				<if test="lrAbout != null">,LR_About = #{lrAbout}</if>
+				<if test="lrIsShare != null">,LR_IsShare = #{lrIsShare}</if>		
+				<if test="lrRelation != null">,LR_Relation = #{lrRelation}</if>
+			</trim>
+		</set>
+		where LR_ID=${lrID}
+	</update>
+	
+   <select id="select_state" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select LR_State from res_laboratory_room
+		<where>
+		   <trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrUpload != null">and LR_Upload = #{lrUpload}</if>
+				<if test="lrFileSwf != null">and LR_FileSwf = #{lrFileSwf}</if>
+				<if test="lrID != null">and LR_ID = ${lrID}</if>
+			</trim>
+		</where>
+	</select>
+	
+    <update id="update_state" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrState != null">,LR_State = #{lrState}</if>
+
+				,LR_OperateTime = now()
+			</trim>
+		</set>
+		<where>
+		    <trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrUpload != null">and LR_Upload = #{lrUpload}</if>
+				<if test="lrFileSwf != null">and LR_FileSwf = #{lrFileSwf}</if>
+				<if test="lrID != null">and LR_ID = ${lrID}</if>
+			</trim>
+		</where>
+	</update>
+	
+	<update id="update_upload" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrUpload != null">,LR_Upload = #{lrUpload}</if>
+				<if test="lrFileSwf != null">,LR_FileSwf = #{lrFileSwf}</if>
+				<if test="s_userID != null">,LR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,LR_UserAccount = #{s_userLoginAccount}</if>
+				,LR_OperateTime = now()
+			</trim>
+		</set>
+		where LR_ID=${lrID}
+	</update>
+
+	<update id="update_refertype" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrReferType != null">,LR_ReferType = #{lrReferType}</if>
+				<if test="lrIsRefer != null">,LR_IsRefer = #{lrIsRefer}</if>
+			</trim>
+		</set>
+		where LR_ID=${lrID}
+	</update>
+	<update id="update_is_grade" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrIsGrade != null">,LR_IsGrade = #{lrIsGrade}</if>
+				<if test="s_userID != null">,LR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,LR_UserAccount = #{s_userLoginAccount}</if>
+				,LR_OperateTime = now()
+			</trim>
+		</set>
+		where LR_ID=${lrID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_laboratory_room where LR_ID in (${lrID})
+		</trim>
+	</delete>
+	
+	<select id="select_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType, laboratory.LR_Recommen, laboratory.LR_Contest,laboratory.LR_NO, laboratory.LR_CateTwLevel,laboratory.LR_CateTwLevel_Name,laboratory.LR_Category,laboratory.LR_CategoryName,laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail, laboratory.LR_UserID,
+			laboratory.LR_UserAccount, laboratory.LR_OperateTime,laboratory.LR_About,laboratory.LR_Relation,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,laboratory.LR_IsGrade ,laboratory.LR_Grade ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name 
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+					and laboratory.LR_Name like '%${keyword}%' and laboratory.LR_CateTwLevel='${LrCateTwLevel}'
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	<select id="select_storystate" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select LR_StoryState from res_laboratory_room
+		where  LR_Upload = #{lrUpload}
+	</select>
+	<update id="update_storystate" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrStoryState != null">,LR_StoryState = #{lrStoryState}</if>
+				,LR_OperateTime = now()
+			</trim>
+		</set>
+		where  LR_Upload = '${lrUpload}'
+	</update>
+
+	
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrIsShare != null">,LR_IsShare = ${lrIsShare}</if>
+			</trim>
+		</set>
+		where  LR_ID = ${lrID}
+	</update>
+
+	<update id="update_clickLile" parameterType="java.util.HashMap">
+		update res_laboratory_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="lrCountLike != null">,LR_CountLike = #{lrCountLike}</if>
+			</trim>
+		</set>
+		where  LR_id = '${lrID}'
+	</update>
+	<select id="select_page_category" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail,laboratory.Lr_InThum, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '1011'</if>
+		
+		</trim>
+		</where>
+		
+		ORDER BY laboratory.LR_ID desc
+	</select>
+	<select id="select_page_category_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail,laboratory.Lr_InThum, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '1011'</if>
+		
+		</trim>
+		</where>
+		
+		ORDER BY laboratory.LR_ID desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_category_pic" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail,laboratory.Lr_InThum, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="lrCategory != null and lrCategory != '' "> and laboratory.LR_Category = '${lrCategory}'</if>
+				<if test="lrCateTwLevel != null and lrCateTwLevel != '' "> and laboratory.LR_CateTwLevel = '${lrCateTwLevel}'</if>
+				<if test="lrType != null and lrType != '' "> and laboratory.LR_Type = '1011'</if>
+		    	<if test="lrID != null and lriD != '' "> and laboratory.LR_ID  != '${lrID}'</if>
+		</trim>
+		</where>
+		
+		ORDER BY laboratory.LR_ID desc
+		limit 30
+	</select>
+	<select id="select_page_keywords" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_CountLike,laboratory.LR_Keywords,laboratory.LR_ContentPath,laboratory.LR_StoryState,laboratory.LR_FileSwfPath,laboratory.LR_IsRefer,laboratory.LR_ReferType,laboratory.LR_Category,laboratory.LR_CategoryName, laboratory.LR_State, laboratory.LR_Recommen,laboratory.LR_Contest, laboratory.LR_NO, laboratory.LR_Upload, laboratory.LR_Name,laboratory.LR_FileSwf,
+			laboratory.LR_ExperimentSupplies,laboratory.LR_Type,laboratory.LR_Content,
+			laboratory.LR_DetailInfo, laboratory.LR_Thumbnail,laboratory.Lr_InThum, laboratory.LR_UserID,laboratory.LR_Grade ,
+			laboratory.LR_UserAccount, DATE_FORMAT(laboratory.LR_OperateTime,'%Y-%m-%d %H:%i:%s') LR_OperateTime ,
+			DATE_FORMAT(laboratory.LR_CreateTime,'%Y-%m-%d')  LR_CreateTime, laboratory.LR_Creator ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		where ${sqlParamlr} and LR_ID not in(#{notInID})
+		
+		ORDER BY laboratory.LR_ID desc
+	</select>
+	<select id="select_page_keywords_little" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			laboratory.LR_ID,laboratory.LR_Name,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as LR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where laboratory.LR_Category=c.CATE_ID ) as  lr_Path
+		from
+			res_laboratory_room laboratory
+			left join res_category c on c.CATE_ID = laboratory.LR_CateTwLevel
+		where ${sqlParamlr} and LR_ID not in(#{notInID})
+		ORDER BY laboratory.LR_ID desc
+	</select>
+</mapper>

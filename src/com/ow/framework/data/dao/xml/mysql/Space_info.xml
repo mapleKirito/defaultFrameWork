@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="space_info">
+	<!--
+	   AREA_ID              bigint not null,
+	   AREA_NAME        varchar(200),
+	        注：xxxx系统说明，因角色暂无停用一条件，暂时性将角色状态(ROLE_STATUS)字段关闭。    2010-9-16  成生记录
+	-->
+	<resultMap id="convertResultRole" type="result">
+		<result property="userID" column="user_id" />
+		<result property="spaceLike" column="space_like" />
+		<result property="spaceImg" column="space_img" />
+	</resultMap>
+	<select id="select_by_userid" resultMap="convertResultRole" parameterType="param">
+		select * from space_info where user_id=${userID}
+	 </select>
+	<select id="select_all" resultMap="convertResultRole" parameterType="param">
+		select * from space_info 
+	 </select>
+	 <select id="select_page" resultMap="convertResultRole" parameterType="param">
+		select * from space_info order by user_id desc limit ${start},${offset}
+	 </select>
+	 <select id="select_page_count" resultMap="convertResultRole" parameterType="param">
+		select count(user_id) from space_info 
+	 </select>
+	 <select id="select_school_count" resultMap="convertResultRole" parameterType="param">
+		select count(user_id) from space_info where user_id in (${userID})
+	 </select>
+	 <!-- 
+	 <insert id="addBlog" parameterType="Blog" > 
+	 	<selectKey keyProperty="blogid" resultType="int" order="BEFORE"> 
+	 		select seq_order.nextval() from dual </selectKey> 
+	 	insert into Blog
+	 		(author,subject,content, publishTime,blogid)
+	    values
+	    	(#{author}#,#{subject}#,#{content}#,#{publishTime}#,#{blogid}) 
+	 </insert>
+	  -->
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into space_info (user_id,user_area,user_school)
+		values (#{userID},#{userArea},#{userSchool})	
+	 </insert>
+
+	<update id="update" parameterType="java.util.HashMap">
+		update space_info
+		<set>
+		<trim prefixOverrides=",">		
+			,space_lastTime = now()
+			<if test="spaceLike!=null">,space_like = #{spaceLike}</if>
+			<if test="userArea!=null">,user_area = ${userArea}</if>
+			<if test="userSchool!=null">,user_school = ${userSchool}</if>
+			<if test="userClass!=null">,user_class = #{userClass}</if>
+			<if test="userImg!=null">,user_img = #{userImg}</if>
+			</trim>
+		</set>
+		 where user_id=${userID}
+	</update>	 
+	
+	<update id="update_HeadImg" parameterType="java.util.HashMap">
+		update space_info
+		<set>
+			<trim prefixOverrides=",">
+				<if test="spaceImg != null">,space_img = #{spaceImg}</if>
+			</trim>
+		</set>
+		where user_id = ${s_userID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from space_info where user_id in (${userID})
+	</delete> 
+</mapper>

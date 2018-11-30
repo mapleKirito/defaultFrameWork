@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+function loadComplete(){
+	
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+	var curWwwPath=window.document.location.href; 
+	var pathName=window.document.location.pathname; 
+	var pos=curWwwPath.indexOf(pathName); 
+	var localhostPaht=curWwwPath.substring(0,pos); 
+	var st=localhostPaht+"/dm/";
+	
+	var ug = navigator.userAgent.toLowerCase();
+	var userAgent = document.getElementById("userAgent");
+	var browserType = "";
+	var ver = "";
+	var IE = ug.match(/msie\s*\d\.\d/);
+	var isIE = check(/msie/);
+	var isPad= (ug.match(/iPad/i)=="ipad");
+	if(isIE) {
+	    $("#music").html('<embed src="" id="mp" style="height:0px;width:0px;" autostart="false" loop="true">');
+	}else{
+	 	$("#music").html('<audio src="" id="mp"></audio>');
+	}
+	    
+	//$("#pikame").PikaChoose({carousel:true});
+	    
+	//初始�?
+	$("#pikame").css({"width":$("#pikame li").length*161+"px"});
+	
+	var clickTag=true;
+	$(".clip img:first").addClass("active");
+	$(".pika-stage img").attr("src",$(".clip img:first").attr("srcs"));
+	
+	
+	$(".clip").each(function(){
+		$(this).find("img").click(function(){
+			//alert($(this).parent().parent().index());
+			$(".pika-stage img").attr("src",$(this).attr("srcs"));
+			$(".clip img").removeClass("active");
+			$(this).addClass("active");
+		});
+	})
+	
+	$(".pika-stage").on("swipeleft",function(){
+		    if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().next().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+		  }); 
+	
+	$(".pika-stage").on("swiperight",function(){
+		 if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().prev().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+	  }); 
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+  	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	$("#jump_map").click(function(){
+		
+		//window.maplistner.openMap($("#point_x").val(),$("#point_y").val());
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+		
+	})
+		
+	
+	 /* $("#pikame").on("swipeleft",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=-720;
+		    if((0-l)+720>parseInt($(this).css("width"))){
+		    	l=0-(parseInt($(this).css("width"))-720);
+		    }
+		    $(this).animate({"left":l+"px"});
+		  }); 
+	 
+	 $("#pikame").on("swiperight",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=720;
+		    if(l>0){
+		    	l=0;
+		    }
+		    $(this).animate({"left":l+"px"});
+		  });  */
+	
+		
+	$("#allmap").click(function(){
+		//alert("全屏地图");
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+	});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+function initialize() {
+    //地图
+	var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+	var point = new BMap.Point(74.404, 53.915);
+	map.centerAndZoom(point, 4);
+	map.enableScrollWheelZoom();  
+
+	var erlalo = $("#dingwei").val();
+	var erval = erlalo.split("|");
+	var ischina = true;
+
+	for (var i = 0; i < erval.length; i ++) {
+		var jing = erval[i].split(",")[0];
+		var weid = erval[i].split(",")[1];
+		
+		if(jing>=73.33 && jing<=135.05 && weid>=3.51 && weid<= 53.33){
+			ischina = false;
+		}
+	    var point = new BMap.Point(erval[i].split(",")[0], erval[i].split(",")[1]);
+	    addMarker(point);
+	}
+
+	if(ischina){
+		setTimeout(function(){
+			map.setCenter(new BMap.Point(0, 20));  
+			map.setZoom(3);    
+		}, 1500);	
+		 	
+	}    
+	
+	function addMarker(point){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	}
+	//地图结束
+}
+
+function loadScript() {
+    var script = document.createElement("script");
+    script.src = "http://api.map.baidu.com/api?v=1.5&ak=D1835706182777b6cf2e0a57846a26e8&callback=initialize";
+    document.body.appendChild(script);
+}
+ 
+window.onload = loadScript;
+
+</script>
+</head>
+<body>
+<input type="hidden" value="" id="dingwei" />
+	<table>
+		
+		<tr>
+			<td>
+			<DIV LANG="zh-CN" TEXT="#000000" LINK="#0000ff" DIR="LTR"><H1 CLASS="cjk" ALIGN=CENTER STYLE="margin-top: 0cm; margin-bottom: 0cm;  line-height: 0.48cm"><FONT COLOR="#000000"><FONT SIZE=6 STYLE="font-size: 26pt">原始社会时期</FONT></FONT></H1><H1 CLASS="cjk" ALIGN=CENTER STYLE="margin-top: 0cm; margin-bottom: 0cm;  font-weight: normal; line-height: 0.48cm"></H1><P CLASS="cjk" STYLE="text-indent: 0.56cm; margin-bottom: 0cm"><SPAN STYLE="background: #ffffff">原始社会是人类社会的起点。在原始社会中，由于生产力水平低，人类为了能够生存，就必须依赖于群居生活。群居行为是人发展过程中的重要一环。到目前为止，还没有发现世界上有哪个民族没有经历过原始社会。</SPAN></P><P CLASS="cjk" STYLE="margin-bottom: 0cm"><BR></P><H2 CLASS="cjk"><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><SPAN STYLE="background: #ffffff">1.</SPAN></FONT></FONT></SPAN>简要介绍</H2><H3 CLASS="cjk"><A NAME="2366791-2502629-1_1"></A><SPAN LANG="en-US">1.1</SPAN>基本信息</H3><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">原始社会（</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">primitivesociet</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">）：元谋人</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">-</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">北京人</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">-</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">山顶洞人</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">-</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">河姆渡人</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">-</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">半坡人</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">-</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">大汶口人等（史前史的一部分，尧舜禹传说时期前）</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">文化人类学理论上的一种社会组织类型，以亲族关系为基础，以母系社会为前提，人口很少，经济生活采取平均主义分配办法。对社会的控制则靠<IMG class='b' SRC="page/scanner/BLS3000001000032/1423564161762_html_m403b0ba6.jpg" NAME="img_2034021" ALIGN=LEFT HSPACE=12 WIDTH=242 HEIGHT=132 BORDER=0>传统和家长来维系，而无习惯法和政府权力。在典型的原始社会里，没有专职的领袖。年龄与性别相同的人具有同等社会地位。如有争执就按照传统准则进行调停，人们普遍遵守这些准则。世界各地都有原始社会，形式多样。有些以狩猎和采集经济为主，有些则以渔业为主，或者以简单的自然农业为主，部落组织是某些原始社会的特征，但是并非所有的原始社会都有这一特征。根据文化进化论者的学说，有些原始社会保持著平均主义的性质，但另一些则已经逐步变成等级制度的社会，并进而发展成为酋长领地，其组织形式更为复杂。</FONT></FONT></FONT></P><H3 CLASS="cjk"><SPAN LANG="en-US">1<IMG class='b' SRC="page/scanner/BLS3000001000032/1423564161762_html_4cd92782.jpg" NAME="img_2034022" ALIGN=LEFT HSPACE=12 WIDTH=218 HEIGHT=160 BORDER=0>.2</SPAN>第一阶段</H3><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><A NAME="2366791-2502629-2"></A><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">原始社会是人类社会发展的第一阶段，到目前为止，还没有发现世界上有哪个民族没有经历过原始社会。人类出现，原始社会也就产生了。但是他的消亡则各地参差不一。处于原始社会的人类生产力水平很低，生产资料都是公有制的。随着生产力水平的提高，出现产品的剩余之后，就出现了贫富分化和私有制，原先的共同分配和共同劳动的关系被破坏，而被剥削与被剥削的关系所代替。</FONT></FONT></FONT></P><H3 CLASS="cjk"><SPAN LANG="en-US">2</SPAN><FONT COLOR="#222222"><FONT SIZE=4 STYLE="font-size: 15pt">阶段分类</FONT></FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H3><H4 CLASS="cjk"><A NAME="2366791-2502629-2_1"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">2.1</FONT></SPAN></FONT>旧石器时代<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.85cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">距<IMG class='b' SRC="page/scanner/BLS3000001000032/1423564161762_html_24b85069.jpg" NAME="img_2034023" ALIGN=LEFT HSPACE=12 WIDTH=230 HEIGHT=145 BORDER=0>今约</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">250</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">万年～距今约</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">1</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">万年，旧石器时代早期、中期和晚期，大体上分别相当于人类体质进化的能人和直立人阶段、</FONT></FONT><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">早期智人阶段、晚期智人阶段。旧石器时代的人类经济活动，主要是通过采摘果实、狩猎或捕捞获取食物。当时人们群居在山洞里或部分地群居在树上，以一些植物的果实、坚果和根茎为食物，同时集体捕猎野兽、捕捞河湖中的鱼蚌来维持生活。在山洞中的遗迹和遗物，已留下了很多，但树居生活却很难留下什么遗迹。从古代的文献中，依稀可以寻觅到远古时代树居和采集的影子。从旧石器时代晚期到中石器时代，人类的生活特点就是洞居或巢居，采集和狩猎。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">通过在旧石器时代早期和中期，人们通过血缘关系维持着家族内部的关系。在血缘家族内部，婚姻按照辈数来划分，同一辈分的人互为夫妻。而在不同辈分之间则不通婚。这样一个家族就是一个社会集团和生产单位。内部两性有分工，男性狩猎，女性进行采集和抚育小孩。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">到了旧石器时代晚期，随着生产力的发展，人类转入了相对的定居生活。人口逐渐增多，同时认识到家族内部同辈之间近亲婚姻对人类体质的危害，原先的原始人群为氏族公社所取代，同时形成了族外婚制。互相通婚的两个氏族就形成了部落。一个氏族的成员必须和另一氏族的成员通婚。在这种情况下，人们只知有母不知有父，氏族的世系只能按母系计算，所以叫做母系氏族。</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">(</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">母系氏族和父系氏族，是指在生产中谁起的作用大而言的</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">,</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">。譬如</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">,</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">如果整个社会女性的工作处于主导地位的时候，这个社会就属于母系氏族，反之则是父系氏族。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-2_2"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">2.2</FONT></SPAN></FONT>中石器时代<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">距今</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">15000</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">～</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">10000</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">年至</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">8000</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">年，以石片石器和细石器为代表工具，石器已小型化。旧石器时代和新石器时代之间的人类物质文化发展过渡性阶段。直接取之于自然的攫取性经济高涨、并孕育向生产性经济转化的时期。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">这一时期细石器被大量使用。广泛使用弓箭；已知驯狗；在一些地方还发现了独木舟和木桨。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-2_3"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US">2.3</SPAN></FONT>新石器时代<FONT SIZE=1 STYLE="font-size: 1pt">折叠</FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">始于距今</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">8000</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">年前的人类原始</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">(</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">母系</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">)</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">氏族的繁荣时期。以磨制的石斧、石锛、石凿和石铲，琢制的磨盘和打制的石锤、石片、石器为主要工具。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.85cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">新<IMG class='b' SRC="page/scanner/BLS3000001000032/1423564161762_html_m4b2ea514.jpg" NAME="img_2034054" ALIGN=LEFT HSPACE=12 WIDTH=184 HEIGHT=195 BORDER=0>石器时代母系氏族得到了全盛。婚姻制度由群婚转向对偶婚，形成了比较确定的夫妻关系。在氏族内部，除个人常用的工具外，所有的财产归集体公有。有威望的年长妇女担任首领，氏族的最高权力机关是氏族议事会，参加者是全体的成年男女，享有平等的表决权。每个氏族都有自己的名称、共同信仰和领地。当氏族内部的成员受到外人伤害，全族会为他复仇。</FONT></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">在新石器时代，产生了农业和畜牧业，磨光石器流行，并发明了陶器。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">世界各地这一时代的发展道路很不相同。有的地方在农业产生后的很长一段时期里没有陶器，因而被称为前陶新石器时代或无陶新石器时代；有的地方在</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">1</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">万多年以前就已出现陶器，却迟迟没有农业的痕迹，甚至磨制石器也很不发达。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-2_4"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">2.4</FONT></SPAN></FONT>原始社会的解体<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">随着生产的发展，产品出现了剩余，集体劳动逐渐被个体劳动所取代，由此产生了私有制，随之也出现了阶级。氏族中出现了贵族阶层和平民阶层。到了末期，以血缘关系结成的氏族开始破裂，一些氏族成员脱离自己的氏族，到别处和与他们没有血缘关系的人们杂居，同时氏族也不断接纳外来人，于是出现了按地域划分的农村公社。到了这时，原始社会基本上就已经瓦解了，不同阶级之间出现了斗争，随着情况的深化就出现了国家来对人民进行有效的统治。许多文明的原始社会解体后都进入了奴隶社会。事实上，阶级思想在更早就已经产生<IMG class='b' SRC="page/scanner/BLS3000001000032/1423564161762_html_3cbc0ce3.jpg" NAME="img_2034059" ALIGN=LEFT HSPACE=12 WIDTH=200 HEIGHT=180 BORDER=0>。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">在新石器时代末期，人类已使用天然金属，后来学会了制作纯铜器。但是由于纯铜的质地不如石器坚硬，不能取代石器，这一时期也称为金石并用时代。到了公元前</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">3000</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">～前</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">2000</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">年左右，人类学会了制造青铜，进入了青铜时代。到了公元前</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">1000</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">年～公元初年，随着铁器的使用，人类进入铁器时代。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">从金石并用时代到铁器时代，是原始社会的解体时期，也是阶级社会形成的时期。世界各地阶级社会的出现几乎都和金属出现的时代相关，唯一例外的是美洲的玛雅文明。不同文明其原始社会解体的过程也不一样，在埃及和两河流域，原始社会在金石并用时代就已经解体，而在其他一些地区，则是在青铜时代或铁器时代才发生解体。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">这一时期，生产有较大发展。出现了三次社会大分工。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><A NAME="2366791-2502629-3"></A><FONT SIZE=2 STYLE="font-size: 10pt">随着农业和畜牧业在生产中的地位的提升，男性逐渐取代女性取得了社会的主导地位，父系氏族公社形成了。在父系氏族公社内，出身和世系按男子的系统计算，实行父系财产继承制。夫居妇家制度变成了妇居夫家制，不稳定的对偶婚逐步向一夫一妻制或一夫多妻制过渡。妇女的地位逐渐下降，父系氏族首领改由男子担任，氏族议事会由各大家族的族长组成，原来由全体成年男女参加的氏族议事会，现在由全体成年男子参加。</FONT></P><H3 CLASS="cjk"><SPAN LANG="en-US">3</SPAN>科技文化</H3><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">在原始社会时期，人类创造了象形文字，产生了原始宗教和图腾崇拜。艺术也在这一时期产生了。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_1"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US">3.1</SPAN></FONT>原始社会的象形文字</H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">原始社会象形文字是指纯粹利用图形来作文字使用，而这些文字又与所代表的东西，在形状上很相像。一般而言，象形文字是最早产生的文字。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">现时世上最广为人知的象形文字，是古埃及象形文字&mdash;&mdash;圣书体，虽然如此，但更精确地说，圣书体应属于一种意音文字。此外，现时中国西南部纳西族所采用的东巴文和水族的水书，是现存世上唯一仍在使用的象形文字系统。还有可能存在的第三种仍在使用的象形文字系统达巴文（即将消失）。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">汉字虽然还保留象形文字的特征，但由于汉字除了象形以外，还有其他构成文字的方式，而且亦在某程度上表示语音；而汉字经过数千年的演变，已跟原来的形象相去甚远，所以不属于象形文字，而属于表意文字。然而，甲骨文和金文亦算是象形文字。此外，玛雅文字的&ldquo;头字体&rdquo;和&ldquo;几何体&rdquo;亦是。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_2"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">3.2</FONT></SPAN></FONT>原始社会的宗教<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">根据考古所发现的原始宗教可追溯到石器时代。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">原始宗教属于历史范畴，有其产生、发展和消亡的过程。人类一开始并无任何宗教可言。到了旧石器时代中、晚期，氏族公社产生，人类社会形成为一个个比较稳定的血缘集团。这时，人的体质与思维能力有了进步，集团内部语言有了发展，某些禁忌和规范已经形成。人们以集体的力量和简陋的工具与自然界作斗争时，一方面逐步认识到人们的生产活动与某些自然现象的联系；另一方面又受着自然界的沉重压迫，对自然界的千姿百态、千变万化得不到正确的理解。于是，恐惧与希望交织在一起，对许多自然现象作出歪曲的颠倒的反映，把自然现象神化，原始宗教便从而产生。与阶级社会所形成的一神教对比，其特征为万物有灵──多神崇拜，故又名多神教。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_3"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">3.3</FONT></SPAN></FONT>原始社会的陶器<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">陶器出现于新石器时代。陶器的发明是人类文明的重要进程－－是人类第一次利用天然物，按照自己的意志创造出来的一种崭新的东西。人们把粘土加水混和后，制成各种器物，干燥后经火焙烧，产生质的变化，形成陶器。它揭开了人类利用自然、改造自然的新篇章，具有重大的划时代的意义。陶器的出现，标志着新石器时代的开端。陶器的发明，也大大改善了人类的生活条件，在人类发展史上开辟了新纪元。</FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_4"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">3.4</FONT></SPAN></FONT>原始社会的纺织<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">世界各个地区开始纺织生产的时间迟早不一。大约公元前</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">5000</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">年，世界各文明发祥地区都已就地取材开始了纺织生产。如北非尼罗河流域居民利用亚麻纺织；中国黄河、长江流域居民利用葛、麻纺织；南亚印度河流域居民和南美印加帝国人民均已利用棉花纺织；小亚细亚地区已有羊毛纺织。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">据考古资料，中国纺织生产习俗，大约在旧石器时代晚期已见萌芽，距今约</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">2</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">万年左右的北京山顶洞人已学会利用骨针来缝制苇、皮衣服。这种原始的缝纫术虽不是严格的纺织，但却可以说是原始纺织的发轫。而真正纺织技术和习俗的诞生流行当在新石器文化时期。</FONT></FONT></FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_5"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">3.5</FONT></SPAN></FONT>原始社会的墓葬文化<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">在距今约</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">10</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">万年的旧石器时代晚期，墓葬开始出现，由于发现的资料有限，这一时期的墓葬情况还不是很清楚。目前发现的几座墓葬均在山洞之内，墓坑的形状也不太清楚，或许当时还没有挖墓坑的习俗，在人骨周围还有少数随葬品。法国发现的尼安德特人的墓葬，人骨旁边有有意放置的石块和动物骨骼，中国发现的山顶洞人的墓葬，人骨周围有红色铁矿石粉末及随葬品。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">大约在距今</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">1</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">万年前后，人类社会进入新石器时代，此时，安葬自己死去的亲人已非常普遍。距今约</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">8</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">千至</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">7</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">千年的新石器时代早期，已经有了公共墓地。距今约</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">7</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">千至</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">5</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">千年的新石器时代中期，墓地制度已经相当完备，墓葬有成人土坑墓和儿童瓮棺葬两种。距今约</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">5</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">千至</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">4</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">千年的新石器时代晚期，墓地制度更加完备，墓葬之间有了明显的等级之分。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">原始社会的墓葬是复杂多样的，不同的阶段、不同的地域，其特征也不尽相同。如墓葬方向，仰韶文化多向西北，大汶口文化多向东，大溪文化则多向南；再如墓葬形状，长方形土坑最多，也有掏成土洞的，少数地区墓葬则没有墓坑，等等。</FONT></FONT></FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_6"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">3.6</FONT></SPAN></FONT>原始社会的冶金<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">从古代陶术中发展而来。首先是冶铜，铜的熔点相对较低，随着陶术的发展，陶术需要的温度越来越高，达到铜的熔点温度，而在陶术制作过程中，在一些有铜矿的地方制作陶术，铜自然成了附生物质而被发现。古人也慢慢掌握铜的冶炼方法。</FONT></P><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">最早的青铜器出现于约</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">5000</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">年到</FONT></FONT></FONT><FONT FACE="宋体, SimSun"><FONT SIZE=3><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt">6000</FONT></FONT></FONT></SPAN></FONT></FONT><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">年间的西亚两河流域地区。苏美尔文明时期的雕有狮子形象的大型铜刀是早期青铜器的代表。中国青铜器制作精美，在世界各地青铜器中堪称艺术价值最高。中国青铜器代表着中国在先秦时期高超的技术与文化。</FONT></FONT></FONT></P><H4 CLASS="cjk"><A NAME="2366791-2502629-3_7"></A><FONT FACE="Cambria, serif"><SPAN LANG="en-US"><FONT FACE="microsoft yahei, Times New Roman, serif">3.7</FONT></SPAN></FONT>原始社会的房屋<FONT COLOR="#0000ff"><U><A HREF="http://baike.haosou.com/doc/2366791.html"><FONT SIZE=1 STYLE="font-size: 1pt"><B>折叠</B></FONT></A></U></FONT></H4><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><A NAME="2366791-2502629-4"></A><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">原始人类为避寒暑风雨，防虫蛇猛兽，住在山洞里或树上，这就是所谓的&ldquo;穴居&rdquo;和&ldquo;巢居&rdquo;（树上筑巢）。经过不断进化，古人开始营建房屋。据考古发掘证明，我国最早的房屋建筑产生于距今约六七千年前的新石器时代。当时的房屋主要有两种，一种是以陕西西安半坡遗址为代表的北方建筑模式&mdash;&mdash;半地穴式房屋和地面房屋；半地穴式房屋多圆形，地穴有深有浅，以坑壁作墙基或墙壁；坑上搭架屋顶，顶上抹草泥土；有的四壁和屋室中间还立有木柱支撑屋顶。一种是以浙江余姚河姆渡遗址为代表的长江流域及以南地区的建筑模式&mdash;&mdash;干栏式建筑；一般是用竖立的木桩或竹桩构成高出地面的底架，底架上有大小梁木承托的悬空的地板，其上用竹木、茅草等建造住房。干栏式建筑上面住人，下面饲养牲畜。</FONT></FONT></FONT></P><H3 CLASS="cjk"><SPAN LANG="en-US">4</SPAN>社会组织</H3><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><A NAME="2366791-2502629-5"></A><FONT SIZE=2 STYLE="font-size: 10pt">与原始社会生产资料公有制相适应，原始社会的社会组织经历原始群、母系氏族组织、父系氏族组织的发展。原始氏族组织是按血缘关系为基础自然形成的联盟，也是全体氏族成员进行民主管理的自治组织。氏族议事会是由氏族全体成员组成的，是最高的议事机关，一切重大的事情都由全体氏族成员平等地讨论决定，不存在专门管理社会的特殊权力机构。氏族首领是在社会生产和管理活动中产生出来的德高望重的长者，他们没有任何特权，与其他氏族成员一样平等地参加劳动和分配劳动产品，他们的权威来自于他们自身的良好品质和氏族成员对他们的信任。</FONT></P><H3 CLASS="cjk"><SPAN LANG="en-US">5</SPAN>社会规范</H3><P ALIGN=LEFT STYLE="text-indent: 0.93cm; margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=3><FONT COLOR="#000000"><FONT SIZE=2 STYLE="font-size: 10pt">在原始社会，通过道德规范、宗教规范特别是习惯来调整人与人之间的社会关系，氏族习惯是人们在长期的共同生产和生活中逐渐形成和演化，世代相传，成为氏族成员内在需要和外在自觉的行为模式或行为惯性。这些社会规范涉及公共管理、婚姻家庭、财产继承、渔猎耕种、产品分配、血族复仇等方面，如严禁氏族内通婚、相互帮助、实行血族复仇、组织渔猎、采集和原始农业生产、平均分配产品、共同举行宗教仪式、参加氏族公共事务的讨论和管理等。这些社会规范是由生产力极端低下所决定的，与当时的社会结构和社会关系相适应，维持了原始社会的生产秩序和生活秩序。原始社会以习惯为主的社会规范体现了全体氏族成员的共同利益和意志，依靠氏族部落领袖的威信、社会舆论和人们的自觉遵守来保证其实施。</FONT></FONT></FONT></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=RIGHT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt"><B>摘自</B></FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US"><B>:</B></SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt"><B>百度百科</B></FONT></P></DIV>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/pause.png");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

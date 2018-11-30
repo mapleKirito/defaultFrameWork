@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="GBK"?>
+
+<decorators defaultdir="/decorators">
+    <!-- 在excludes元素下指定的页面将不会由SiteMesh来装饰 -->
+    <excludes>
+    	<pattern>/SmallServlet/*</pattern>
+    	<pattern>/ckeditor/*</pattern>
+   	   	<pattern>/module/install/*</pattern>
+    	<pattern>/module/pms/*</pattern>
+    	<pattern>/lookimg.jsp</pattern>
+        <pattern>/center.jsp</pattern>
+        <pattern>/exit.jsp</pattern>
+        <pattern>/foot.jsp</pattern>
+        <pattern>/head.jsp</pattern>
+        <pattern>/iframe.jsp</pattern>
+        <pattern>/story.jsp</pattern>
+        <pattern>/overtime.jsp</pattern>
+        <pattern>/overclick.jsp</pattern>
+        <pattern>/changetime.jsp</pattern>
+        <pattern>/index.jsp</pattern>
+        <pattern>/index1.jsp</pattern>
+        <pattern>/default.jsp</pattern>
+        <pattern>/flash*</pattern>
+        <pattern>/left.jsp</pattern>
+        <pattern>/main.jsp</pattern>
+        <pattern>/prompt.jsp</pattern>
+        <pattern>/top.jsp</pattern>
+        <pattern>/welcome.jsp</pattern>
+        <pattern>/DemoTrueF/*</pattern>
+        <pattern>/TestDemo.jsp</pattern>
+		<pattern>/demoinfo.jsp</pattern>
+        <pattern>/demoinfo2.jsp</pattern>
+        <pattern>/demoinfoNew.jsp</pattern>
+        <pattern>/demoinfoNew2.jsp</pattern>
+        <pattern>/RemoteRequest.jsp</pattern>
+        <pattern>/GotoDemo/*</pattern>
+        
+        <pattern>/helphtml/help.html</pattern>
+        <pattern>/loginAction.action</pattern>
+        <pattern>/ajaxAction.*</pattern>
+		<pattern>/ajaxInstallAction.*</pattern>
+		<pattern>/forwardAction.*</pattern>
+		<pattern>/downloadAction.*</pattern>
+		<pattern>/forwardAction.*</pattern>
+		<pattern>/welcomeAction.*</pattern>	
+		<pattern>/commonForwardAction.*</pattern>	
+		<pattern>/registerAction.*</pattern>	
+		<pattern>/retrieveQuestionAction.*</pattern>	
+		<pattern>/retrievePasswordAction.*</pattern>	
+		<pattern>/confirmAction.*</pattern>	
+		<pattern>/installAction.*</pattern>		
+		<pattern>/listAction.*</pattern>		
+		<pattern>/PreparingCenterTop/*</pattern>		
+		<pattern>/uploadAction.*</pattern>	
+		<pattern>/js/datePicker/My97DatePicker.*</pattern>		
+		<pattern>/js/fckeditor/*</pattern>
+		<pattern>/map.html</pattern> 
+		<pattern>/helphtml/help.htm</pattern>
+		<pattern>servlet/resourceManage.do</pattern>
+		<pattern>uploadFile/upload/*</pattern>
+		<pattern>/uploadFile/getBar/*</pattern>
+		<pattern>/RemoteRequestServlet/*</pattern>
+		<pattern>/ModuleStatesServlet/*</pattern>
+		<pattern>/SmartIpXmlServlet/*</pattern>
+		<pattern>/SmartServerRemoteRequest.jsp</pattern>
+		<pattern>/IpConfig.jsp</pattern>
+		<pattern>/decorateForwardAction.action?code=-1895*</pattern>
+		<pattern>/decorateForwardAction.action?code=-1896*</pattern>
+		<pattern>/decorateForwardAction.action?code=-1897*</pattern>
+		<pattern>/decorateForwardAction.action?code=-1898*</pattern>
+		<pattern>/decorateForwardAction.action?code=-1899*</pattern>
+		<pattern>/decorateForwardAction.action?code=-11899*</pattern>
+		<pattern>/decorateForwardAction.action?code=-13899*</pattern>
+		<pattern>/GotoDemo/*</pattern>
+		<pattern>/SmallExhibitionServlet/*</pattern>
+		<pattern>/module/enginev/SearchEngineBaidu.jsp</pattern>
+		<pattern>/module/system/res/resRecomm/recomm.jsp</pattern>
+		<pattern>/module/enginev/MapBaidu.jsp</pattern>
+		<pattern>/module/enginev/MapBaidu2.jsp</pattern>
+		<pattern>/module/enginev/SearchEngineGoogle.jsp</pattern>
+		<pattern>/module/enginev/SearchEngineWeiJi.jsp</pattern>
+		<pattern>/module/enginev/SearchEngineHuDong.jsp</pattern>
+		<pattern>/module/enginev/SearchEngineBiYing.jsp</pattern>
+		<pattern>/decorateForwardAction.action?code=-60*</pattern>
+		<pattern>/decorateForwardAction.action?code=00203200204*</pattern>
+		<pattern>/decorateForwardAction.action?code=002032000*</pattern>
+		<pattern>/decorateForwardAction.action?code=003023</pattern>
+		<pattern>/decorateForwardAction.action?code=002032</pattern>
+		<pattern>/decorateForwardAction.action?code=00203200201*</pattern>
+		<pattern>/show_page*</pattern>
+    </excludes>
+
+	<!-- 创建一个名为decorator的装饰器，该装饰器页面为decorator.jsp,
+	     用于装饰pattern指定的URL的所有页面-->
+    <decorator name="decorator" page="decorator.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+	<!-- 定义一个装饰器,但该装饰器默认不装饰任何页面 -->
+    <decorator name="panel" page="panel.jsp"/>
+</decorators>

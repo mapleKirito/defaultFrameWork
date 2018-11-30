@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+	RE_ID bigint(20) 组织机构id
+	RE_RESroom varchar(200) 被关联的资源室名
+	RE_RESid varchar(200)  被关联的资源室内id
+	RE_RESabout varchar(200) 关联的资源室名
+	-->
+	
+<mapper namespace="relate_about">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="reID" column="RE_ID" />
+		<result property="resroom" column="RE_RESroom" />
+		<result property="resid" column="RE_RESid" />
+		<result property="reBroom" column="RE_Broom" />
+		<result property="reBid" column="RE_Bid" />
+		<result property="resabout" column="RE_RESabout" />
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+		relate_about.RE_ID,relate_about.RE_RESroom,relate_about.RE_RESid,RE_RESabout		
+		from 
+		res_relate_about relate_about
+	</select>
+	<select id="select_name" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+		relate_about.RE_ID,relate_about.RE_RESroom,relate_about.RE_RESid,RE_RESabout,
+		relate_about.RE_Broom,relate_about.RE_Bid		
+		from 
+		res_relate_about relate_about
+		where  RE_Broom='${keyword}' and RE_Bid	='${roomtype}'
+	</select>	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_relate_about
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="resroom != null">,RE_RESroom</if>
+			<if test="resid != null">,RE_RESid</if>
+			<if test="reBroom != null">,RE_Broom</if>
+			<if test="reBid != null">,RE_Bid</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="resroom != null">,#{resroom}</if>
+			<if test="resid != null">,#{resid}</if>
+			<if test="reBroom != null">,#{reBroom}</if>
+			<if test="reBid != null">,#{reBid}</if>
+		</trim>
+	
+	</insert>
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_relate_about			
+			where  RE_RESroom='${resroom}'  and RE_RESid='${resid}'  and  RE_Broom='${reBroom}' and  RE_Bid='${reBid}'
+			
+		</trim>
+	</delete>
+</mapper>
+

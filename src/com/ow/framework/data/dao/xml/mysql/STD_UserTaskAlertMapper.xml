@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+   T_ID                 bigint not null,
+   USER_ID              bigint not null
+	-->
+	
+<mapper namespace="utam">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="tID" column="T_ID" />
+		<result property="userID" column="USER_ID" />
+		<result property="title" column="T_Title" />
+		<result property="viewCount" column="T_ViewCount" />
+		<result property="replyCount" column="T_ReplyCount" />
+		<result property="createTime" column="T_CreateTime" />
+	</resultMap>
+	
+	<select id="select_by_user_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select utam.* from sys_user_task_alert_mapper utam where utam.USER_ID=#{s_userID}
+	</select>
+	
+	<select id="select_by_task_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select utam.* from sys_user_task_alert_mapper utam where utam.T_ID=#{tID}
+	</select>
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_user_task_alert_mapper
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tID!=null">,T_ID</if>
+			<if test="userID!=null">,USER_ID</if>		
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tID!=null">,${tID}</if>
+			<if test="userID!=null">,${userID}</if>		
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	
+	<update id="update_by_user_id" parameterType="java.util.HashMap">
+		update sys_user_task_alert_mapper
+		<set>
+			<trim prefixOverrides=",">
+				<if test="tID!=null">,T_ID=${tID}</if>
+			</trim>
+		</set>
+		where T_ID=${userID}
+	</update>
+	
+	<update id="update_by_task_id" parameterType="java.util.HashMap">
+		update sys_user_task_alert_mapper
+		<set>
+			<trim prefixOverrides=",">
+				<if test="userID!=null">,USER_ID=${userID}</if>
+			</trim>
+		</set>
+		where T_ID=${tID}
+	</update>
+		
+	<delete id="delete_by_task_id" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_user_task_alert_mapper where T_ID in (${taskId})
+		</trim>
+	</delete>
+	
+	<delete id="delete_by_user_id" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_user_task_alert_mapper where USER_ID in (${s_userID})
+		</trim>
+	</delete>	
+	<delete id="delete_user_by_user_id" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_user_task_alert_mapper where USER_ID in (${userID})
+		</trim>
+	</delete>
+
+	<select id="select_task_page" resultMap="convertResult" parameterType="param">
+		select task.T_ID,task.T_Content,task.T_Title,task.T_ReplyCount,task.T_ViewCount,task.T_IsTop,
+			task.T_UserID,DATE_FORMAT(task.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime 
+		from sys_user_task_alert_mapper utam,std_task task  
+		where utam.T_ID=task.T_ID and utam.User_ID=${s_userID} order by task.T_CreateTime desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_task_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_user_task_alert_mapper utam,std_task task  
+		where utam.T_ID=task.T_ID and utam.User_ID=${s_userID}
+	</select>
+	
+	<select id="select_by_user_id_and_t_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select utam.* from sys_user_task_alert_mapper utam where utam.USER_ID=#{userID} and utam.T_ID=#{tID}
+	</select>
+	
+	<delete id="delete_alert_by_all" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_user_task_alert_mapper where USER_ID in (${userID}) and T_ID in (${tID})
+		</trim>
+	</delete>
+</mapper>

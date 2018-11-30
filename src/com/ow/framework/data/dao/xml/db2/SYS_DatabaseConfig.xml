@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="database">
+	<resultMap id="convertResult" type="result">
+		<result property="dbcID" column="DBC_ID" />
+		<result property="dbcName" column="DBC_Name" />
+		<result property="dbcType" column="DBC_Type" />
+		<result property="dbcIP" column="DBC_IP" />
+		<result property="dbcPort" column="DBC_Port" />
+		<result property="dbcDriverClass" column="DBC_DriverClass" />
+		<result property="dbcServerName" column="DBC_ServerName" />
+		<result property="dbcEncode" column="DBC_Encode" />
+		<result property="dbcAccount" column="DBC_Account" />
+		<result property="dbcPassword" column="DBC_Password" />
+	</resultMap>
+	
+	<select id="select_database_all" resultMap="convertResult" parameterType="param">
+		select *  from SYS_DatabaseConfig
+	</select>
+	
+	<select id="select_all" resultMap="convertResult" parameterType="param">
+		select *  from SYS_DatabaseConfig
+		<where>
+		<trim prefix="" prefixOverrides="and" suffix="">
+		<if test="dbcName!=null and dbcName!=''">and DBC_Name=${dbcName}</if>
+		<if test="dbcType!=null and dbcTypee!=''">and DBC_Type=#{dbcType}</if>
+		</trim>
+		</where>
+		limit ${start},${offset}
+	</select>
+	<select id="select_all_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from SYS_DatabaseConfig 
+		<where>
+		<trim prefix="" prefixOverrides="and" suffix="">
+		<if test="dbcName!=null and dbcName!=''">and DBC_Name=${dbcName}</if>
+		<if test="dbcType!=null and dbcTypee!=''">and DBC_Type=#{dbcType}</if>
+		</trim>
+		</where>
+	</select>
+	
+	<select id="select_db_by_id" resultMap="convertResult" parameterType="param">
+		select *  from SYS_DatabaseConfig
+		<where>
+		<trim prefix="" prefixOverrides="and" suffix="">
+		<if test="dbcID!=null and dbcID!=''"> and DBC_ID=${dbcID}</if>
+		</trim>
+		</where>
+	</select>	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into SYS_DatabaseConfig
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="dbcName!=null and dbcName!=''">,DBC_Name</if>
+			<if test="dbcType!=null and dbcType!=''">,DBC_Type</if>
+			<if test="dbcIP!=null and dbcIP!=''">,DBC_IP</if>
+			<if test="dbcPort!=null and dbcPort!=''">,DBC_Port</if>
+			<if test="dbcDriverClass!=null and dbcDriverClass!=''">,DBC_DriverClass</if>
+			<if test="dbcEncode!=null and dbcEncode!=''">,DBC_Encode</if>
+			<if test="dbcServerName!=null and dbcServerName!=''">,DBC_ServerName</if>
+			<if test="dbcAccount!=null and dbcAccount!=''">,DBC_Account</if>
+			<if test="dbcPassword!=null and dbcPassword!=''">,DBC_Password</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="dbcName!=null and dbcName!=''">,#{dbcName}</if>
+			<if test="dbcType!=null and dbcType!=''">,#{dbcType}</if>
+			<if test="dbcIP!=null and dbcIP!=''">,#{dbcIP}</if>
+			<if test="dbcPort!=null and dbcPort!=''">,#{dbcPort}</if>
+			<if test="dbcDriverClass!=null and dbcDriverClass!=''">,#{dbcDriverClass}</if>
+			<if test="dbcServerName!=null and dbcServerName!=''">,#{dbcServerName}</if>
+			<if test="dbcEncode!=null and dbcEncode!=''">,#{dbcEncode}</if>
+			<if test="dbcAccount!=null and dbcAccount!=''">,#{dbcAccount}</if>
+			<if test="dbcPassword!=null and dbcPassword!=''">,#{dbcPassword}</if>
+		</trim>
+	</insert>	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from SYS_DatabaseConfig where DBC_ID in (${dbcID})
+		</trim>
+	</delete>
+	<update id="update" parameterType="java.util.HashMap">
+		update SYS_DatabaseConfig
+		<set>
+		   <trim prefix="" prefixOverrides="," suffix="">
+			<if test="dbcName!=null and dbcName!=''">,DBC_Name=#{dbcName}</if>
+			<if test="dbcType!=null and dbcType!=''">,DBC_Type=#{dbcType}</if>
+			<if test="dbcIP!=null and dbcIP!=''">,DBC_IP=#{dbcIP}</if>
+			<if test="dbcPort!=null and dbcPort!=''">,DBC_Port=#{dbcPort}</if>
+			<if test="dbcDriverClass!=null and dbcDriverClass!=''">,DBC_DriverClass=#{dbcDriverClass}</if>
+			<if test="dbcServerName!=null and dbcServerName!=''">,DBC_ServerName=#{dbcServerName}</if>
+			<if test="dbcEncode!=null and dbcEncode!=''">,DBC_Encode=#{dbcEncode}</if>
+			<if test="dbcAccount!=null and dbcAccount!=''">,DBC_Account=#{dbcAccount}</if>
+			<if test="dbcPassword!=null and dbcPassword!=''">,DBC_Password=#{dbcPassword}</if>
+			</trim>
+		</set>
+		<where>
+		<trim prefix="" prefixOverrides="and" suffix="">
+		<if test="dbcID!=null and dbcID!=''"> and DBC_ID=${dbcID}</if>
+		</trim>
+		</where>		
+	</update>	
+</mapper>

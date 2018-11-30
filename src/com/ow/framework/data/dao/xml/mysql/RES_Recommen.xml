@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="recom">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="reID" column="RE_ID" />
+		<result property="reRecommendType" column="RE_RecommendType" />
+		<result property="reRecommendID" column="RE_RecommendID" />
+		<result property="reName" column="RE_Name" />
+		<result property="reType" column="RE_Type" />
+		<result property="reSize" column="RE_Size" />
+		<result property="reSort" column="RE_Sort" />
+		
+		<result property="reRecoFileUP" column="RE_RecoFileUP" />
+		<result property="reThumbnail" column="RE_Thumbnail" />
+		<result property="reInThum" column="RE_InThum" />
+		<result property="reUpload" column="RE_Upload" />
+		<result property="reCreateTime" column="RE_CreateTime" />	
+		<result property="reOperateTime" column="RE_OperateTime" />		 
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			recom.RE_ID, recom.RE_Sort,recom.RE_RecommendType, recom.RE_RecommendID, recom.RE_Name,recom.RE_Type,recom.RE_Size,
+			recom.RE_Thumbnail, recom.RE_Upload, recom.RE_InThum,recom.RE_RecoFileUP, 
+			recom.RE_CreateTime    from
+		res_recommen recom  where recom.RE_Size!=''  order by recom.RE_RecommendType,recom.RE_OperateTime asc
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			recom.RE_ID, recom.RE_Sort,recom.RE_RecommendType, recom.RE_RecommendID, recom.RE_Name,recom.RE_Type,recom.RE_Size,
+			recom.RE_Thumbnail, recom.RE_Upload, recom.RE_InThum,recom.RE_RecoFileUP,  
+			recom.RE_CreateTime    from
+		res_recommen recom
+		where recom.RE_RecommendID = ${reRecommendID} and RE_RecommendType = '${reRecommendType}'
+	</select>
+	<select id="select_by_RecommendType1024" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			recom.RE_ID, recom.RE_Sort,recom.RE_RecommendType, recom.RE_RecommendID, recom.RE_Name,recom.RE_Type,recom.RE_Size,
+			recom.RE_Thumbnail, recom.RE_Upload, recom.RE_InThum,recom.RE_RecoFileUP,  
+			recom.RE_CreateTime    from
+		res_recommen recom
+		where RE_RecommendType = '${reRecommendType}' order by recom.RE_Sort desc,recom.RE_CreateTime desc
+	</select>
+	<select id="select_by_RecommendType1920" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			recom.RE_ID, recom.RE_Sort1920,recom.RE_RecommendType, recom.RE_RecommendID, recom.RE_Name,recom.RE_Type,recom.RE_Size,
+			recom.RE_Thumbnail, recom.RE_Upload, recom.RE_InThum,recom.RE_RecoFileUP,  
+			recom.RE_CreateTime    from
+		res_recommen recom
+		where RE_RecommendType = '${reRecommendType}' order by recom.RE_Sort1920 desc,recom.RE_CreateTime desc
+	</select>
+	<select id="select_by_resid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			recom.RE_ID, recom.RE_Sort,recom.RE_RecommendType, recom.RE_RecommendID, recom.RE_Name,recom.RE_Type,recom.RE_Size,
+			recom.RE_Thumbnail, recom.RE_Upload, recom.RE_InThum,recom.RE_RecoFileUP,  
+			recom.RE_CreateTime    from
+		res_recommen recom
+		where recom.RE_RecommendID = '${reRecommendID}' and recom.RE_RecommendType = '${reRecommendType}'
+	</select>
+	<select id="select_by_resid_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_recommen recom where recom.RE_RecommendID = ${reRecommendID} and recom.RE_RecommendType = '${reRecommendType}'
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			recom.RE_ID, recom.RE_Sort,recom.RE_RecommendType, recom.RE_RecommendID, recom.RE_Name,recom.RE_Type,recom.RE_Size,recom.RE_InThum,recom.RE_RecoFileUP, 
+			recom.RE_Thumbnail, recom.RE_Upload, recom.RE_InThum,recom.RE_RecoFileUP,  
+			recom.RE_CreateTime    from
+		res_recommen recom
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="reType != null and reType != '' ">
+					<if test="reType == '1073' ">
+						and recom.RE_Type = '1073' or recom.RR_Audio != ''
+					</if>
+					<if test="reType != '1073'">
+						and recom.RE_Type = ${reType}
+					</if>
+				</if>
+			</trim>
+		</where>
+		order by recom.RE_CreateTime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_recommen recom
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="reType != null and reType != '' and reType != '1073'">
+					and recom.RE_Type = ${reType}
+				</if>
+				<if test="reType == '1073'">
+					and recom.RE_Type = '1073' or recom.RR_Audio != ''	
+				</if>			
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_recommen
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="reRecommendType != null">,RE_RecommendType</if>
+			<if test="reRecommendID != null">,RE_RecommendID</if>
+			<if test="reName != null">,RE_Name</if>
+			<if test="reThumbnail != null">,RE_Thumbnail</if>
+			<if test="reInThum != null">,RE_InThum</if>
+			<if test="reUpload != null">,RE_Upload</if>
+			<if test="reType != null">,RE_Type</if>
+			<if test="reSize != null">,RE_Size</if>
+			<if test="reRecoFileUP != null">,RE_RecoFileUP</if>  
+			,RE_CreateTime
+			,RE_OperateTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="reRecommendType != null">,#{reRecommendType}</if>
+			<if test="reRecommendID != null">,#{reRecommendID}</if>
+			<if test="reName != null">,#{reName}</if>
+			<if test="reThumbnail != null">,#{reThumbnail}</if>
+			<if test="reInThum != null">,#{reInThum}</if>
+			<if test="reUpload != null">,#{reUpload}</if>
+			<if test="reType != null">,#{reType}</if>
+			<if test="reSize != null">,#{reSize}</if>
+			<if test="reRecoFileUP != null">,#{reRecoFileUP}</if>
+			,now()
+			,now()
+		</trim>
+	</insert>
+	<insert id="insert_test" parameterType="java.util.HashMap">
+		insert into res_recommen
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="reRecommendType != null">,RE_RecommendType</if>
+			<if test="reRecommendID != null">,RE_RecommendID</if>
+			<if test="reName != null">,RE_Name</if>
+			<if test="reThumbnail != null">,RE_Thumbnail</if>
+			<if test="reInThum != null">,RE_InThum</if>
+			<if test="reUpload != null">,RE_Upload</if>
+			<if test="reType != null">,RE_Type</if>
+			<if test="reSize != null">,RE_Size</if>
+			<if test="reRecoFileUP != null">,RE_RecoFileUP</if>  
+			,RE_CreateTime
+			,RE_OperateTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="reRecommendType != null">,#{reRecommendType}</if>
+			<if test="reRecommendID != null">,#{reRecommendID}</if>
+			<if test="reName != null">,#{reName}</if>
+			<if test="reThumbnail != null">,#{reThumbnail}</if>
+			<if test="reInThum != null">,#{reInThum}</if>
+			<if test="reUpload != null">,#{reUpload}</if>
+			<if test="reType != null">,#{reType}</if>
+			<if test="reSize != null">,#{reSize}</if>
+			<if test="reRecoFileUP != null">,#{reRecoFileUP}</if>
+			,now()
+			,now()
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_recommen
+		<set>
+			<trim prefixOverrides=",">
+				<if test="reRecoFileUP != null">,RE_RecoFileUP = #{reRecoFileUP}</if>  
+				<if test="reRecommendType != null">,RE_RecommendType = #{reRecommendType}</if>  
+				<if test="reName != null">,RE_Name = #{reName}</if>
+				<if test="reInThum != null">,RE_InThum = #{reInThum}</if>  
+				<if test="reThumbnail != null">,RE_Thumbnail = #{reThumbnail}</if>
+				<if test="reUpload != null">,RE_Upload = #{reUpload}</if>
+				<if test="reType != null">,RE_Type = #{reType}</if>
+				<if test="reSize != null">,RE_Size = #{reSize}</if>
+				,RE_OperateTime = now()
+			</trim>
+		</set>
+		where RE_RecommendID=${reRecommendID}  and RE_RecommendType = '${reRecommendType}'
+	</update>
+	<update id="update_res" parameterType="java.util.HashMap">
+		update res_recommen
+		<set>
+			<trim prefixOverrides=",">
+				<if test="reName != null">,RE_Name = #{reName}</if>
+				<if test="reThumbnail != null">,RE_Thumbnail = #{reThumbnail}</if>
+				<if test="reInThum != null">,RE_InThum = #{reInThum}</if>  
+				<if test="reUpload != null">,RE_Upload = #{reUpload}</if>
+				<if test="reType != null">,RE_Type = #{reType}</if>
+			</trim>
+		</set>
+		where RE_RecommendID = ${reRecommendID} and RE_RecommendType = '${reRecommendType}'
+	</update>
+	<update id="update_manager_1024" parameterType="java.util.HashMap">
+		update res_recommen
+		<set>
+			<trim prefixOverrides=",">
+				<if test="reSort != null">,RE_Sort = #{reSort}</if>
+			</trim>
+		</set>
+		where RE_ID=${reID}
+	</update>
+	<update id="update_manager_1920" parameterType="java.util.HashMap">
+		update res_recommen
+		<set>
+			<trim prefixOverrides=",">
+				<if test="reSort != null">,RE_Sort1920 = #{reSort}</if>
+			</trim>
+		</set>
+		where RE_ID=${reID}
+	</update>
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_recommen where RE_ID in (${reID})
+		</trim>
+	</delete>
+	<delete id="delete_by_resid" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_recommen where RE_RecommendID in (${reRecommendID}) and RE_RecommendType = '${reRecommendType}'
+		</trim>
+	</delete>
+</mapper>

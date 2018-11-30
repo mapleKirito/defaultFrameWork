@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="tctest">
+
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="tcID" column="TC_ID" />
+		<result property="tcAUserID" column="TC_AUserID" />
+		<result property="tcAnswerY" column="TC_AnswerY" />
+		<result property="tcAnswerN" column="TC_AnswerN" />
+		<result property="tcAnswerT" column="TC_AnswerT" />
+		<result property="tcAnswerP" column="TC_AnswerP" />
+		<result property="tcCreateTime" column="TC_CreateTime" />
+	</resultMap>
+	
+	<select id="select_today_test_info" resultMap="convertResult">
+		 select sum(TC_AnswerY) as Y,sum(TC_AnswerN) as N,sum(TC_AnswerT) as T,sum(TC_AnswerP) as P from sys_test_info_count where TC_CreateTime=#{tcCreateTime} and TC_AUserId=${s_userID};
+	</select>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_test_info_count tctestes where tctestes.TC_AUserID = ${s_userID} order by tctestes.TC_ID desc limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_test_info_count tctestes where tctestes.TC_AUserID = ${s_userID} 
+	</select>
+	
+	<select id="select_count_days" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT TC_AUserID,COUNT(a.TC_AnswerY) AS tcAccountval ,(SELECT USER_Account FROM sys_user  WHERE USER_ID =  a.TC_AUserID) AS tcAccount,(select user_img from sys_user_info where user_id=a.TC_AUserID) as tcUserImg  FROM sys_test_info_count a  where tc_createtime=#{TtcCreateTime} group by tc_auserid  ORDER BY tcAccountval DESC LIMIT 0,10
+	</select>
+	
+	  <!-- <select id="select_today_test_info" resultMap="convertResultRole" parameterMap="param">
+	  		select sum(TC_AnswerY),sum(TC_AnswerN),sum(TC_AnswerT) from sys_test_info_count where TC_CreateTime='' and TC_AUserId=${s_userID}
+	  </select> -->
+	
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_test_info_count
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tcAUserID != null and tcAUserID != ''">,TC_AUserID</if>
+			<if test="tcAnswerY != null and tcAnswerY != ''">,TC_AnswerY</if>
+			<if test="tcAnswerP != null and tcAnswerP != ''">,TC_AnswerP</if>
+			<if test="tcAnswerN != null and tcAnswerN != ''">,TC_AnswerN</if>
+			<if test="tcAnswerT != null and tcAnswerT != ''">,TC_AnswerT</if>
+			,TC_CreateTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tcAUserID != null and tcAUserID != ''">,#{tcAUserID}</if>
+			<if test="tcAnswerY != null and tcAnswerY != ''">,#{tcAnswerY}</if>
+			<if test="tcAnswerP != null and tcAnswerP != ''">,#{tcAnswerP}</if>
+			<if test="tcAnswerN != null and tcAnswerN != ''">,#{tcAnswerN}</if>
+			<if test="tcAnswerT != null and tcAnswerT != ''">,#{tcAnswerT}</if>
+			,now()
+		</trim>
+	</insert>
+	
+</mapper>

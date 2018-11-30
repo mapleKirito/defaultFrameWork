@@ -1,0 +1,35 @@
+@charset "utf-8";
+/* CSS Document */
+a{text-decoration:none;resize: none;}
+a:hover{text-decoration:underline;}
+.content{ margin:0 auto; width:500px;}
+.User_info{ width:95%; margin:30px 0;}
+.ReviewList{ list-style:none; color:#000000;}
+.ReviewList li{margin:2px 0;}
+.isay{width:95%; height:25px; border:1px solid #235660; padding:0 4px; line-height:25px; margin:60px auto;outline:none;}
+
+.isay:hover{border:1px solid #EEE6DF;}
+.faceDiv{position:absolute; z-index:20; padding:5px; border:1px solid #EAEAEA; width:390px; background:#FFF;}
+.law{position:absolute; margin:-12px 0 0 20px;background:url(../images/layer_arrow.gif);display:block; width:14px; height:7px;}
+.faceDiv ul{ list-style:none;}
+.faceDiv ul li{ float:left; border:1px solid #FFFFFF; width:24px; height:24px;}
+.faceDiv ul li:hover{border:1px solid #0066CC;}
+.showface{color: #000000; line-height:30px; cursor: pointer;}
+.Face-ico{width:7%; height:16px; display:inline-block;vertical-align:middle;margin-right:5px;}
+.isay_content[type="Say"]{ width:95%;margin:20px 17px;; position:relative;padding-right: 4px;}
+.isay_content[type="FirstReply"],.isay_content[type="SecondReply"]{width:95%;margin:20px 0; position:relative;}
+.isay_textarea[type="Say"]{ width:98%; min-height:56px; padding:5px;  border:1px solid #1A1A1A;resize: none; color:#606060;overflow-y:hidden;outline:0px; cursor:text;margin-bottom: 5px;outline:none;}
+.isay_textarea[type="FirstReply"],.isay_textarea[type="SecondReply"]{ width:98%; min-height:56px; padding:2px;  border:1px solid #1A1A1A;resize: none; color:#606060;overflow-y:hidden;outline:0px; cursor:text;margin-bottom: 5px;outline:none;}
+.isay_textarea:hover{border:1px solid #235660;}
+
+.FB_content{width:15%; height:30px; background:#362E2E; border:none; font-size:14px; color:#B4ADAD; border-radius:2px; float: right;  margin-right: -65px;}
+.FB_content.hidefocus::-moz-focus-inner {  border:none; }
+.isay_num{ position:relative; right:5px; top:-30px; color:#606060; font:14px/18px Georgia,Tahoma,Arial; width:70px; height:18px; line-height:18px; display:block; text-align:right; overflow:hidden;float: right;}
+
+.FirstReplyDiv,.SecondReplyDiv{padding:0 0 0 40px; position:relative;}/*一级回复*/
+.ui_avatar{left:0;position: absolute;top:10px;}
+.FirstReply_list,.SecondReply_list{line-height:1.6;}
+.SecondReply_list p{width: 95%;}
+.FirstReply_list p{width: 100%;}
+.FirstReply_list a,.SecondReply_list a{ color:#235660;margin-left:5px;}
+.comments_list ul{ list-style:none;}

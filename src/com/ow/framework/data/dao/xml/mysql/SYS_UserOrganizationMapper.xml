@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="userorg">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="userID" column="USER_ID" />
+		<result property="orgID" column="ORG_ID" />
+		<result property="orgName" column="ORG_Name" />
+	</resultMap>
+	<select id="select_user_org_by_uid" resultMap="convertResult" parameterType="param">
+		select som.USER_ID,som.ORG_ID,so.ORG_Name from sys_user_organization_mapper som join sys_organization so on som.ORG_ID = so.ORG_ID
+			<where>
+			 	<if test="s_userID != null">
+			 	 USER_ID=${s_userID}
+				</if>				
+			</where>
+			group by som.org_id
+	 </select>
+	 <select id="select_user_org_by_loginId" resultMap="convertResult" parameterType="param">
+		select som.USER_ID,som.ORG_ID,so.ORG_Name from sys_user_organization_mapper som join sys_organization so on som.ORG_ID = so.ORG_ID
+			<where>
+			 	<if test="s_userID != null" >
+			 	 USER_ID=${s_userID}
+				</if>			
+			</where>
+	 </select>
+	<select id="select_user_org_mapper_by_uid" resultMap="convertResult" parameterType="param">
+		select om.USER_ID,om.ORG_ID,org.ORG_Name from sys_user_organization_mapper om left  join sys_organization org on org.ORG_ID=om.ORG_ID
+		<where>
+		 	<if test="userID != null">
+		 	 USER_ID=${userID}
+			</if>
+		</where>
+	 </select>
+	<select id="select_user_select_mapper_by_oid" resultMap="convertResult" parameterType="param">
+		select * from sys_user_organization_mapper suom,sys_user user
+		<where>
+			suom.USER_ID=user.USER_ID and user.USER_Type=2
+		 	<if test="orgID != null">
+		 	 and suom.ORG_ID in (${orgID})
+			</if>
+		</where>
+	 </select>
+	 
+	<select id="select_user_count_by_oid" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_user_organization_mapper uom,sys_user user
+		<where>
+			<trim prefixOverrides="and">
+			uom.USER_ID=user.USER_ID and user.USER_Type=2
+		 	<if test="orgId != null">
+		 	 and uom.ORG_ID=${orgId}
+			</if>
+		 	<if test="orgID != null">
+		 	 and uom.ORG_ID=${orgID}
+			</if>			
+			</trim>
+		</where>
+	 </select>	 
+	 
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_user_organization_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="generatedKey!=null">USER_ID</if>
+			,ORG_ID
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="generatedKey!=null">${generatedKey}</if>
+			,3
+		</trim>
+	 </insert>
+	 <insert id="insert_default" parameterType="java.util.HashMap">
+	 	insert into sys_user_organization_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="generatedKey!=null">USER_ID</if>
+			,ORG_ID
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="generatedKey!=null">${generatedKey}</if>
+			,3
+		</trim>
+	 </insert>	 
+	  <insert id="move_org" parameterType="java.util.HashMap">
+	 	insert into sys_user_organization_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="userID!=null">USER_ID</if>
+			<if test="orgID!=null">,ORG_ID</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="userID!=null">${userID}</if>
+			<if test="orgID!=null">,${orgID}</if>
+		</trim>
+	 </insert>
+	<delete id="delete_by_uid" parameterType="java.util.HashMap">
+		delete from sys_user_organization_mapper
+		<where>
+		 	<if test="userID != null">
+		 	 USER_ID in(${userID})
+			</if>			
+		</where>
+	</delete>	 
+	
+	<delete id="delete_by_oid" parameterType="java.util.HashMap">
+		delete from sys_user_organization_mapper
+		<where>
+		 	<if test="orgID != null">
+		 	 ORG_ID=${orgID}
+			</if>
+		</where>
+	</delete>		
+	<select id="select_user_count_by_org_id" resultType="int" parameterType="java.util.HashMap">
+		select count(*) from sys_user_organization_mapper suom,sys_user su 
+
+		<where>
+			suom.user_id = su.user_id and su.user_type=2
+			<if test="orgID!=null and orgID!=''">
+				and suom.ORG_ID=${orgID}
+			</if>
+		</where> 
+	</select>
+	
+</mapper>

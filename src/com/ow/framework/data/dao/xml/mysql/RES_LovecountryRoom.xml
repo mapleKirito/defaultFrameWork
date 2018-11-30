@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="lovely">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="crID" column="CR_ID" />
+		<result property="crName" column="CR_Name" />
+		<result property="crChar" column="CR_Char" />
+		<result property="crNo" column="CR_No" />
+		<result property="crRecommen" column="CR_Recommen" />
+		<result property="crIsRefer" column="CR_IsRefer" />
+		<result property="crType" column="CR_Type" />
+		<result property="crUpload" column="CR_Upload" />
+		<result property="crFileSwf" column="CR_FileSwf" />
+		<result property="crFileSwfPath" column="CR_FileSwfPath" />
+		<result property="crThumbnail" column="CR_Thumbnail" />
+		<result property="crInThum" column="CR_InThum" />
+		<result property="crReferType" column="CR_ReferType" />
+		<result property="crConType" column="CR_ConType" />
+		<result property="crContent" column="CR_Content" />
+		<result property="crContentPath" column="CR_ContentPath" />
+		<result property="crIsGrade" column="CR_IsGrade" />
+		<result property="crGrade" column="CR_Grade" />
+		<result property="crContest" column="CR_Contest" />
+		<result property="crResType" column="CR_ResType" />
+		<result property="crResTypeName" column="CR_ResTypeName" />
+		<result property="crCateTwLevel" column="CR_CateTwLevel" />
+		<result property="crCateTwLevelName" column="CR_CateTwLevel_Name" />
+		<result property="crTaskId" column="CR_TaskId" />
+		<result property="crUserID" column="CR_UserID" />
+		<result property="crUserAccount" column="CR_UserAccount" />
+		<result property="crOperateTime" column="CR_OperateTime" />
+		<result property="crCreateTime" column="CR_CreateTime" />
+		<result property="crCreator" column="CR_Creator" />		
+		<result property="crState" column="CR_State" />
+		<result property="crStoryState" column="CR_StoryState" />		
+		<result property="crCountLike" column="CR_CountLike" />	
+		<result property="crIsShare" column="CR_IsShare" />	
+		<result property="crAbout" column="CR_About" />
+		<result property="crRelation" column="CR_Relation" />
+	</resultMap>
+<!-- 修改 -->
+	<select id="select_by_name" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select
+			DISTINCT ( loveCountry.CR_Name )
+		from
+			res_lovecountry_room loveCountry
+		where
+			loveCountry.CR_Name like '${crName}%' or loveCountry.CR_Char like '${crName}%'
+	</select>	
+<!-- 修改 -->
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime, loveCountry.CR_CreateTime, loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator ,loveCountry.CR_IsGrade, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type
+		from 
+			res_lovecountry_room loveCountry
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime, loveCountry.CR_CreateTime, loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator , loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type,loveCountry.CR_InThum,loveCountry.CR_About,loveCountry.CR_Relation,
+			(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry
+	</select>
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime, loveCountry.CR_CreateTime, loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator , loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type,loveCountry.CR_InThum,loveCountry.CR_About,loveCountry.CR_Relation,
+			(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry
+		where loveCountry.CR_No = '${code}'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_Keywords,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime, loveCountry.CR_CreateTime, loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,loveCountry.CR_IsShare,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator , loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type,loveCountry.CR_InThum,loveCountry.CR_About,loveCountry.CR_Relation,
+			(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry
+		where loveCountry.CR_ID = ${crID}
+	</select>
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime, loveCountry.CR_CreateTime, loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator , loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type
+		from 
+			res_lovecountry_room loveCountry
+		where loveCountry.CR_ID in (${crID})
+	</select>
+	<select id="select_count_by_category" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_lovecountry_room loveCountry
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crResType != null and erResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and erCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="IsShare != null and IsShare != '' "> and loveCountry.CR_IsShare = ${IsShare}</if>
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '%${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+		
+		order by loveCountry.CR_ID DESC
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_lovecountry_room loveCountry
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="IsShare != null and IsShare != '' "> and loveCountry.CR_IsShare = ${IsShare}</if>
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '%${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+		
+		 ORDER BY loveCountry.CR_ID DESC
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_xmllist" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+			    loveCountry.CR_Type!='3036'
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+		
+		 ORDER BY loveCountry.CR_ID DESC
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count_xmllist" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_lovecountry_room loveCountry
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				loveCountry.CR_Type!='3036'
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_lovecountry_room loveCountry
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_OZOO_select" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath, loveCountry.CR_State,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '${keyword}%' order by loveCountry.CR_Name DESC
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_recom_select" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath, loveCountry.CR_State,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%' 
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_smallselect" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath, loveCountry.CR_State,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name,
+			(select c.CATE_Path from res_category c where loveCountry.CR_CateTwLevel=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+		<if test="keyword != '' and keyword != null ">order by loveCountry.CR_Name='${keyword}' DESC,loveCountry.CR_Name</if>
+	</select>
+	<select id="select_page_other" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath, loveCountry.CR_State,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_InThum,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crName != null and erName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${erIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and erNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+		
+		 
+	</select>
+	<select id="select_page_other_about" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath, loveCountry.CR_State,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, c.CATE_Path as erPath, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_InThum,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '${keyword}%'
+				</if>
+			</trim>
+		</where>
+
+	</select>
+	<select id="select_page_other_about_manager" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath, loveCountry.CR_State,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, c.CATE_Path as erPath, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_InThum,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%' and loveCountry.CR_Name != '${keyword}'
+				</if>
+			</trim>
+		</where>
+
+	</select>
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,c.CATE_Path as path, loveCountry.CR_State,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type  
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (loveCountry.CR_UserID != '${s_userID}' or loveCountry.CR_UserID is null)</if>
+				${values}
+
+		</where>
+		ORDER BY loveCountry.CR_ID DESC
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (loveCountry.CR_UserID != '${s_userID}' or loveCountry.CR_UserID is null)</if>
+				${values}
+
+		</where>
+	</select>
+	
+	<select id="select_teacher_page" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,c.CATE_Path as path,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,loveCountry.CR_IsShare,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name 
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and loveCountry.CR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and loveCountry.CR_UserID = '${userID}'</if>
+				<if test="crUserID != null and crUserID != '' "> and loveCountry.CR_UserID = '${crUserID}'</if>
+				<if test="crUserAccount != null and crUserAccount != '' "> and loveCountry.CR_UserAccount = '${crUserAccount}'</if>
+				<if test="crName != null and crName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and loveCountry.CR_IsShare = ${isShare}
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${crIsGrade}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and crNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+		
+		order by loveCountry.CR_ID DESC
+		limit ${start},${offset}
+	</select>
+	<select id="select_teacher_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_lovecountry_room loveCountry
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and loveCountry.CR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and loveCountry.CR_UserID = '${userID}'</if>
+				<if test="crUserID != null and crUserID != '' "> and loveCountry.CR_UserID = '${crUserID}'</if>
+				<if test="crUserAccount != null and crUserAccount != '' "> and loveCountry.CR_UserAccount = '${crUserAccount}'</if>
+				<if test="crName != null and crName != ''">
+				and loveCountry.CR_Name like '${crName}%'
+				</if>
+				<if test="crIsGrade != null ">
+				and loveCountry.CR_IsGrade = ${crIsGrade}
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and loveCountry.CR_IsShare = ${isShare}
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%'
+				</if>
+				<if test="crNo != null and crNo != '' "> and loveCountry.CR_No = '${crNo}'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID = ${crID}</if>
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_lovecountry_room
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="crResType != null">,CR_ResType</if>
+			<if test="crResTypeName != null">,CR_ResTypeName</if>
+			<if test="crCateTwLevel != null">,CR_CateTwLevel</if>
+			<if test="crCateTwLevelName != null">,CR_CateTwLevel_Name</if>
+			<if test="crName != null">,CR_Name</if>
+			<if test="crChar != null">,CR_Char</if>
+			<if test="crNO != null">,CR_No</if>
+			<if test="crConType != null">,CR_ConType</if>
+			<if test="crContent != null">,CR_Content</if>
+			<if test="crContentPath != null">,CR_ContentPath</if>
+			<if test="crThumbnail != null">,CR_Thumbnail</if>
+			<if test="crInThum != null">,CR_InThum</if>
+			<if test="crUpload != null">,CR_Upload</if>
+			<if test="crRecommen != null">,CR_Recommen</if>
+			
+			<if test="crState != null">,CR_State</if>
+			<if test="crStoryState != null">,CR_StoryState</if>
+			<if test="crReferType != null">,CR_ReferType</if>
+			<if test="crIsRefer != null">,CR_IsRefer</if>
+			
+			<if test="crType != null">,CR_Type</if>
+			<if test="s_userID != null">,CR_UserID</if>
+			<if test="s_userLoginAccount != null">,CR_UserAccount</if>
+			,CR_OperateTime
+			<if test="crCreateTime != null and erCreateTime != '' ">,CR_CreateTime</if>
+			<if test="s_userLoginAccount != null">,CR_Creator</if>
+			<if test="crIsGrade != null">,CR_IsGrade</if>
+			<if test="crGrade != null">,CR_Grade</if>
+			<if test="crContest != null">,CR_Contest</if>
+			<if test="crTaskId != null">,CR_TaskId</if>
+			<if test="crFileSwf != null">,CR_FileSwf</if>
+			<if test="crFileSwfPath != null">,CR_FileSwfPath</if>
+			<if test="crIsShare != null">,CR_IsShare</if>
+			<if test="crAbout != null">,CR_About</if>	
+			<if test="crRelation != null">,CR_Relation</if>	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="crResType != null">,#{crResType}</if>
+			<if test="crResTypeName != null">,#{crResTypeName}</if>
+			<if test="crCateTwLevel != null">,#{crCateTwLevel}</if>
+			<if test="crCateTwLevelName  != null">,#{crCateTwLevelName}</if>
+			<if test="crName != null">,#{crName}</if>
+			<if test="crChar != null">,#{crChar}</if>
+			<if test="crNO != null">,#{crNO}</if>
+			<if test="crConType != null">,#{crConType}</if>
+			<if test="crContent != null">,#{crContent}</if>
+			<if test="crContentPath != null">,#{crContentPath}</if>
+			<if test="crThumbnail != null">,#{crThumbnail}</if>
+			<if test="crInThum != null">,#{crInThum}</if>
+			<if test="crUpload != null">,#{crUpload}</if>
+			<if test="crRecommen != null">,#{crRecommen}</if>
+			
+			<if test="crState != null">,#{crState}</if>
+			<if test="crStoryState != null">,#{crStoryState}</if>
+			<if test="crReferType != null">,#{crReferType}</if>
+			<if test="crIsRefer != null">,#{crIsRefer}</if>
+			
+			<if test="crType != null">,#{crType}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="crCreateTime != null and erCreateTime != '' ">,#{crCreateTime}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="crIsGrade != null">,#{crIsGrade}</if>
+			<if test="crGrade != null">,#{crGrade}</if>
+			<if test="crContest != null">,#{crContest}</if>
+			<if test="crTaskId != null">,#{crTaskId}</if>
+			<if test="crFileSwf != null">,#{crFileSwf}</if>
+			<if test="crFileSwfPath != null">,#{crFileSwfPath}</if>
+			<if test="crIsShare != null">,#{crIsShare}</if>	
+			<if test="crAbout != null">,#{crAbout}</if>		
+			<if test="crRelation != null">,#{crRelation}</if>	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crResType != null">,CR_ResType = #{crResType}</if>
+				<if test="crResTypeName != null">,CR_ResTypeName = #{crResTypeName}</if>
+				<if test="crCateTwLevel != null">,CR_CateTwLevel_Name = #{crCateTwLevel}</if>
+				<if test="crCateTwLevelName != null">,CR_CateTwLevel_Name = #{crCateTwLevelName}</if>
+				<if test="crName != null">,CR_Name = #{crName}</if>
+				<if test="crChar != null">,CR_Char = #{crChar}</if>
+				<if test="crNo != null">,CR_No = #{crNo}</if>
+				<if test="crUpload != null">,CR_Upload = #{crUpload}</if>
+				<if test="crConType != null">,CR_ConType = #{crConType}</if>
+				<if test="crContent != null">,CR_Content = #{crContent}</if>
+				<if test="crContentPath != null">,CR_ContentPath = #{crContentPath}</if>
+				<if test="crThumbnail != null">,CR_Thumbnail = #{crThumbnail}</if>
+				<if test="crInThum != null">,CR_InThum = #{crInThum}</if>
+				
+				<if test="crState != null">,CR_State = #{crState}</if>
+				<if test="crReferType != null">,CR_ReferType = #{crReferType}</if>
+				<if test="crIsRefer != null">,CR_IsRefer = #{crIsRefer}</if>
+				
+				<if test="crType != null">,CR_Type = #{crType}</if>
+				<if test="s_userID != null">,CR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,CR_UserAccount = #{s_userLoginAccount}</if>
+				,CR_OperateTime = now()
+				<if test="crCreateTime != null and erCreateTime != '' ">,CR_CreateTime = #{crCreateTime}</if>
+				<if test="crIsGrade != null">,CR_IsGrade = #{crIsGrade}</if>
+				<if test="crGrade != null">,CR_Grade = #{crGrade}</if>
+				<if test="crContest != null">,CR_Contest = #{crContest}</if>
+				<if test="crFileSwf != null">,CR_FileSwf = #{crFileSwf}</if>
+				<if test="crFileSwfPath != null">,CR_FileSwfPath = #{crFileSwfPath}</if>
+				<if test="crRecommen != null">,CR_Recommen = #{crRecommen}</if>
+				<if test="crAbout != null">,CR_About = #{crAbout}</if>	
+				<if test="crIsShare != null">,CR_IsShare = #{crIsShare}</if>
+				<if test="crRelation != null">,CR_Relation = #{crRelation}</if>
+			</trim>
+		</set>
+		where CR_ID=${crID}
+	</update>
+	
+	<select id="select_state" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select CR_State from res_lovecountry_room
+		<where>
+		    <trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crUpload != null">and CR_Upload = #{crUpload}</if>
+				<if test="crFileSwf != null">and CR_FileSwf = #{crFileSwf}</if>
+				<if test="crID != null">and CR_ID = ${crID}</if>
+			</trim>
+		</where>
+	</select>
+	
+	<update id="update_state" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crState != null">,CR_State = #{crState}</if>
+
+				,CR_OperateTime = now()
+			</trim>
+		</set>
+		<where>
+		    <trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crUpload != null">and CR_Upload = #{crUpload}</if>
+				<if test="crFileSwf != null">and CR_FileSwf = #{crFileSwf}</if>
+				<if test="crID != null">and CR_ID = ${crID}</if>
+			</trim>
+		</where>
+	</update>
+	
+	<update id="update_upload" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crUpload != null">,CR_Upload = #{crUpload}</if>
+				<if test="crFileSwf != null">,CR_FileSwf = #{crFileSwf}</if>
+				<if test="s_userID != null">,CR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,CR_UserAccount = #{s_userLoginAccount}</if>
+				,CR_OperateTime = now()
+			</trim>
+		</set>
+		where CR_ID=${crID}
+	</update>
+	
+	<update id="update_refertype" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crReferType != null">,CR_ReferType = #{crReferType}</if>
+				<if test="crIsRefer != null">,CR_IsRefer = #{crIsRefer}</if>
+			</trim>
+		</set>
+		where CR_ID=${crID}
+	</update>
+	
+	
+	<update id="update_is_grade" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crIsGrade != null">,CR_IsGrade = #{crIsGrade}</if>
+				<if test="s_userID != null">,CR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,CR_UserAccount = #{s_userLoginAccount}</if>
+				,CR_OperateTime = now()
+			</trim>
+		</set>
+		where CR_ID=${crID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from res_lovecountry_room where CR_ID=${crID}
+	</delete>
+	<delete id="delete_by_taskId" parameterType="java.util.HashMap">
+		delete from res_lovecountry_room where CR_TaskId=${crTaskId}
+	</delete>
+	<select id="select_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime, loveCountry.CR_CreateTime, loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_Creator ,loveCountry.CR_IsGrade, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type
+		from 
+			res_lovecountry_room loveCountry
+			left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+		<trim prefix="" prefixOverrides="and" suffix=""> 
+			<if test="keyword != null and keyword != ''">
+				and loveCountry.CR_Name like '%${keyword}%' and loveCountry.CR_ResType='${crTotalID}'
+			</if>
+			
+		</trim>
+		</where>
+	</select>
+	<select id="select_storystate" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select CR_StoryState from res_lovecountry_room
+		where  CR_Upload = #{crUpload}
+	</select>
+	
+	<update id="update_storystate" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crStoryState != null">,CR_StoryState = #{crStoryState}</if>
+				,CR_OperateTime = now()
+			</trim>
+		</set>
+		where  CR_Upload = '${crUpload}'
+	</update>
+	<update id="update_clickLile" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crCountLike != null">,CR_CountLike = #{crCountLike}</if>
+			</trim>
+		</set>
+		where  CR_id = '${crID}'
+	</update>
+	<select id="select_page_category" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+				<if test="crType != null and crType != '' "> and loveCountry.CR_Type = '1011'</if>
+			</trim>
+		</where>
+		order by loveCountry.CR_ID DESC
+	</select>
+	<select id="select_page_category_about" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+				<if test="crType != null and crType != '' "> and loveCountry.CR_Type = '1011'</if>
+			</trim>
+		</where>
+		order by loveCountry.CR_ID DESC
+		limit ${start},${offset}
+	</select>
+		<select id="select_page_category_pic" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="crResType != null and crResType != '' "> and loveCountry.CR_ResType = '${crResType}'</if>
+				<if test="crCateTwLevel != null and crCateTwLevel != '' "> and loveCountry.CR_CateTwLevel = '${crCateTwLevel}'</if>
+				<if test="crType != null and crType != '' "> and loveCountry.CR_Type = '1011'</if>
+				<if test="crID != null and crID != '' "> and loveCountry.CR_ID != '${crID}'</if>
+			</trim>
+		</where>
+		order by loveCountry.CR_ID DESC
+		limit 30
+	</select>
+		<select id="select_page_keywords" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_ContentPath,loveCountry.CR_StoryState,loveCountry.CR_FileSwfPath,loveCountry.CR_ResTypeName,loveCountry.CR_No,loveCountry.CR_ReferType,loveCountry.CR_IsRefer, loveCountry.CR_State, loveCountry.CR_Recommen, loveCountry.CR_Name, loveCountry.CR_Content, loveCountry.CR_UserID, loveCountry.CR_ResType, loveCountry.CR_CateTwLevel, loveCountry.CR_CateTwLevel_Name, loveCountry.CR_ConType,
+			loveCountry.CR_UserAccount, loveCountry.CR_OperateTime,  loveCountry.CR_Grade, loveCountry.CR_TaskId,loveCountry.CR_Contest,
+			DATE_FORMAT(loveCountry.CR_CreateTime,'%Y-%m-%d %H:%i:%s') CR_CreateTime ,loveCountry.CR_About,loveCountry.CR_Relation,
+			loveCountry.CR_Thumbnail ,loveCountry.CR_InThum,loveCountry.CR_Creator, loveCountry.CR_Upload, loveCountry.CR_FileSwf, loveCountry.CR_Type ,
+			case when c.CATE_Name is null or c.CATE_Name = '' then '顶级分类' else c.CATE_Name end as CR_CateTwLevel_Name ,(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != '' "> and loveCountry.CR_Keywords  like '%${keyword}%'</if>
+				and CR_ID not in(#{notInID})
+			</trim>
+		</where>
+		order by loveCountry.CR_ID DESC
+	</select>
+	<select id="select_page_keywords_little" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			loveCountry.CR_ID,loveCountry.CR_Name,
+			(select c.CATE_Path from res_category c where loveCountry.CR_ResType=c.CATE_ID ) as  crPath
+		from 
+			res_lovecountry_room loveCountry left join res_category c on c.CATE_ID = loveCountry.CR_ResType
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != '' "> and loveCountry.CR_Keywords  like '%${keyword}%'</if>
+			    and CR_ID not in(#{notInID})
+			</trim>
+		</where>
+		order by loveCountry.CR_ID DESC
+	</select>
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_lovecountry_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="crIsShare != null">,CR_IsShare = ${crIsShare}</if>
+			</trim>
+		</set>
+		where  CR_ID = ${crID}
+	</update>
+</mapper>

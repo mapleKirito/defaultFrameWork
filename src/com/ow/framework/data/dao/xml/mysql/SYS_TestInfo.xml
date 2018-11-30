@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="test">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="testID" column="Test_ID" />
+		<result property="testType" column="Test_Type" />
+		<result property="testName" column="Test_Name" />
+		<result property="testVal" column="Test_Val" />
+		<result property="testGrades" column="Test_Grades" />
+		<result property="testClass" column="Test_Class" />
+		<result property="testRemarks" column="Test_Remarks" />
+		<result property="testIndivOptionA" column="Test_IndivOptionA" />
+		<result property="testIndivOptionB" column="Test_IndivOptionB" />
+		<result property="testIndivOptionC" column="Test_IndivOptionC" />
+		<result property="testIndivOptionD" column="Test_IndivOptionD" />
+		<result property="testIndivAnswer" column="Test_IndivAnswer" />
+		<result property="testJudgeAnswer" column="Test_JudgeAnswer" />
+		<result property="testCreateTime" column="Test_CreateTime" />
+		<result property="testCreateUserID" column="Test_CreateUserID" />
+		<result property="t_index" column="t_index" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select testes.Test_Name,testes.Test_ID,testes.Test_Val,testes.Test_Grades,testes.Test_Remarks,testes.Test_CreateUserID,testes.Test_Type,DATE_FORMAT(testes.Test_CreateTime,'%Y-%m-%d')  Test_CreateTime  from  sys_test_info testes
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="testName != null and testName != ''"> and testes.Test_Name like '${testName}%'</if>
+				<if test="testGrades != null and testGrades != ''"> and testes.Test_Grades like '%${testGrades}%'</if>
+				<if test="testID != null and testID != ''"> and  ${testID} > testes.Test_ID </if>
+			</trim>
+		</where>
+		order by testes.Test_ID desc limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_test_info testes
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="testName != null and testName != ''"> and testes.Test_Name like '${testName}%'</if>
+				<if test="testGrades != null and testGrades != ''"> and testes.Test_Grades like '%${testGrades}%'</if>
+				<if test="testID != null and testID != ''"> and  ${testID} > testes.Test_ID </if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_user" resultMap="convertResult" parameterType="java.util.HashMap">
+		select testes.Test_Name,testes.Test_ID,testes.Test_Val,testes.Test_Grades,testes.Test_Remarks,testes.Test_CreateUserID,testes.Test_Type,DATE_FORMAT(testes.Test_CreateTime,'%Y-%m-%d')  Test_CreateTime
+		from  sys_test_info testes
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="testName != null and testName != ''"> and testes.Test_Name like '${testName}%'</if>
+				<if test="testGrades != null and testGrades != ''"> and testes.Test_Grades like '%${testGrades}%'</if>
+				<if test="testID != null and testID != ''"> and  ${testID} > testes.Test_ID </if>
+				<if test="s_userID != null and s_userID != ''"> and  testes.Test_CreateUserID = '${s_userID}' </if>
+				
+			</trim>
+		</where>
+		order by testes.Test_ID desc limit ${start},${offset}
+	</select>
+	<select id="select_page_user_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_test_info testes
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="testName != null and testName != ''"> and testes.Test_Name like '${testName}%'</if>
+				<if test="testGrades != null and testGrades != ''"> and testes.Test_Grades like '%${testGrades}%'</if>
+				<if test="testID != null and testID != ''"> and  ${testID} > testes.Test_ID </if>
+				<if test="s_userID != null and s_userID != ''"> and  testes.Test_CreateUserID = '${s_userID}' </if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_new_test" resultMap="convertResult" parameterType="java.util.HashMap">
+		select *,(select count(test_id)-1 as test_index from sys_test_info where test_grades =sti.test_grades and test_id>=sti.test_id order by test_id desc) as t_index 
+		from sys_test_info sti 
+		order by test_id desc limit 0,3
+	</select>
+	<select id="select_page_grades" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_test_info testes where testes.Test_Grades like '%${testGrades}%'
+		<if test="testID != null and testID != ''"> and  ${testID} >= testes.Test_ID </if>
+		order by testes.Test_ID desc limit ${start},${offset}
+	</select>
+	<select id="select_page_grades_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_test_info testes where testes.Test_Grades like '%${testGrades}%'
+	</select>
+	<select id="select_page_byclass" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_test_info testes
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="testClass != null and testClass != ''"> testes.Test_Class in (${testClass})</if>
+			</trim>
+		</where>
+		order by testes.Test_ID desc limit ${start},${offset}
+	</select>
+	<select id="select_page_byclass_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_test_info testes
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="testClass != null and testClass != ''"> testes.Test_Class in (${testClass})</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_test_info testes where testes.Test_ID = ${testID}
+	</select>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_test_info
+		<set>
+			<trim prefixOverrides=",">
+				<if test="testType != null">,Test_Type = #{testType}</if>
+				<if test="testGrades != null">,Test_Grades = #{testGrades}</if>
+				<if test="testName != null">,Test_Name = #{testName}</if>
+				<if test="testRemarks != null">,Test_Remarks = #{testRemarks}</if>
+				<if test="testClass != null">,Test_Class = #{testClass}</if>
+				<if test="testVal != null">,Test_Val = #{testVal}</if>
+				<if test="testIndivOptionA != null">,Test_IndivOptionA = #{testIndivOptionA}</if>
+				<if test="testIndivOptionB != null">,Test_IndivOptionB = #{testIndivOptionB}</if>
+				<if test="testIndivOptionC != null">,Test_IndivOptionC = #{testIndivOptionC}</if>
+				<if test="testIndivOptionD != null">,Test_IndivOptionD = #{testIndivOptionD}</if>
+				<if test="testIndivAnswer != null">,Test_IndivAnswer = #{testIndivAnswer}</if>
+				<if test="testJudgeAnswer != null">,Test_JudgeAnswer = #{testJudgeAnswer}</if>
+			</trim>
+		</set>
+		where Test_ID=${testID}
+	</update>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_test_info
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="testType != null and testType != ''">,Test_Type</if>
+			<if test="testGrades != null and testGrades != ''">,Test_Grades</if>
+			<if test="testName != null and testName != ''">,Test_Name</if>
+			<if test="testVal != null and testVal != ''">,Test_Val</if>
+			<if test="testClass != null and testClass != ''">,Test_Class</if>
+			<if test="testRemarks != null and testRemarks != ''">,Test_Remarks</if>
+			<if test="testIndivOptionA != null and testIndivOptionA != ''">,Test_IndivOptionA</if>
+			<if test="testIndivOptionB != null and testIndivOptionB != ''">,Test_IndivOptionB</if>
+			<if test="testIndivOptionC != null and testIndivOptionC != ''">,Test_IndivOptionC</if>
+			<if test="testIndivOptionD != null and testIndivOptionD != ''">,Test_IndivOptionD</if>
+			<if test="testIndivAnswer != null and testIndivAnswer != ''">,Test_IndivAnswer</if>
+			<if test="testJudgeAnswer != null and testJudgeAnswer != ''">,Test_JudgeAnswer</if>
+			,Test_CreateTime
+			,Test_CreateUserID
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="testType != null and testType != ''">,#{testType}</if>
+			<if test="testGrades != null and testGrades != ''">,#{testGrades}</if>
+			<if test="testName != null and testName != ''">,#{testName}</if>
+			<if test="testVal != null and testVal != ''">,#{testVal}</if>
+			<if test="testClass != null and testClass != ''">,#{testClass}</if>
+			<if test="testRemarks != null and testRemarks != ''">,#{testRemarks}</if>
+			<if test="testIndivOptionA != null and testIndivOptionA != ''">,#{testIndivOptionA}</if>
+			<if test="testIndivOptionB != null and testIndivOptionB != ''">,#{testIndivOptionB}</if>
+			<if test="testIndivOptionC != null and testIndivOptionC != ''">,#{testIndivOptionC}</if>
+			<if test="testIndivOptionD != null and testIndivOptionD != ''">,#{testIndivOptionD}</if>
+			<if test="testIndivAnswer != null and testIndivAnswer != ''">,#{testIndivAnswer}</if>
+			<if test="testJudgeAnswer != null and testJudgeAnswer != ''">,#{testJudgeAnswer}</if>
+			,now()
+			,#{s_userID}
+		</trim>
+	</insert>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_test_info where Test_ID in (${testID})
+	</delete>
+	
+	
+	<select id="select_page_smallselect" resultMap="convertResult" parameterType="java.util.HashMap">
+		select testes.Test_Name,testes.Test_ID,testes.Test_Val,testes.Test_Grades,testes.Test_Remarks,testes.Test_CreateUserID,testes.Test_Type,DATE_FORMAT(testes.Test_CreateTime,'%Y-%m-%d')  Test_CreateTime 
+		 from  sys_test_info testes
+    	<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and testes.Test_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+		<if test="keyword != '' and keyword != null ">order by testes.Test_Name='${keyword}' desc,testes.Test_Name</if>
+	</select>
+</mapper>

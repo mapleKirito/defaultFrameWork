@@ -1,0 +1,13 @@
+#flow-box{margin:10px auto 0 auto; padding:0; position:relative} 
+#flow-box li{ 
+width:190px; position:absolute; padding:0px; border:solid 1px #efefef; list-style:none; 
+opacity:0; 
+-moz-opacity:0; 
+filter:alpha(opacity=0); 
+-webkit-transition:opacity 500ms ease-in-out; 
+-moz-transition:opacity 500ms ease-in-out; 
+-o-transition:opaicty 500ms ease-in-out; 
+transition:opaicty 500ms ease-in-out;} 
+#flow-box li img{width:100%;} 
+#flow-box li a{display:block; width:100%; text-align:center; font-size:14px; color:#333; line-height:18px; text-decoration:none;} 
+.loadwrap{position:absolute; left:0; width:100%; text-align:center;} 

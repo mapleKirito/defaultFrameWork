@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="observation">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="orID" column="OR_ID" />
+		<result property="orNO" column="OR_NO" />
+		<result property="orName" column="OR_Name" />
+		<result property="orChar" column="OR_Char" />
+		<result property="orRecommen" column="OR_Recommen" /> 
+		<result property="orType" column="OR_Type" />
+		<result property="orZip" column="OR_Zip" />
+		<result property="orAudio" column="OR_Audio" />
+		<result property="orUpload" column="OR_Upload" />
+		<result property="orFileSwf" column="OR_FileSwf" />
+		<result property="orFileSwfPath" column="OR_FileSwfPath" />	
+		<result property="orThumbnail" column="OR_Thumbnail" />
+		<result property="orInThum" column="OR_InThum" />
+		<result property="orModel" column="OR_Model" />
+		
+		<result property="orCategory" column="OR_Category" />
+		<result property="orCategoryName" column="OR_CategoryName" />
+		<result property="orCateTwLevel" column="OR_CateTwLevel" />
+		<result property="orCateTwLevelName" column="OR_CateTwLevel_Name" />
+		<result property="orCateThLevel" column="OR_CateThLevel" />
+		<result property="orCateThLevelName" column="OR_CateTHLevel_Name" />
+		<result property="orCateFoLevel" column="OR_CateFoLevel" />
+		<result property="orCateFoLevelName" column="OR_CateFoLevel_Name" />
+		<result property="orCateFiveLevel" column="OR_CateFiveLevel" />
+		<result property="orCateFiveLevelName" column="OR_CateFiveLevel_Name" />
+		
+		
+		<result property="orProvince" column="OR_Province" />
+		<result property="orCity" column="OR_City" />
+		<result property="orPlaceName" column="OR_PlaceName" />
+		
+		<result property="orIsGrade" column="OR_IsGrade" />
+		<result property="orGrade" column="OR_Grade" />
+		<result property="orContest" column="OR_Contest" />
+		<result property="orCustom" column="OR_Custom" />
+		<result property="orLatinNameID" column="OR_LatinNameID" />
+		<result property="orLatinName" column="OR_LatinName" />
+		<result property="orDescription" column="OR_Description" />
+		<result property="orIdentifier" column="OR_Identifier" />
+		<result property="orRemarks" column="OR_Remarks" />
+		
+		<result property="orContent" column="OR_Content" />
+		<result property="orContentPath" column="OR_ContentPath" />
+		<result property="orUserID" column="OR_UserID" />
+		<result property="orUserAccount" column="OR_UserAccount" />
+		<result property="orOperateTime" column="OR_OperateTime" />
+		<result property="orCreateTime" column="OR_CreateTime" />
+		<result property="orCreator" column="OR_Creator" />
+		<result property="orState" column="OR_State" />
+		<result property="orStoryState" column="OR_StoryState" />
+		<result property="orKeywords" column="OR_Keywords" />
+		<result property="orCountLike" column="OR_CountLike" />
+		<result property="orIsShare" column="OR_IsShare" />
+		<result property="orAbout" column="OR_About" />
+		<result property="orRelation" column="OR_Relation" />
+	</resultMap>
+<!-- 修改 -->
+	<select id="select_by_name" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select
+			DISTINCT ( observation.OR_Name )
+		from
+			res_observation_room observation
+		where
+			observation.OR_Name like '${erName}%' or observation.OR_Char like '${erName}%'
+	</select>	
+<!-- 修改 -->
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			   observation.OR_Custom,
+			observation.OR_Creator ,observation.OR_IsGrade ,observation.OR_Grade 
+		from res_observation_room observation
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_Content,observation.OR_InThum,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,  observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,observation.OR_About,observation.OR_Relation,
+			   observation.OR_LatinNameID,observation.OR_Contest,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator ,observation.OR_Grade ,
+			observation.OR_CategoryName ,
+			   observation.OR_Custom,
+			   	(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  or_Path
+	
+		from 
+			res_observation_room observation
+	</select>
+	<select id="select_static_videolist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select OR_Name,OR_Thumbnail,OR_Upload from res_observation_room where OR_Type='1084' and OR_Name like '%${name}%'
+	</select>
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_Content,observation.OR_InThum,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,  observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,observation.OR_About,observation.OR_Relation,
+			   observation.OR_LatinNameID,observation.OR_Contest,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator ,observation.OR_Grade ,
+			observation.OR_CategoryName ,observation.OR_CateThLevel,observation.OR_CateFoLevel,
+			observation.OR_CateFiveLevel,
+			observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,
+			observation.OR_CateFiveLevel_Name,
+			   observation.OR_Custom,
+			   	(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  or_Path
+	
+		from 
+			res_observation_room observation
+		where observation.OR_NO = '${code}'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,
+			observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,
+			observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,
+			observation.OR_CateThLevel,observation.OR_CateFoLevel,
+			observation.OR_CateFiveLevel,
+			observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,
+			observation.OR_CateFiveLevel_Name,
+			observation.OR_Province,observation.OR_City,observation.OR_PlaceName,
+			observation.OR_Zip,observation.OR_Content,observation.OR_InThum,
+			observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, 
+			observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,  observation.OR_FileSwfPath,  observation.OR_About,observation.OR_Relation,
+			 observation.OR_LatinName,observation.OR_Keywords,
+			   observation.OR_LatinNameID,observation.OR_Contest,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator ,observation.OR_Grade ,
+			observation.OR_CategoryName ,
+			observation.OR_IsShare,
+			
+			   observation.OR_Custom,
+			   	(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  or_Path
+	
+		from 
+			res_observation_room observation
+		where observation.OR_ID = ${orID}
+	</select>
+	
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,
+			observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,
+			observation.OR_CateThLevel,observation.OR_CateFoLevel,
+			observation.OR_CateFiveLevel,
+			observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,
+			observation.OR_CateFiveLevel_Name,
+			observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,  observation.OR_FileSwfPath,  observation.OR_About,observation.OR_Relation,
+			 observation.OR_LatinName,
+			   observation.OR_LatinNameID,observation.OR_Contest,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator ,observation.OR_Grade ,
+			observation.OR_CateThLevel,observation.OR_CateFoLevel,
+			observation.OR_CateFiveLevel,
+			observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,
+			observation.OR_CateFiveLevel_Name,
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+		where observation.OR_ID in (${orID})
+	</select>
+	
+	<select id="select_count_by_category" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_observation_room observation
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,  observation.OR_About,observation.OR_Relation,
+			 observation.OR_LatinName,
+			   observation.OR_LatinNameID,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,observation.OR_Contest,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+<!-- 			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel -->
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orName != null and orName != ''">
+				and observation.OR_Name like '%${orName}%'
+				</if>
+				<if test="orIsGrade != null and orIsGrade != ''">
+				and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<!-- <if test="catePath != null and catePath != ''">
+				and c.CATE_Path like '${catePath}%'
+				</if> -->
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '%${keyword}%'  
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and observation.OR_IsShare = ${IsShare}</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+			
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				<if test="orCateTHLevelName != null and orCateTHLevelName != '' "> and observation.OR_CateTHLevel_Name = '${orCateTHLevelName}'</if>
+				<if test="orCateTHLevel != null and orCateTHLevel != '' "> and observation.OR_CateTHLevel = '${orCateTHLevel}'</if>
+				<if test="orCateFoLevelName != null and orCateFoLevelName != '' "> and observation.OR_CateFoLevel_Name = '${orCateFoLevelName}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+			</trim>
+		</where>
+		ORDER BY observation.OR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(observation.OR_ID) from 
+			res_observation_room observation
+<!-- 			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel -->
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orName != null and orName != ''">
+				and observation.OR_Name like '%${orName}%'
+				</if>
+				<if test="orIsGrade != null and orIsGrade != ''">
+				and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<!-- <if test="catePath != null and catePath != ''">
+				and c.CATE_Path like '${catePath}%'
+				</if> -->
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '%${keyword}%'  
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and observation.OR_IsShare = ${IsShare}</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+			
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				<if test="orCateTHLevelName != null and orCateTHLevelName != '' "> and observation.OR_CateTHLevel_Name = '${orCateTHLevelName}'</if>
+				<if test="orCateTHLevel != null and orCateTHLevel != '' "> and observation.OR_CateTHLevel = '${orCateTHLevel}'</if>
+				<if test="orCateFoLevelName != null and orCateFoLevelName != '' "> and observation.OR_CateFoLevel_Name = '${orCateFoLevelName}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,observation.OR_Contest,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			observation.OR_Custom
+			<!-- (select c.CATE_Path from res_category c where observation.OR_CateTwLevel=c.CATE_ID ) as orPath  -->
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orName != null and orName != ''">
+				and observation.OR_Name like '%${orName}%'
+				</if>
+				<if test="orIsGrade != null">
+				and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '%${keyword}%'  
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+			
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				
+				<if test="orCateThLevel != null and orCateThLevel != '' "> and observation.OR_CateThLevel = '${orCateThLevel}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+				<if test="orCateFiveLevel != null and orCateFiveLevel != '' "> and observation.OR_CateFiveLevel = '${orCateFiveLevel}'</if>
+			</trim>
+		</where>
+		ORDER BY observation.OR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_quick_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_observation_room observation left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orName != null and orName != ''">
+				and observation.OR_Name like '%${orName}%'
+				</if>
+				<if test="orIsGrade != null">
+				and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '%${keyword}%' 
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				<if test="orCateThLevel != null and orCateThLevel != '' "> and observation.OR_CateThLevel = '${orCateThLevel}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+				<if test="orCateFiveLevel != null and orCateFiveLevel != '' "> and observation.OR_CateFiveLevel = '${orCateFiveLevel}'</if>
+			
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_OZOO_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,observation.OR_FileSwfPath,   
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '${keyword}%'   order by observation.OR_Name desc
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_recom_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,observation.OR_FileSwfPath,   
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '%${keyword}%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_smallselect" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,observation.OR_FileSwfPath,   
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom,
+			   (select c.CATE_Path from res_category c where observation.OR_CateTwLevel=c.CATE_ID ) as orPath
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name like '%${keyword}%'  
+				</if>
+			</trim>
+		</where>
+		<if test="keyword != '' and keyword != null ">order by observation.OR_Name='${keyword}' desc,observation.OR_Name</if>
+	</select>
+	<select id="select_page_other" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,   
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orName != null and orName != ''">
+				and observation.OR_Name like '${orName}'
+				</if>
+				<if test="orIsGrade != null">
+				and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+				and observation.OR_Name = '${keyword}'  
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+				
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+			</trim>
+		</where>
+		<if test="orID != '' and orID != null ">order by observation.OR_ID='${orID}' desc,observation.OR_ID</if>
+	</select>
+	
+	<select id="select_page_other_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,c.CATE_Path as orPath, observation.OR_Zip,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_CateTwLevel,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName, observation.OR_FileSwfPath,  
+			observation.OR_LatinName,observation.OR_Contest,
+			observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != '' and flag == 'animal'">
+					and ( observation.OR_Name like '%${keyword}%'  and  (OR_CateTwLevel='1105' or  OR_CateTwLevel='1078'))
+				</if>
+				<if test="flag == 'plant' and keyword != '' and keyword != null">
+					and ( observation.OR_Name like '%${keyword}%' and  (OR_CateTwLevel='1106' or  OR_CateTwLevel='1078' ) )
+				</if>
+				<if test="flag == 'other' and keyword != '' and keyword != null">
+					and ( observation.OR_Name like '%${keyword}%'  )
+				</if>
+				
+			</trim>
+		</where>
+		
+		 
+		
+	</select>
+	<select id="select_page_other_about_manager" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,c.CATE_Path as orPath, observation.OR_Zip,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_CateTwLevel,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName, observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,			
+			observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="flag == 'plant' and keyword != null and keyword != '' ">
+					and ( observation.OR_Name like '%${keyword}%'  and  (OR_CateTwLevel='1106' or  OR_CateTwLevel='1078') and  observation.OR_Name != '${keyword}' )
+				</if>
+				<if test="flag == 'animal' and keyword != '' and keyword != null">
+					and ( observation.OR_Name like '%${keyword}%' and  OR_CateTwLevel='1105' and  observation.OR_Name != '${keyword}' )
+				</if>
+				<if test="flag == 'other' and keyword != '' and keyword != null">
+					and observation.OR_Name like '%${keyword}%'   and  observation.OR_Name != '${keyword}'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,c.CATE_Path as path,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' ">and (observation.OR_UserID != '${s_userID}' or observation.OR_UserID is null)</if>
+				${values}
+
+
+		</where>
+		ORDER BY observation.OR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (observation.OR_UserID != '${s_userID}' or observation.OR_UserID is null)</if>
+				${values}
+
+		</where>
+	</select>
+	
+	
+	<select id="select_teacher_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,c.CATE_Path as path,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,observation.OR_FileSwfPath,  
+			 observation.OR_LatinName,observation.OR_Contest,
+			   observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator  ,
+			observation.OR_IsShare,
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and observation.OR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and observation.OR_UserID = '${userID}'</if>
+				<if test="orName != null and orName != ''">
+					and observation.OR_Name like '${orName}%'
+				</if>
+				<if test="orIsGrade != null">
+					and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and observation.OR_IsShare = ${isShare}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and observation.OR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+			</trim>
+		</where>
+		 ORDER BY observation.OR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_teacher_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_observation_room observation left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and observation.OR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and observation.OR_UserID = '${userID}'</if>
+				<if test="orName != null and orName != ''">
+					and observation.OR_Name like '${orName}%'
+				</if>
+				<if test="orIsGrade != null">
+					and observation.OR_IsGrade = ${orIsGrade}
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and observation.OR_IsShare = ${isShare}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					and observation.OR_Name like '%${keyword}%'
+				</if>
+				<if test="category != null and category != '' "> and c.CATE_Path like '%,${category},%'</if>
+				<if test="orNO != null and orNO != '' "> and observation.OR_NO = '${orNO}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '${orType}'</if>
+				<if test="orLatinName != null and orLatinName != '' "> and observation.OR_LatinName = '${orLatinName}'</if>
+				<if test="orDescription != null and orDescription != '' "> and observation.OR_Description = '${orDescription}'</if>
+				<if test="orIdentifier != null and orIdentifier != '' "> and observation.OR_Identifier = '${orIdentifier}'</if>
+				<if test="orUserID != null and orUserID != '' "> and observation.OR_UserID = '${orUserID}'</if>
+				<if test="orUserAccount != null and orUserAccount != '' "> and observation.OR_UserAccount = '${orUserAccount}'</if>
+				<if test="orOperateTime != null and orOperateTime != '' "> and observation.OR_OperateTime = '${orOperateTime}'</if>
+				<if test="orCreateTime != null and orCreateTime != '' "> and observation.OR_CreateTime = '${orCreateTime}'</if>
+				<if test="orCreator != null and orCreator != '' "> and observation.OR_Creator = '${orCreator}'</if>
+				<if test="orIsGrade != null and orIsGrade != '' "> and observation.OR_IsGrade = '${orIsGrade}'</if>
+				<if test="orLatinNameID != null and orLatinNameID != '' "> and observation.OR_LatinNameID = '${orLatinNameID}'</if>
+				
+				<if test="orCategoryName != null and orCategoryName != '' "> and observation.OR_CategoryName = '${orCategoryName}'</if>
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != '' "> and observation.OR_CateTwLevel_Name = '${orCateTwLevelName}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_observation_room
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="orNO != null">,OR_NO</if>
+			<if test="orUpload != null">,OR_Upload</if> 
+			<if test="orFileSwf != null">,OR_FileSwf</if>
+			<if test="orFileSwfPath != null">,OR_FileSwfPath</if>
+			<if test="orName != null">,OR_Name</if>
+			<if test="orChar != null">,OR_Char</if>
+			<if test="orType != null">,OR_Type</if>
+			<if test="orZip != null">,OR_Zip</if>
+			<if test="orModel != null">,OR_Model</if>
+			
+			<if test="orCategory != null">,OR_Category</if>
+			<if test="orCategoryName != null">,OR_CategoryName</if>
+			<if test="orCateTwLevel != null and orCateTwLevel != ''">,OR_CateTwLevel</if>
+			<if test="orCateTwLevelName != null">,OR_CateTwLevel_Name</if>
+			<if test="orCateThLevel != null and orCateThLevel != ''">,OR_CateThLevel</if>
+			<if test="orCateTHLevelName != null">,OR_CateTHLevel_Name</if>
+			<if test="orCateFoLevel != null and orCateFoLevel != ''">,OR_CateFoLevel</if>
+			<if test="orCateFoLevelName != null">,OR_CateFoLevel_Name</if>
+			<if test="orProvince != null and orProvince != ''">,OR_Province</if>
+			<if test="orCity != null">,OR_City</if>
+			<if test="orPlaceName != null and orPlaceName != ''">,OR_PlaceName</if>
+
+			<if test="orState != null">,OR_State</if>
+			<if test="orStoryState != null">,OR_StoryState</if>
+			<if test="orRecommen != null">,OR_Recommen</if>
+			<if test="orLatinName != null">,OR_LatinName</if>
+			<if test="orDescription != null">,OR_Description</if>
+			<if test="orIdentifier != null">,OR_Identifier</if>
+			<if test="orRemarks != null">,OR_Remarks</if>
+			<if test="orContent != null">,OR_Content</if>
+			<if test="orContentPath != null">,OR_ContentPath</if>
+			<if test="orThumbnail != null">,OR_Thumbnail</if>
+			<if test="orInThum != null">,OR_InThum</if>
+			<if test="s_userID != null">,OR_UserID</if>
+			<if test="s_userLoginAccount != null">,OR_UserAccount</if>
+			,OR_OperateTime
+			<if test="orCreateTime != null and orCreateTime != '' ">,OR_CreateTime</if>
+			<if test="s_userLoginAccount != null">,OR_Creator</if>
+			<if test="orGrade != null">,OR_Grade</if>
+			<if test="orContest != null">,OR_Contest</if>
+			<if test="orIsGrade != null">,OR_IsGrade</if>
+			<if test="orCustom != null">,OR_Custom</if>
+			<if test="orAudio != null">,OR_Audio</if>
+			<if test="orKeywords != null and orKeywords != '' ">,OR_Keywords</if>
+			<if test="orIsShare != null and orIsShare != '' ">,OR_IsShare</if>
+			<if test="orAbout != null and orAbout != '' ">,OR_About</if>	
+			<if test="orRelation != null and orRelation != '' ">,OR_Relation</if>	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="orNO != null">,#{orNO}</if>
+			<if test="orUpload != null">,#{orUpload}</if>
+			<if test="orFileSwf != null">,#{orFileSwf}</if>
+			<if test="orFileSwfPath != null">,#{orFileSwfPath}</if>
+			<if test="orName != null">,#{orName}</if>
+			<if test="orChar != null">,#{orChar}</if>
+			<if test="orType != null">,#{orType}</if>
+			<if test="orZip != null">,#{orZip}</if>
+			<if test="orModel != null">,#{orModel}</if>
+
+			<if test="orCategory != null">,#{orCategory}</if>
+			<if test="orCategoryName != null">,#{orCategoryName}</if>
+			<if test="orCateTwLevel != null and orCateTwLevel != ''">,#{orCateTwLevel}</if>
+			<if test="orCateTwLevelName != null">,#{orCateTwLevelName}</if>
+			<if test="orCateThLevel != null">,#{orCateThLevel}</if>
+			<if test="orCateTHLevelName != null">,#{orCateTHLevelName}</if>
+			<if test="orCateFoLevel != null">,#{orCateFoLevel}</if>
+			<if test="orCateFoLevelName != null">,#{orCateFoLevelName}</if>
+			<if test="orProvince != null">,#{orProvince}</if>
+			<if test="orCity != null">,#{orCity}</if>
+			<if test="orPlaceName != null">,#{orPlaceName}</if>
+			
+			<if test="orState != null">,#{orState}</if>
+			<if test="orStoryState != null">,#{orStoryState}</if>
+			<if test="orRecommen != null">,#{orRecommen}</if>
+			<if test="orLatinName != null">,#{orLatinName}</if>
+			<if test="orDescription != null">,#{orDescription}</if>
+			<if test="orIdentifier != null">,#{orIdentifier}</if>
+			<if test="orRemarks != null">,#{orRemarks}</if>
+			<if test="orContent != null">,#{orContent}</if>
+			<if test="orContentPath != null">,#{orContentPath}</if>
+			<if test="orThumbnail != null">,#{orThumbnail}</if>
+			<if test="orInThum != null">,#{orInThum}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="orCreateTime != null and orCreateTime != '' ">,#{orCreateTime}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="orGrade != null">,#{orGrade}</if>
+			<if test="orContest != null">,#{orContest}</if>
+			<if test="orIsGrade != null">,#{orIsGrade}</if>
+			<if test="orCustom != null">,#{orCustom}</if>
+			<if test="orAudio != null">,#{orAudio}</if>
+			<if test="orKeywords != null and orKeywords != ''">,#{orKeywords}</if>
+			<if test="orIsShare != null and orIsShare != ''">,#{orIsShare}</if>
+			<if test="orAbout != null and orAbout != ''">,#{orAbout}</if>		
+			<if test="orRelation != null and orRelation != ''">,#{orRelation}</if>	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orNO != null">,OR_NO = #{orNO}</if>
+				<if test="orName != null">,OR_Name = #{orName}</if>
+				<if test="orChar != null">,OR_Char = #{orChar}</if>
+				<if test="orType != null">,OR_Type = #{orType}</if> 
+				<if test="orRecommen != null">,OR_Recommen = #{orRecommen}</if> 
+				<if test="orZip != null">,OR_Zip = #{orZip}</if> 
+				<if test="orModel != null">,OR_Model = #{orModel}</if>
+				<if test="orAudio != null">,OR_Audio = #{orAudio}</if>
+				<if test="orKeywords != null">,OR_Keywords = #{orKeywords}</if>    
+
+				<if test="orUpload != null">,OR_Upload = #{orUpload}</if>
+				<if test="orFileSwf != null">,OR_FileSwf = #{orFileSwf}</if>
+				<if test="orFileSwfPath != null">,OR_FileSwfPath = #{orFileSwfPath}</if>
+				<if test="orThumbnail != null">,OR_Thumbnail = #{orThumbnail}</if>
+				<if test="orInThum != null">,OR_InThum = #{orInThum}</if>
+				<if test="orContent != null">,OR_Content = #{orContent}</if>
+				<if test="orContentPath != null">,OR_ContentPath = #{orContentPath}</if>
+				
+				<if test="orCategory != null and orCategory != '' ">,OR_Category = #{orCategory}</if>
+				<if test="orCategoryName != null and orCategoryName != ''">,OR_CategoryName = #{orCategoryName}</if>
+				<if test="orCateTwLevel != '' ">,OR_CateTwLevel = #{orCateTwLevel,jdbcType=BIGINT}</if>
+				<if test="orCateTwLevelName != null and orCateTwLevelName != ''">,OR_CateTwLevel_Name = #{orCateTwLevelName}</if>
+				<if test="orCateThLevel != null and orCateThLevel != ''">,OR_CateThLevel = #{orCateThLevel}</if>
+				<if test="orCateTHLevelName != null">,OR_CateTHLevel_Name = #{orCateTHLevelName}</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != ''">,OR_CateFoLevel = #{orCateFoLevel}</if>
+				<if test="orCateFoLevelName != null">,OR_CateFoLevel_Name = #{orCateFoLevelName}</if>
+				<if test="orProvince != null and orProvince != ''">,OR_Province = #{orProvince}</if>
+				<if test="orCity != null">,OR_City = #{orCity}</if>
+				<if test="orPlaceName != null and orPlaceName != ''">,OR_PlaceName = #{orPlaceName}</if>
+				
+				<if test="orLatinName != null">,OR_LatinName = #{orLatinName}</if>
+				<if test="orDescription != null">,OR_Description = #{orDescription}</if>
+				<if test="orIdentifier != null">,OR_Identifier = #{orIdentifier}</if>
+				<if test="orRemarks != null">,OR_Remarks = #{orRemarks}</if>
+				
+				<if test="s_userID != null">,OR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,OR_UserAccount = #{s_userLoginAccount}</if>
+				,OR_OperateTime = now()
+				<if test="orCreateTime != null and orCreateTime != '' ">,OR_CreateTime = #{orCreateTime}</if>
+				<if test="orGrade != null">,OR_Grade = #{orGrade}</if>
+				<if test="orContest != null">,OR_Contest= #{orContest}</if>
+				<if test="orIsGrade != null">,OR_IsGrade = #{orIsGrade}</if>
+				
+				<if test="orCustom != null">,OR_Custom = #{orCustom}</if>
+				<if test="orLatinName != null">,OR_LatinName = #{orLatinName}</if>
+				<if test="orAbout != null">,OR_About = #{orAbout}</if>	
+				<if test="orIsShare != null">,OR_IsShare = #{orIsShare}</if>
+				<if test="orRelation != null">,OR_Relation = #{orRelation}</if>
+			</trim>
+		</set>
+		where OR_ID=${orID}
+	</update>
+	
+	<select id="select_state" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select OR_State from res_observation_room
+		where  OR_Upload = #{orUpload} and OR_FileSwf = #{orFileSwf}
+	</select>
+	
+	<update id="update_state" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orState != null">,OR_State = #{orState}</if>
+				,OR_OperateTime = now()
+			</trim>
+		</set>
+		where  OR_Upload = #{orUpload} and OR_FileSwf = #{orFileSwf}
+	</update>
+	<update id="update_upload" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orUpload != null">,OR_Upload = #{orUpload}</if>
+
+				<if test="orFileSwf != null">,OR_FileSwf = #{orFileSwf}</if>
+				<if test="s_userID != null">,OR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,OR_UserAccount = #{s_userLoginAccount}</if>
+				,OR_OperateTime = now()
+			</trim>
+		</set>
+		where OR_ID=${orID}
+	</update>
+	
+	<update id="update_is_grade" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orIsGrade != null">,OR_IsGrade = #{orIsGrade}</if>
+				<if test="s_userID != null">,OR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,OR_UserAccount = #{s_userLoginAccount}</if>
+				,OR_OperateTime = now()
+			</trim>
+		</set>
+		where OR_ID=${orID}
+	</update>
+
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_observation_room where OR_ID in (${orID})
+		</trim>
+	</delete>
+		<select id="select_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type,  observation.OR_FileSwfPath,
+			 observation.OR_LatinName,observation.OR_About,observation.OR_Relation,
+			   observation.OR_LatinNameID,observation.OR_Contest,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,
+			observation.OR_UserID, observation.OR_UserAccount,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator ,observation.OR_Grade ,
+			
+			   observation.OR_Custom
+		from 
+			res_observation_room observation
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keyword != null and keyword != ''">
+					and observation.OR_Name like '%${keyword}%' and observation.OR_Category='${orCategory}'
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	<select id="select_storystate" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select OR_StoryState from res_observation_room
+		where  OR_Upload = #{orUpload}
+	</select>
+	
+	<update id="update_storystate" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orStoryState != null">,OR_StoryState = #{orStoryState}</if>
+				,OR_OperateTime = now()
+			</trim>
+		</set>
+		where  OR_Upload = '${orUpload}'
+	</update>
+
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orIsShare != null">,OR_IsShare = ${orIsShare}</if>
+			</trim>
+		</set>
+		where  OR_ID = ${orID}
+	</update>
+
+	<update id="update_clickLile" parameterType="java.util.HashMap">
+		update res_observation_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="orCountLike != null">,OR_CountLike = #{orCountLike}</if>
+			</trim>
+		</set>
+		where  OR_id = '${orID}'
+	</update>
+	<select id="select_page_category" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,
+			observation.OR_LatinName,
+			observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,observation.OR_Contest,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator,
+			observation.OR_Custom,
+				(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  orPath
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				<if test="orCateThLevel != null and orCateThLevel != '' "> and observation.OR_CateThLevel = '${orCateThLevel}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+				<if test="orCateFiveLevel != null and orCateFiveLevel != '' "> and observation.OR_CateFiveLevel = '${orCateFiveLevel}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '1011'</if>
+				<if test="orAbout != null and orAbout != '' "> and observation.OR_ID not in (${orAbout}) </if>
+			</trim>
+		</where>
+		ORDER BY observation.OR_ID desc
+	</select>
+	<select id="select_page_category_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,
+			observation.OR_LatinName,
+			observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,observation.OR_Contest,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator,
+			observation.OR_Custom,
+				(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  orPath
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				<if test="orCateTHLevel != null and orCateTHwLevel != '' "> and observation.OR_CateTHLevel = '${orCateTHLevel}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+				<if test="orCateFiveLevel != null and orCateFiveLevel != '' "> and observation.OR_CateFiveLevel = '${orCateFiveLevel}'</if>
+				<if test="orType != null and orType != '' "> and observation.OR_Type = '1011'</if>
+			</trim>
+		</where>
+		ORDER BY observation.OR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_category_pic" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,
+			observation.OR_Audio,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,
+			observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,
+			observation.OR_Category, observation.OR_CategoryName,
+			 observation.OR_Recommen, observation.OR_NO, observation.OR_Upload,
+			  observation.OR_Name,
+			observation.OR_Type, observation.OR_About,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,
+		
+				(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  orPath
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="orCategory != null and orCategory != '' "> and observation.OR_Category = '${orCategory}'</if>
+				<if test="orCateTwLevel != null and orCateTwLevel != '' "> and observation.OR_CateTwLevel = '${orCateTwLevel}'</if>
+				<if test="orCateThLevel != null and orCateThLevel != '' "> and observation.OR_CateThLevel = '${orCateThLevel}'</if>
+				<if test="orCateFoLevel != null and orCateFoLevel != '' "> and observation.OR_CateFoLevel = '${orCateFoLevel}'</if>
+				<if test="orCateFiveLevel != null and orCateFiveLevel != '' "> and observation.OR_CateFiveLevel = '${orCateFiveLevel}'</if>
+			    <if test="orType != null and orType != '' "> and observation.OR_Type = '1011'</if>
+				<if test="orID != null and orID != '' "> and observation.OR_ID != ${orID}</if>
+			</trim>
+		</where>
+		ORDER BY observation.OR_ID desc
+		limit 30
+	</select>
+		<select id="select_page_keywords" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_CountLike,observation.OR_Keywords,observation.OR_Audio,observation.OR_ContentPath,observation.OR_StoryState,observation.OR_Model,observation.OR_CateTwLevel,observation.OR_CateTwLevel_Name,observation.OR_CateTHLevel_Name,observation.OR_CateFoLevel_Name,observation.OR_Province,observation.OR_City,observation.OR_PlaceName,observation.OR_Zip,observation.OR_State,observation.OR_Content,observation.OR_Category, observation.OR_CategoryName, observation.OR_Recommen, observation.OR_NO, observation.OR_Upload, observation.OR_Name,observation.OR_FileSwf,
+			observation.OR_Type, observation.OR_FileSwfPath,
+			observation.OR_LatinName,
+			observation.OR_LatinNameID,observation.OR_About,observation.OR_Relation,
+			observation.OR_Description, observation.OR_Identifier,
+			observation.OR_Remarks, observation.OR_Thumbnail,observation.OR_InThum,observation.OR_Contest,
+			observation.OR_UserID, observation.OR_UserAccount,observation.OR_Grade ,
+			observation.OR_OperateTime, DATE_FORMAT(observation.OR_CreateTime,'%Y-%m-%d')  OR_CreateTime,
+			observation.OR_Creator,
+			observation.OR_Custom,
+				(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  orPath
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		where ${sqlParamor}  and OR_ID not in(#{notInID})
+		ORDER BY observation.OR_ID desc
+	</select>
+	<select id="select_page_keywords_little" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			observation.OR_ID,observation.OR_Name,
+				(select c.CATE_Path from res_category c where observation.OR_Category=c.CATE_ID ) as  orPath
+		from 
+			res_observation_room observation
+			left join res_category c on c.CATE_ID = observation.OR_CateTwLevel
+		where ${sqlParamor} and OR_ID not in(#{notInID})
+		ORDER BY observation.OR_ID desc
+	</select>
+</mapper>

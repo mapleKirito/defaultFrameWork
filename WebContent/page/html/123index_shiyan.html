@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+
+function init(path){
+	var object_play = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="'+oHight+'" width="'+oWidth+'"><param name="movie" value="'+path+'" /><embed height="'+oHight+'" pluginspage="http://www.macromedia.com/go/getflashplayer" src="'+path+'" type="application/x-shockwave-flash" width="'+oWidth+'"></embed></object>';
+	$(".lrUpload").html(object_play);	
+}
+
+
+function loadComplete(){
+	
+	var oHight = 480,oWidth=800;
+	
+	var object_play = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" height="'+oHight+'" width="'+oWidth+'"><param name="movie" value="###shiyan###" /><embed height="'+oHight+'" pluginspage="http://www.macromedia.com/go/getflashplayer" src="###shiyan###" type="application/x-shockwave-flash" width="'+oWidth+'"></embed></object>';
+	$(".lrUpload").html(object_play);	
+	
+	
+	$(".vp").each(function(){
+		$(this).click(function(){
+			var str=$(this).attr("fpath");
+			init(str);
+		});
+	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+
+
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+		
+		
+		$("#allmap").click(function(){
+			//alert("全屏地图");
+			window.maplistner.openMap($("#dingwei").val());
+		});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+</script>
+</head>
+<body style="background:url('page/html/34/24.png');margin: 0px;">
+<input type="hidden" value="###dingwei###" id="dingwei" />
+	<table>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<img class="icon" style="margin-left: 20px;" src="page/html/34/name.png" border="0" alt="">
+						</td>
+						<td>
+							<table style="margin-left:100px;">
+								<tr>
+									###pageList###
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;position: relative;top:-10px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<span style="font-size: 35px;margin-left: 20px;">###name###</span>
+				<div id="music" style="display: none;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td  style="vertical-align:top;">
+				<table cellspacing="10px">
+						<tr>
+							<td >
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<div class="lrUpload" style="position:relative;width:800px;height:480px;float: right;"></div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td  style="vertical-align:top;">
+								<table >
+										
+										<tr>
+											<td>
+												<table>
+														<tr>
+															<td >
+																<div style="width:265px; height:330px;overflow-y:auto;overflow-x:hidden;font-size: 14px;  ">
+																	<table border="1" width="100%" cellspacing="0" cellpadding="0" style="line-height: 30px;table-layout: fixed;word-wrap:break-word;">
+																		###infoTable###
+																		
+																	</table>
+																</div>
+														   </td>									
+													    </tr>
+												</table>
+										   </td>									
+									    </tr>
+								</table>
+						   </td>
+						
+						</tr>
+					</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			###content###
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/1368269094890_middle.gif");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

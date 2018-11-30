@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.xrg//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="xiaoshiguan">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="xrID" column="XR_ID" />
+		<result property="xrNO" column="XR_NO" />
+		<result property="xrName" column="XR_Name" />
+		<result property="xrChar" column="XR_Char" />
+		<result property="xrRecommen" column="XR_Recommen" /> 
+		<result property="xrType" column="XR_Type" />
+		<result property="xrZip" column="XR_Zip" />
+		<result property="xrAudio" column="XR_Audio" />
+		<result property="xrUpload" column="XR_Upload" />
+		<result property="xrFileSwf" column="XR_FileSwf" />
+		<result property="xrFileSwfPath" column="XR_FileSwfPath" />	
+		<result property="xrThumbnail" column="XR_Thumbnail" />
+		<result property="xrInThum" column="XR_InThum" />
+		<result property="xrModel" column="XR_Model" />
+		
+		<result property="xrCategory" column="XR_Category" />
+		<result property="xrCategoryName" column="XR_CategoryName" />
+		<result property="xrCateTwLevel" column="XR_CateTwLevel" />
+		<result property="xrCateTwLevelName" column="XR_CateTwLevel_Name" />
+		<result property="xrCateThLevel" column="XR_CateThLevel" />
+		<result property="xrCateThLevelName" column="XR_CateTHLevel_Name" />
+		<result property="xrCateFoLevel" column="XR_CateFoLevel" />
+		<result property="xrCateFoLevelName" column="XR_CateFoLevel_Name" />
+		<result property="xrCateFiveLevel" column="XR_CateFiveLevel" />
+		<result property="xrCateFiveLevelName" column="XR_CateFiveLevel_Name" />
+		
+		
+		<result property="xrProvince" column="XR_Province" />
+		<result property="xrCity" column="XR_City" />
+		<result property="xrPlaceName" column="XR_PlaceName" />
+		
+		<result property="xrIsGrade" column="XR_IsGrade" />
+		<result property="xrGrade" column="XR_Grade" />
+		<result property="xrContest" column="XR_Contest" />
+		<result property="xrCustom" column="XR_Custom" />
+		<result property="xrLatinNameID" column="XR_LatinNameID" />
+		<result property="xrLatinName" column="XR_LatinName" />
+		<result property="xrDescription" column="XR_Description" />
+		<result property="xrIdentifier" column="XR_Identifier" />
+		<result property="xrRemarks" column="XR_Remarks" />
+		
+		<result property="xrContent" column="XR_Content" />
+		<result property="xrContentPath" column="XR_ContentPath" />
+		<result property="xrUserID" column="XR_UserID" />
+		<result property="xrUserAccount" column="XR_UserAccount" />
+		<result property="xrOperateTime" column="XR_OperateTime" />
+		<result property="xrCreateTime" column="XR_CreateTime" />
+		<result property="xrCreatxr" column="XR_Creator" />
+		<result property="xrState" column="XR_State" />
+		<result property="xrStoryState" column="XR_StoryState" />
+		<result property="xrKeywords" column="XR_Keywords" />
+		<result property="xrCountLike" column="XR_CountLike" />
+		<result property="xrIsShare" column="XR_IsShare" />
+		<result property="xrAbout" column="XR_About" />
+		<result property="xrRelation" column="XR_Relation" />
+	</resultMap>
+<!-- 修改 -->
+	<select id="select_by_name" resultType="java.lang.String" parameterType="java.util.HashMap">
+		select
+			DISTINCT ( xiaoshiguan.XR_Name )
+		from
+			res_xiaoshiguan_room xiaoshiguan
+		where
+			xiaoshiguan.XR_Name like '${erName}%' xr xiaoshiguan.XR_Char like '${erName}%'
+	</select>	
+<!-- 修改 -->
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			   xiaoshiguan.XR_Custom,
+			xiaoshiguan.XR_Creator ,xiaoshiguan.XR_IsGrade ,xiaoshiguan.XR_Grade 
+		from res_xiaoshiguan_room xiaoshiguan
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,  xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator ,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_CategoryName ,
+			   xiaoshiguan.XR_Custom,
+			   	(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xr_Path
+	
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+	</select>
+	<select id="select_static_videolist" resultMap="convertResult" parameterType="java.util.HashMap">
+		select XR_Name,XR_Thumbnail,XR_Upload from res_xiaoshiguan_room where XR_Type='1084' and XR_Name like '%${name}%'
+	</select>
+	<select id="select_by_code" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,  xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator ,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_CategoryName ,xiaoshiguan.XR_CateThLevel,xiaoshiguan.XR_CateFoLevel,
+			xiaoshiguan.XR_CateFiveLevel,
+			xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,
+			xiaoshiguan.XR_CateFiveLevel_Name,
+			   xiaoshiguan.XR_Custom,
+			   	(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xr_Path
+	
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+		where xiaoshiguan.XR_NO = '${code}'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,
+			xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,
+			xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,
+			xiaoshiguan.XR_CateThLevel,xiaoshiguan.XR_CateFoLevel,
+			xiaoshiguan.XR_CateFiveLevel,
+			xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,
+			xiaoshiguan.XR_CateFiveLevel_Name,
+			xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,
+			xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, 
+			xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,  xiaoshiguan.XR_FileSwfPath,  xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Keywords,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator ,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_CategoryName ,
+			xiaoshiguan.XR_IsShare,
+			
+			   xiaoshiguan.XR_Custom,
+			   	(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  XR_Path
+	
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+		where xiaoshiguan.XR_ID = ${xrID}
+	</select>
+	
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,
+			xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,
+			xiaoshiguan.XR_CateThLevel,xiaoshiguan.XR_CateFoLevel,
+			xiaoshiguan.XR_CateFiveLevel,
+			xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,
+			xiaoshiguan.XR_CateFiveLevel_Name,
+			xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,  xiaoshiguan.XR_FileSwfPath,  xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			 xiaoshiguan.XR_LatinName,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator ,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_CateThLevel,xiaoshiguan.XR_CateFoLevel,
+			xiaoshiguan.XR_CateFiveLevel,
+			xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,
+			xiaoshiguan.XR_CateFiveLevel_Name,
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+		where xiaoshiguan.XR_ID in (${xrID})
+	</select>
+	
+	<select id="select_count_by_categxry" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from
+			res_xiaoshiguan_room xiaoshiguan
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,  xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			 xiaoshiguan.XR_LatinName,
+			   xiaoshiguan.XR_LatinNameID,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+<!-- 			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel -->
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrName != null and xrName != ''">
+				and xiaoshiguan.XR_Name like '%${xrName}%'
+				</if>
+				<if test="xrIsGrade != null and xrIsGrade != ''">
+				and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<!-- <if test="catePath != null and catePath != ''">
+				and c.CATE_Path like '${catePath}%'
+				</if> -->
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '%${keywxrd}%'  
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and xiaoshiguan.XR_IsShare = ${IsShare}</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+			
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				<if test="xrCateTHLevelName != null and xrCateTHLevelName != '' "> and xiaoshiguan.XR_CateTHLevel_Name = '${xrCateTHLevelName}'</if>
+				<if test="xrCateTHLevel != null and xrCateTHLevel != '' "> and xiaoshiguan.XR_CateTHLevel = '${xrCateTHLevel}'</if>
+				<if test="xrCateFoLevelName != null and xrCateFoLevelName != '' "> and xiaoshiguan.XR_CateFoLevel_Name = '${xrCateFoLevelName}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(xiaoshiguan.XR_ID) from 
+			res_xiaoshiguan_room xiaoshiguan
+<!-- 			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel -->
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrName != null and xrName != ''">
+				and xiaoshiguan.XR_Name like '%${xrName}%'
+				</if>
+				<if test="xrIsGrade != null and xrIsGrade != ''">
+				and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<!-- <if test="catePath != null and catePath != ''">
+				and c.CATE_Path like '${catePath}%'
+				</if> -->
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '%${keywxrd}%'  
+				</if>
+				<if test="IsShare != null and IsShare != '' "> and xiaoshiguan.XR_IsShare = ${IsShare}</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+			
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				<if test="xrCateTHLevelName != null and xrCateTHLevelName != '' "> and xiaoshiguan.XR_CateTHLevel_Name = '${xrCateTHLevelName}'</if>
+				<if test="xrCateTHLevel != null and xrCateTHLevel != '' "> and xiaoshiguan.XR_CateTHLevel = '${xrCateTHLevel}'</if>
+				<if test="xrCateFoLevelName != null and xrCateFoLevelName != '' "> and xiaoshiguan.XR_CateFoLevel_Name = '${xrCateFoLevelName}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_quick" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrName != null and xrName != ''">
+				and xiaoshiguan.XR_Name like '%${xrName}%'
+				</if>
+				<if test="xrIsGrade != null">
+				and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '%${keywxrd}%'  
+				</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+			
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				
+				<if test="xrCateThLevel != null and xrCateThLevel != '' "> and xiaoshiguan.XR_CateThLevel = '${xrCateThLevel}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+				<if test="xrCateFiveLevel != null and xrCateFiveLevel != '' "> and xiaoshiguan.XR_CateFiveLevel = '${xrCateFiveLevel}'</if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_quick_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_xiaoshiguan_room xiaoshiguan left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrName != null and xrName != ''">
+				and xiaoshiguan.XR_Name like '%${xrName}%'
+				</if>
+				<if test="xrIsGrade != null">
+				and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '%${keywxrd}%' 
+				</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				<if test="xrCateThLevel != null and xrCateThLevel != '' "> and xiaoshiguan.XR_CateThLevel = '${xrCateThLevel}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+				<if test="xrCateFiveLevel != null and xrCateFiveLevel != '' "> and xiaoshiguan.XR_CateFiveLevel = '${xrCateFiveLevel}'</if>
+			
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_OZOO_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,xiaoshiguan.XR_FileSwfPath,   
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '${keywxrd}%'   xrder by xiaoshiguan.XR_Name desc
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_recom_select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,xiaoshiguan.XR_FileSwfPath,   
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '%${keywxrd}%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page_smallselect" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,xiaoshiguan.XR_FileSwfPath,   
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name like '%${keywxrd}%'  
+				</if>
+			</trim>
+		</where>
+		<if test="keywxrd != '' and keywxrd != null ">xrder by xiaoshiguan.XR_Name='${keywxrd}' desc,xiaoshiguan.XR_Name</if>
+	</select>
+	<select id="select_page_other" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,   
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrName != null and xrName != ''">
+				and xiaoshiguan.XR_Name like '${xrName}'
+				</if>
+				<if test="xrIsGrade != null">
+				and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<if test="catePath != null ">
+				and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keywxrd != null and keywxrd != ''">
+				and xiaoshiguan.XR_Name = '${keywxrd}'  
+				</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+				
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+			</trim>
+		</where>
+		<if test="xrID != '' and xrID != null ">xrder by xiaoshiguan.XR_ID='${xrID}' desc,xiaoshiguan.XR_ID</if>
+	</select>
+	
+	<select id="select_page_other_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,c.CATE_Path as xrPath, xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName, xiaoshiguan.XR_FileSwfPath,  
+			xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != '' and flag == 'animal'">
+					and ( xiaoshiguan.XR_Name like '%${keywxrd}%'  and  (XR_CateTwLevel='1105' xr  XR_CateTwLevel='1078'))
+				</if>
+				<if test="flag == 'plant' and keywxrd != '' and keywxrd != null">
+					and ( xiaoshiguan.XR_Name like '%${keywxrd}%' and  (XR_CateTwLevel='1106' xr  XR_CateTwLevel='1078' ) )
+				</if>
+				<if test="flag == 'other' and keywxrd != '' and keywxrd != null">
+					and ( xiaoshiguan.XR_Name like '%${keywxrd}%'  )
+				</if>
+				
+			</trim>
+		</where>
+		
+		 
+		
+	</select>
+	<select id="select_page_other_about_manager" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,c.CATE_Path as xrPath, xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName, xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,			
+			xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="flag == 'plant' and keywxrd != null and keywxrd != '' ">
+					and ( xiaoshiguan.XR_Name like '%${keywxrd}%'  and  (XR_CateTwLevel='1106' xr  XR_CateTwLevel='1078') and  xiaoshiguan.XR_Name != '${keywxrd}' )
+				</if>
+				<if test="flag == 'animal' and keywxrd != '' and keywxrd != null">
+					and ( xiaoshiguan.XR_Name like '%${keywxrd}%' and  XR_CateTwLevel='1105' and  xiaoshiguan.XR_Name != '${keywxrd}' )
+				</if>
+				<if test="flag == 'other' and keywxrd != '' and keywxrd != null">
+					and xiaoshiguan.XR_Name like '%${keywxrd}%'   and  xiaoshiguan.XR_Name != '${keywxrd}'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,c.CATE_Path as path,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' ">and (xiaoshiguan.XR_UserID != '${s_userID}' xr xiaoshiguan.XR_UserID is null)</if>
+				${values}
+
+
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(*)
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<if test="s_userID != null and s_userID != '' "> and (xiaoshiguan.XR_UserID != '${s_userID}' xr xiaoshiguan.XR_UserID is null)</if>
+				${values}
+
+		</where>
+	</select>
+	
+	
+	<select id="select_teacher_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,c.CATE_Path as path,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,xiaoshiguan.XR_FileSwfPath,  
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_Contest,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator  ,
+			xiaoshiguan.XR_IsShare,
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and xiaoshiguan.XR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and xiaoshiguan.XR_UserID = '${userID}'</if>
+				<if test="xrName != null and xrName != ''">
+					and xiaoshiguan.XR_Name like '${xrName}%'
+				</if>
+				<if test="xrIsGrade != null">
+					and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and xiaoshiguan.XR_IsShare = ${isShare}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keywxrd != null and keywxrd != ''">
+					and xiaoshiguan.XR_Name like '%${keywxrd}%'
+				</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+			</trim>
+		</where>
+		 ORDER BY xiaoshiguan.XR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_teacher_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_xiaoshiguan_room xiaoshiguan left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="account !=null and account!=''">
+					and xiaoshiguan.XR_Creator='${account}'
+				</if>
+				<if test="userID != null and userID != '' "> and xiaoshiguan.XR_UserID = '${userID}'</if>
+				<if test="xrName != null and xrName != ''">
+					and xiaoshiguan.XR_Name like '${xrName}%'
+				</if>
+				<if test="xrIsGrade != null">
+					and xiaoshiguan.XR_IsGrade = ${xrIsGrade}
+				</if>
+				<if test="isShare != null and isShare != ''">
+					and xiaoshiguan.XR_IsShare = ${isShare}
+				</if>
+				<if test="catePath != null ">
+					and c.CATE_Path like '${catePath}%'
+				</if>
+				<if test="keywxrd != null and keywxrd != ''">
+					and xiaoshiguan.XR_Name like '%${keywxrd}%'
+				</if>
+				<if test="categxry != null and categxry != '' "> and c.CATE_Path like '%,${categxry},%'</if>
+				<if test="xrNO != null and xrNO != '' "> and xiaoshiguan.XR_NO = '${xrNO}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '${xrType}'</if>
+				<if test="xrLatinName != null and xrLatinName != '' "> and xiaoshiguan.XR_LatinName = '${xrLatinName}'</if>
+				<if test="xrDescription != null and xrDescription != '' "> and xiaoshiguan.XR_Description = '${xrDescription}'</if>
+				<if test="xrIdentifier != null and xrIdentifier != '' "> and xiaoshiguan.XR_Identifier = '${xrIdentifier}'</if>
+				<if test="xrUserID != null and xrUserID != '' "> and xiaoshiguan.XR_UserID = '${xrUserID}'</if>
+				<if test="xrUserAccount != null and xrUserAccount != '' "> and xiaoshiguan.XR_UserAccount = '${xrUserAccount}'</if>
+				<if test="xrOperateTime != null and xrOperateTime != '' "> and xiaoshiguan.XR_OperateTime = '${xrOperateTime}'</if>
+				<if test="xrCreateTime != null and xrCreateTime != '' "> and xiaoshiguan.XR_CreateTime = '${xrCreateTime}'</if>
+				<if test="xrCreatxr != null and xrCreatxr != '' "> and xiaoshiguan.XR_Creator = '${xrCreatxr}'</if>
+				<if test="xrIsGrade != null and xrIsGrade != '' "> and xiaoshiguan.XR_IsGrade = '${xrIsGrade}'</if>
+				<if test="xrLatinNameID != null and xrLatinNameID != '' "> and xiaoshiguan.XR_LatinNameID = '${xrLatinNameID}'</if>
+				
+				<if test="xrCategxryName != null and xrCategxryName != '' "> and xiaoshiguan.XR_CategoryName = '${xrCategxryName}'</if>
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != '' "> and xiaoshiguan.XR_CateTwLevel_Name = '${xrCateTwLevelName}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_xiaoshiguan_room
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="xrNO != null">,XR_NO</if>
+			<if test="xrUpload != null">,XR_Upload</if> 
+			<if test="xrFileSwf != null">,XR_FileSwf</if>
+			<if test="xrFileSwfPath != null">,XR_FileSwfPath</if>
+			<if test="xrName != null">,XR_Name</if>
+			<if test="xrChar != null">,XR_Char</if>
+			<if test="xrType != null">,XR_Type</if>
+			<if test="xrZip != null">,XR_Zip</if>
+			<if test="xrModel != null">,XR_Model</if>
+			
+			<if test="xrCategory != null">,XR_Category</if>
+			<if test="xrCategoryName != null">,XR_CategoryName</if>
+			<if test="xrCateTwLevel != null and xrCateTwLevel != ''">,XR_CateTwLevel</if>
+			<if test="xrCateTwLevelName != null">,XR_CateTwLevel_Name</if>
+			<if test="xrCateThLevel != null and xrCateThLevel != ''">,XR_CateThLevel</if>
+			<if test="xrCateTHLevelName != null">,XR_CateTHLevel_Name</if>
+			<if test="xrCateFoLevel != null and xrCateFoLevel != ''">,XR_CateFoLevel</if>
+			<if test="xrCateFoLevelName != null">,XR_CateFoLevel_Name</if>
+			<if test="xrProvince != null and xrProvince != ''">,XR_Province</if>
+			<if test="xrCity != null">,XR_City</if>
+			<if test="xrPlaceName != null and xrPlaceName != ''">,XR_PlaceName</if>
+
+			<if test="xrState != null">,XR_State</if>
+			<if test="xrStoryState != null">,XR_StoryState</if>
+			<if test="xrRecommen != null">,XR_Recommen</if>
+			<if test="xrLatinName != null">,XR_LatinName</if>
+			<if test="xrDescription != null">,XR_Description</if>
+			<if test="xrIdentifier != null">,XR_Identifier</if>
+			<if test="xrRemarks != null">,XR_Remarks</if>
+			<if test="xrContent != null">,XR_Content</if>
+			<if test="xrContentPath != null">,XR_ContentPath</if>
+			<if test="xrThumbnail != null">,XR_Thumbnail</if>
+			<if test="xrInThum != null">,XR_InThum</if>
+			<if test="s_userID != null">,XR_UserID</if>
+			<if test="s_userLoginAccount != null">,XR_UserAccount</if>
+			,XR_OperateTime
+			<if test="xrCreateTime != null and xrCreateTime != '' ">,XR_CreateTime</if>
+			<if test="s_userLoginAccount != null">,XR_Creator</if>
+			<if test="xrGrade != null">,XR_Grade</if>
+			<if test="xrContest != null">,XR_Contest</if>
+			<if test="xrIsGrade != null">,XR_IsGrade</if>
+			<if test="xrCustom != null">,XR_Custom</if>
+			<if test="xrAudio != null">,XR_Audio</if>
+			<if test="xrKeywords != null and xrKeywords != '' ">,XR_Keywords</if>
+			<if test="xrIsShare != null and xrIsShare != '' ">,XR_IsShare</if>
+			<if test="xrAbout != null and xrAbout != '' ">,XR_About</if>	
+			<if test="xrRelation != null and xrRelation != '' ">,XR_Relation</if>	
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="xrNO != null">,#{xrNO}</if>
+			<if test="xrUpload != null">,#{xrUpload}</if>
+			<if test="xrFileSwf != null">,#{xrFileSwf}</if>
+			<if test="xrFileSwfPath != null">,#{xrFileSwfPath}</if>
+			<if test="xrName != null">,#{xrName}</if>
+			<if test="xrChar != null">,#{xrChar}</if>
+			<if test="xrType != null">,#{xrType}</if>
+			<if test="xrZip != null">,#{xrZip}</if>
+			<if test="xrModel != null">,#{xrModel}</if>
+
+			<if test="xrCategory != null">,#{xrCategory}</if>
+			<if test="xrCategoryName != null">,#{xrCategoryName}</if>
+			<if test="xrCateTwLevel != null and xrCateTwLevel != ''">,#{xrCateTwLevel}</if>
+			<if test="xrCateTwLevelName != null">,#{xrCateTwLevelName}</if>
+			<if test="xrCateThLevel != null">,#{xrCateThLevel}</if>
+			<if test="xrCateTHLevelName != null">,#{xrCateTHLevelName}</if>
+			<if test="xrCateFoLevel != null">,#{xrCateFoLevel}</if>
+			<if test="xrCateFoLevelName != null">,#{xrCateFoLevelName}</if>
+			<if test="xrProvince != null">,#{xrProvince}</if>
+			<if test="xrCity != null">,#{xrCity}</if>
+			<if test="xrPlaceName != null">,#{xrPlaceName}</if>
+			
+			<if test="xrState != null">,#{xrState}</if>
+			<if test="xrStoryState != null">,#{xrStoryState}</if>
+			<if test="xrRecommen != null">,#{xrRecommen}</if>
+			<if test="xrLatinName != null">,#{xrLatinName}</if>
+			<if test="xrDescription != null">,#{xrDescription}</if>
+			<if test="xrIdentifier != null">,#{xrIdentifier}</if>
+			<if test="xrRemarks != null">,#{xrRemarks}</if>
+			<if test="xrContent != null">,#{xrContent}</if>
+			<if test="xrContentPath != null">,#{xrContentPath}</if>
+			<if test="xrThumbnail != null">,#{xrThumbnail}</if>
+			<if test="xrInThum != null">,#{xrInThum}</if>
+			<if test="s_userID != null">,#{s_userID}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="xrCreateTime != null and xrCreateTime != '' ">,#{xrCreateTime}</if>
+			<if test="s_userLoginAccount != null">,#{s_userLoginAccount}</if>
+			<if test="xrGrade != null">,#{xrGrade}</if>
+			<if test="xrContest != null">,#{xrContest}</if>
+			<if test="xrIsGrade != null">,#{xrIsGrade}</if>
+			<if test="xrCustom != null">,#{xrCustom}</if>
+			<if test="xrAudio != null">,#{xrAudio}</if>
+			<if test="xrKeywords != null and xrKeywords != ''">,#{xrKeywords}</if>
+			<if test="xrIsShare != null and xrIsShare != ''">,#{xrIsShare}</if>
+			<if test="xrAbout != null and xrAbout != ''">,#{xrAbout}</if>		
+			<if test="xrRelation != null and xrRelation != ''">,#{xrRelation}</if>	
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrNO != null">,XR_NO = #{xrNO}</if>
+				<if test="xrName != null">,XR_Name = #{xrName}</if>
+				<if test="xrChar != null">,XR_Char = #{xrChar}</if>
+				<if test="xrType != null">,XR_Type = #{xrType}</if> 
+				<if test="xrRecommen != null">,XR_Recommen = #{xrRecommen}</if> 
+				<if test="xrZip != null">,XR_Zip = #{xrZip}</if> 
+				<if test="xrModel != null">,XR_Model = #{xrModel}</if>
+				<if test="xrAudio != null">,XR_Audio = #{xrAudio}</if>
+				<if test="xrKeywords != null">,XR_Keywords = #{xrKeywords}</if>    
+
+				<if test="xrUpload != null">,XR_Upload = #{xrUpload}</if>
+				<if test="xrFileSwf != null">,XR_FileSwf = #{xrFileSwf}</if>
+				<if test="xrFileSwfPath != null">,XR_FileSwfPath = #{xrFileSwfPath}</if>
+				<if test="xrThumbnail != null">,XR_Thumbnail = #{xrThumbnail}</if>
+				<if test="xrInThum != null">,XR_InThum = #{xrInThum}</if>
+				<if test="xrContent != null">,XR_Content = #{xrContent}</if>
+				<if test="xrContentPath != null">,XR_ContentPath = #{xrContentPath}</if>
+				
+				<if test="xrCategxry != null and xrCategxry != '' ">,XR_Category = #{xrCategxry}</if>
+				<if test="xrCategxryName != null and xrCategxryName != ''">,XR_CategoryName = #{xrCategxryName}</if>
+				<if test="xrCateTwLevel != '' ">,XR_CateTwLevel = #{xrCateTwLevel,jdbcType=BIGINT}</if>
+				<if test="xrCateTwLevelName != null and xrCateTwLevelName != ''">,XR_CateTwLevel_Name = #{xrCateTwLevelName}</if>
+				<if test="xrCateThLevel != null and xrCateThLevel != ''">,XR_CateThLevel = #{xrCateThLevel}</if>
+				<if test="xrCateTHLevelName != null">,XR_CateTHLevel_Name = #{xrCateTHLevelName}</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != ''">,XR_CateFoLevel = #{xrCateFoLevel}</if>
+				<if test="xrCateFoLevelName != null">,XR_CateFoLevel_Name = #{xrCateFoLevelName}</if>
+				<if test="xrProvince != null and xrProvince != ''">,XR_Province = #{xrProvince}</if>
+				<if test="xrCity != null">,XR_City = #{xrCity}</if>
+				<if test="xrPlaceName != null and xrPlaceName != ''">,XR_PlaceName = #{xrPlaceName}</if>
+				
+				<if test="xrLatinName != null">,XR_LatinName = #{xrLatinName}</if>
+				<if test="xrDescription != null">,XR_Description = #{xrDescription}</if>
+				<if test="xrIdentifier != null">,XR_Identifier = #{xrIdentifier}</if>
+				<if test="xrRemarks != null">,XR_Remarks = #{xrRemarks}</if>
+				
+				<if test="s_userID != null">,XR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,XR_UserAccount = #{s_userLoginAccount}</if>
+				,XR_OperateTime = now()
+				<if test="xrCreateTime != null and xrCreateTime != '' ">,XR_CreateTime = #{xrCreateTime}</if>
+				<if test="xrGrade != null">,XR_Grade = #{xrGrade}</if>
+				<if test="xrContest != null">,XR_Contest= #{xrContest}</if>
+				<if test="xrIsGrade != null">,XR_IsGrade = #{xrIsGrade}</if>
+				
+				<if test="xrCustom != null">,XR_Custom = #{xrCustom}</if>
+				<if test="xrLatinName != null">,XR_LatinName = #{xrLatinName}</if>
+				<if test="xrAbout != null">,XR_About = #{xrAbout}</if>	
+				<if test="xrIsShare != null">,XR_IsShare = #{xrIsShare}</if>
+				<if test="xrRelation != null">,XR_Relation = #{xrRelation}</if>
+			</trim>
+		</set>
+		where XR_ID=${xrID}
+	</update>
+	
+	<select id="select_state" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select XR_State from res_xiaoshiguan_room
+		where  XR_Upload = #{xrUpload} and XR_FileSwf = #{xrFileSwf}
+	</select>
+	
+	<update id="update_state" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrState != null">,XR_State = #{xrState}</if>
+				,XR_OperateTime = now()
+			</trim>
+		</set>
+		where  XR_Upload = #{xrUpload} and XR_FileSwf = #{xrFileSwf}
+	</update>
+	<update id="update_upload" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrUpload != null">,XR_Upload = #{xrUpload}</if>
+				
+				<if test="xrFileSwf != null">,XR_FileSwf = #{xrFileSwf}</if>
+				<if test="s_userID != null">,XR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,XR_UserAccount = #{s_userLoginAccount}</if>
+				,XR_OperateTime = now()
+			</trim>
+		</set>
+		where XR_ID=${xrID}
+	</update>
+	
+	<update id="update_is_grade" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrIsGrade != null">,XR_IsGrade = #{xrIsGrade}</if>
+				<if test="s_userID != null">,XR_UserID = #{s_userID}</if>
+				<if test="s_userLoginAccount != null">,XR_UserAccount = #{s_userLoginAccount}</if>
+				,XR_OperateTime = now()
+			</trim>
+		</set>
+		where XR_ID=${xrID}
+	</update>
+
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_xiaoshiguan_room where XR_ID in (${xrID})
+		</trim>
+	</delete>
+		<select id="select_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type,  xiaoshiguan.XR_FileSwfPath,
+			 xiaoshiguan.XR_LatinName,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			   xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator ,xiaoshiguan.XR_Grade ,
+			
+			   xiaoshiguan.XR_Custom
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != ''">
+					and xiaoshiguan.XR_Name like '%${keywxrd}%' and xiaoshiguan.XR_Category='${xrCategxry}'
+				</if>
+				
+			</trim>
+		</where>
+	</select>
+	<select id="select_stxrystate" parameterType="java.util.HashMap"  resultType="java.lang.Integer" >
+		select XR_StoryState from res_xiaoshiguan_room
+		where  XR_Upload = #{xrUpload}
+	</select>
+	
+	<update id="update_stxrystate" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrStoryState != null">,XR_StoryState = #{xrStoryState}</if>
+				,XR_OperateTime = now()
+			</trim>
+		</set>
+		where  XR_Upload = '${xrUpload}'
+	</update>
+
+	<update id="update_share" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrIsShare != null">,XR_IsShare = ${xrIsShare}</if>
+			</trim>
+		</set>
+		where  XR_ID = ${xrID}
+	</update>
+
+	<update id="update_clickLile" parameterType="java.util.HashMap">
+		update res_xiaoshiguan_room
+		<set>
+			<trim prefixOverrides=",">
+				<if test="xrCountLike != null">,XR_CountLike = #{xrCountLike}</if>
+			</trim>
+		</set>
+		where  XR_id = '${xrID}'
+	</update>
+	<select id="select_page_categxry" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,
+			xiaoshiguan.XR_LatinName,
+			xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator,
+			xiaoshiguan.XR_Custom,
+				(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xrPath
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				<if test="xrCateThLevel != null and xrCateThLevel != '' "> and xiaoshiguan.XR_CateThLevel = '${xrCateThLevel}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+				<if test="xrCateFiveLevel != null and xrCateFiveLevel != '' "> and xiaoshiguan.XR_CateFiveLevel = '${xrCateFiveLevel}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '1011'</if>
+				<if test="xrAbout != null and xrAbout != '' "> and xiaoshiguan.XR_ID not in (${xrAbout}) </if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+	</select>
+	<select id="select_page_categxry_about" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,
+			xiaoshiguan.XR_LatinName,
+			xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator,
+			xiaoshiguan.XR_Custom,
+				(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xrPath
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				<if test="xrCateTHLevel != null and xrCateTHwLevel != '' "> and xiaoshiguan.XR_CateTHLevel = '${xrCateTHLevel}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+				<if test="xrCateFiveLevel != null and xrCateFiveLevel != '' "> and xiaoshiguan.XR_CateFiveLevel = '${xrCateFiveLevel}'</if>
+				<if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '1011'</if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_categxry_pic" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,
+			xiaoshiguan.XR_Audio,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,
+			xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,
+			xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName,
+			 xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload,
+			  xiaoshiguan.XR_Name,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_About,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,
+		
+				(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xrPath
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="xrCategxry != null and xrCategxry != '' "> and xiaoshiguan.XR_Category = '${xrCategxry}'</if>
+				<if test="xrCateTwLevel != null and xrCateTwLevel != '' "> and xiaoshiguan.XR_CateTwLevel = '${xrCateTwLevel}'</if>
+				<if test="xrCateThLevel != null and xrCateThLevel != '' "> and xiaoshiguan.XR_CateThLevel = '${xrCateThLevel}'</if>
+				<if test="xrCateFoLevel != null and xrCateFoLevel != '' "> and xiaoshiguan.XR_CateFoLevel = '${xrCateFoLevel}'</if>
+				<if test="xrCateFiveLevel != null and xrCateFiveLevel != '' "> and xiaoshiguan.XR_CateFiveLevel = '${xrCateFiveLevel}'</if>
+			    <if test="xrType != null and xrType != '' "> and xiaoshiguan.XR_Type = '1011'</if>
+				<if test="xrID != null and xrID != '' "> and xiaoshiguan.XR_ID != ${xrID}</if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+		limit 30
+	</select>
+		<select id="select_page_keywxrds" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_CountLike,xiaoshiguan.XR_Keywords,xiaoshiguan.XR_Audio,xiaoshiguan.XR_ContentPath,xiaoshiguan.XR_StoryState,xiaoshiguan.XR_Model,xiaoshiguan.XR_CateTwLevel,xiaoshiguan.XR_CateTwLevel_Name,xiaoshiguan.XR_CateTHLevel_Name,xiaoshiguan.XR_CateFoLevel_Name,xiaoshiguan.XR_Province,xiaoshiguan.XR_City,xiaoshiguan.XR_PlaceName,xiaoshiguan.XR_Zip,xiaoshiguan.XR_State,xiaoshiguan.XR_Content,xiaoshiguan.XR_Category, xiaoshiguan.XR_CategoryName, xiaoshiguan.XR_Recommen, xiaoshiguan.XR_NO, xiaoshiguan.XR_Upload, xiaoshiguan.XR_Name,xiaoshiguan.XR_FileSwf,
+			xiaoshiguan.XR_Type, xiaoshiguan.XR_FileSwfPath,
+			xiaoshiguan.XR_LatinName,
+			xiaoshiguan.XR_LatinNameID,xiaoshiguan.XR_About,xiaoshiguan.XR_Relation,
+			xiaoshiguan.XR_Description, xiaoshiguan.XR_Identifier,
+			xiaoshiguan.XR_Remarks, xiaoshiguan.XR_Thumbnail,xiaoshiguan.XR_InThum,xiaoshiguan.XR_Contest,
+			xiaoshiguan.XR_UserID, xiaoshiguan.XR_UserAccount,xiaoshiguan.XR_Grade ,
+			xiaoshiguan.XR_OperateTime, DATE_FORMAT(xiaoshiguan.XR_CreateTime,'%Y-%m-%d')  XR_CreateTime,
+			xiaoshiguan.XR_Creator,
+			xiaoshiguan.XR_Custom,
+				(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xrPath
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != '' "> and xiaoshiguan.XR_Keywords  like '%${keywxrd}%'</if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+	</select>
+	<select id="select_page_keywxrds_little" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			xiaoshiguan.XR_ID,xiaoshiguan.XR_Name,
+				(select c.CATE_Path from res_category c where xiaoshiguan.XR_Category=c.CATE_ID ) as  xrPath
+		from 
+			res_xiaoshiguan_room xiaoshiguan
+			left join res_category c on c.CATE_ID = xiaoshiguan.XR_CateTwLevel
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="keywxrd != null and keywxrd != '' "> and xiaoshiguan.XR_Keywords  like '%${keywxrd}%'</if>
+			</trim>
+		</where>
+		ORDER BY xiaoshiguan.XR_ID desc
+	</select>
+</mapper>

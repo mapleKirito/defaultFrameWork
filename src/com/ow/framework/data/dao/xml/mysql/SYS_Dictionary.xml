@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="dict">
+	<resultMap id="convertResultDictionary" type="result">
+		<result property="dicID" column="DIC_ID" />
+		<result property="dicDictTypeValue" column="DT_Value" />
+		<result property="dicName" column="DIC_Name" />
+		<result property="dicValue" column="DIC_Value" />
+		<result property="dicDesc" column="DIC_Desc" />
+		<result property="dtName" column="DT_Name" />
+		<result property="dtValue" column="DT_Value" />
+	</resultMap>
+	
+	<select id="select_all" resultMap="convertResultDictionary" parameterType="param">
+		select distinct d.*,dt.DT_Name from sys_dictionary d,sys_dictionary_type dt 
+		<where>
+			<trim prefixOverrides="and">
+				d.DT_Value=dt.DT_Value
+				<if test="dicDictTypeValue!=null and dicDictTypeValue!=''">
+					 and d.DT_Value = ${dicDictTypeValue}
+				</if>
+				<if test="name!=null and name!=''"> 
+					and DIC_Name like '%${name}%'
+				</if>
+			</trim>
+		</where>
+		 order by d.DT_Value desc
+		 limit ${start},${offset}
+	</select>	
+	
+	 <select id="select_all_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_dictionary d,sys_dictionary_type dt 
+		<where>
+			<trim prefixOverrides="and">
+				d.DT_Value=dt.DT_Value
+				<if test="dicDictTypeValue!=null and dicDictTypeValue!=''">
+					 and d.DT_Value = ${dicDictTypeValue}
+				</if>
+				<if test="name!=null and name!=''"> 
+					and DIC_Name like '%${name}%'
+				</if>
+			</trim>
+		</where>
+	 </select>	 	 
+	 
+	 <select id="select_dict_by_type_id" resultMap="convertResultDictionary" parameterType="param">
+	 	select dict.* from sys_dictionary dict,sys_dictionary_type dictType
+	 	<where>
+	 	<if test="dicDictTypeValue!=null">dict.DT_Value=dictType.DT_Value and DT_Value.DT_Name=#{dicDictTypeValue}</if>
+	 	</where>
+	 </select>	 
+	 <select id="select_by_dtValue" resultMap="convertResultDictionary" parameterType="java.util.HashMap">
+		select
+			dict.DIC_ID, dict.DT_Value, dict.DIC_Name, dict.DIC_Value, dict.DIC_Desc 
+		from
+			sys_dictionary dict
+		where
+			dict.DT_Value = '${dtValue}'
+	</select>
+	
+	 <select id="select_dict_by_type_name" resultMap="convertResultDictionary" parameterType="param">
+	 	select * from sys_dictionary dict,sys_dictionary_type dictType
+	 	<where>
+	 	<if test="dictTypeName!=null">dict.DT_Value=dictType.DT_Value and dictType.DT_Name='${dictTypeName}')</if>
+	 	</where>
+	 </select>
+	 
+	  <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_dictionary
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="dtValue!=null">,DT_Value</if>			
+			<if test="dicName!=null">,DIC_Name</if>
+			<if test="dicValue!=null">,DIC_Value</if>
+			<if test="dicDesc!=null">,DIC_Desc</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+ 			<if test="dtValue!=null">,#{dtValue}</if>
+			<if test="dicName!=null">,#{dicName}</if>
+			<if test="dicValue!=null">,#{dicValue}</if>
+			<if test="dicDesc!=null">,#{dicDesc}</if>
+		</trim>
+	 </insert>
+	  <select id="select_dictionary_by_id" resultMap="convertResultDictionary" parameterType="param">
+	 	select DIC_ID,
+			   DT_Value,
+			   DIC_Name,
+			   DIC_Value,
+			   DIC_Desc from sys_dictionary where DIC_ID=${dicID}
+	 </select>
+	 
+	 <select id="select_dictionary_page" resultMap="convertResultDictionary" parameterType="param">
+		select distinct d.*,dt.DT_Name from sys_dictionary d,sys_dictionary_type dt 
+		<where>
+			<trim prefixOverrides="and">
+				d.DT_Value=dt.DT_Value
+				<if test="dicDictTypeValue!=null and dicDictTypeValue!=''">
+					 and d.DT_Value = ${dicDictTypeValue}
+				</if>
+				<if test="name!=null and name!=''"> 
+					and DIC_Name like '%${name}%'
+				</if>
+			</trim>
+		</where>
+		 order by d.DT_Value desc
+		 limit ${start},${offset}
+	</select>
+	
+	<select id="select_dictionary_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from sys_dictionary d,sys_dictionary_type dt 
+		<where>
+			<trim prefixOverrides="and">
+				d.DT_Value=dt.DT_Value
+				<if test="dicDictTypeValue!=null and dicDictTypeValue!=''">
+					 and d.DT_Value = ${dicDictTypeValue}
+				</if>
+				<if test="name!=null and name!=''"> 
+					and DIC_Name like '%${name}%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	 <update id="update" parameterType="java.util.HashMap">
+		update sys_dictionary
+		<set>
+			<if test="dicName!=null">DIC_Name = #{dicName}</if>
+			<if test="dicValue!=null">,DIC_Value = #{dicValue}</if>
+			<if test="dicDesc!=null">,DIC_Desc = #{dicDesc}</if>
+			<if test="dicDictTypeValue!=null">,DT_Value = ${dicDictTypeValue}</if>
+		</set>
+		 where DIC_ID=${dicID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_dictionary where DIC_ID in (${dicID})
+	</delete>
+	
+	<delete id="delete_ictionary_by_dtvalue" parameterType="java.util.HashMap">
+		delete from sys_dictionary where DT_Value=#{dtValue}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="taskOrg">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="taskId" column="TASK_ID" />
+		<result property="orgId" column="ORG_ID" />
+		<result property="orgName" column="ORG_Name" />
+	</resultMap>
+	
+	<select id="select_by_taskId" resultMap="convertResult" parameterType="param">
+		select * from std_task_organization_mapper tom join sys_organization so on tom.ORG_ID=so.ORG_ID
+		<where>
+		 	<if test="taskId != null">
+		 	 tom.TASK_ID=${taskId}
+			</if>
+		</where>
+	 </select>
+	 
+	 <select id="select_finished_by_task_org_id" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task_organization_mapper tom,std_task_info ti
+		<where>
+			<trim prefixOverrides="and">
+				tom.TASK_ID=ti.T_ID 
+			 	<if test="taskId != null">
+			 	 and tom.TASK_ID=${taskId}
+				</if>
+				<if test="s_userOrgID != null">
+			 	 and tom.ORG_ID in (${s_userOrgID})
+				</if>
+			</trim>
+		</where>
+	 </select>
+	 
+	 <select id="select_task_by_orgId" resultMap="convertResult" parameterType="param">
+		select * from std_task_organization_mapper tom
+		<where>
+		 	<if test="orgId != null">
+		 	 tom.ORG_ID=${orgId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="select_task_result" resultMap="convertResult" parameterType="java.util.HashMap">
+		select t.T_ID as taskId,t.T_Content as content,t.T_Title as title,t.T_ReplyCount as replyCount,t.T_ViewCount as viewCount,t.T_IsTop as isTop,
+			t.T_UserID as userId,DATE_FORMAT(t.T_CreateTime,'%Y-%m-%d %H:%i:%s') as createTime from std_task t,std_task_organization_mapper tom 
+		where t.T_ID=tom.TASK_ID and t.T_IsLock=1 and tom.ORG_ID in (${s_userOrgID})
+	</select>
+	
+	<select id="select_task_result_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task t,std_task_organization_mapper tom 
+		where t.T_ID=tom.TASK_ID and t.T_IsLock=1 and tom.ORG_ID in (${s_userOrgID})
+	</select>
+	
+	<!-- 查询登录用户班级作业总数	 -->
+	 <select id="select_task_count_by_login_orgids" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task t,std_task_organization_mapper tom
+		where t.T_ID=tom.TASK_ID and tom.ORG_ID in (${s_userOrgID})
+	</select>
+		
+	<!-- 统计锁定作业数量 	-->
+	<select id="select_task_lock_count_by_orgids" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task t,std_task_organization_mapper tom 
+		where t.T_ID=tom.TASK_ID and t.T_IsLock=1 and tom.ORG_ID in (${s_userOrgID})
+	</select>
+		
+	<!-- 统计推荐作业数量	 -->
+	<select id="select_task_recommend_count_by_orgids" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task t,std_task_organization_mapper tom 
+		where t.T_ID=tom.TASK_ID and t.T_IsRecommend=1 and tom.ORG_ID in (${s_userOrgID})
+	</select>	
+	
+	<!-- 统计精彩回答数量	 -->
+	<select id="select_task_excellent_count_by_orgids" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from std_task t,std_task_info ti,std_task_organization_mapper tom 
+		where t.T_ID=ti.T_ID and t.T_ID=tom.TASK_ID and t.T_IsRecommend=1 and tom.ORG_ID in (${s_userOrgID})
+	</select>			
+		
+	<select id="select_user_select_mapper_by_oid" resultMap="convertResult" parameterType="param">
+		select * from sys_user_organization_mapper 
+		<where>
+		 	<if test="orgID != null">
+		 	 ORG_ID=${orgID}
+			</if>
+		</where>
+	 </select>
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into std_task_organization_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="generatedKey!=null">TASK_ID</if>
+			<if test="orgID!=null">,ORG_ID</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="generatedKey!=null">${generatedKey}</if>
+			<if test="orgID!=null">,${orgID}</if>
+		</trim>	
+	 </insert>
+	 
+	 <insert id="update_task_org" parameterType="java.util.HashMap">
+	 	insert into std_task_organization_mapper
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taskId!=null">TASK_ID</if>
+			<if test="orgID!=null">,ORG_ID</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="taskId!=null">${taskId}</if>
+			<if test="orgID!=null">,${orgID}</if>
+		</trim>	
+	 </insert>
+	<delete id="delete_by_taskId" parameterType="java.util.HashMap">
+		delete from std_task_organization_mapper
+		<where>
+		 	<if test="taskId != null">
+		 	 TASK_ID in (${taskId})
+			</if>			
+		</where>
+	</delete>	 
+	
+	<delete id="delete_by_oid" parameterType="java.util.HashMap">
+	
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from std_task_organization_mapper where ORG_ID in (${orgID})
+		</trim>
+
+	</delete>		
+</mapper>

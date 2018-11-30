@@ -1,0 +1,138 @@
+/*------------------------*/
+/*--------表格样式---------*/
+/*------------------------*/
+
+/**表格外层table样式*/
+.gridTable {
+	background-color: #B5B5B5;
+	/* table-layout: fixed; */
+}
+
+.gridTable {
+	border-collapse: collapse;
+}
+
+.gridTable tr td,.gridTable tr th {
+	/* border: 1px solid #606373; */
+	font-weight: normal;
+}
+
+/**表格头Thead样式*/
+.gridHeadThead {
+	
+}
+
+/**表格头Tr样式*/
+.gridHeadTr {
+	background: #f7f7f7;
+	background-repeat: repeat-x;
+	height: 30px;
+}
+/**表格头Th样式*/
+.gridHeadTh {
+	height: 45px;
+	font-size: 12px;
+	color: #000000;
+}
+
+/**表格体Tbody样式*/
+.gridTbody {
+	
+}
+
+/**表格体Tr鼠标悬停（over）样式*/
+.gridBodyTrOver {
+	background-color: #D5D5D5;
+	height: 20px;
+}
+/**表格体Tr鼠标离开奇数行（out）样式*/
+.gridBodyTrOutOdd {
+	background-color: #F7F7F7;
+	height: 20px;
+}
+/**表格体Tr鼠标离开偶数行（out）样式*/
+.gridBodyTrOutEven {
+	background-color: #FFFFFF;
+	height: 20px;
+}
+
+/**表格体Td样式*/
+.gridBodyTd {
+	height: 45px;
+	font-size: 12px;
+	cursor: default;
+	line-height: 20px;
+	text-indent: 0px;
+}
+
+.pageTd {
+	height: 25px;
+}
+
+
+
+
+
+
+/*------------------新的css------------------*/
+a.lt-button {
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #fff;
+	background: #ae9b84;
+	border-radius: 3px;
+	display: inline-block;
+	margin-left: 5px;
+}
+
+a.lt-button.del,#delete_dictionary,.delete_dictionary,.delete_dictionary#del {
+	background-color: #ca4f4f;
+}
+
+.delete_dictionary_none{
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #fff;
+	background: #7c6d5b;
+	border-radius: 3px;
+	display: inline-block;
+	margin-left: 5px;
+}
+
+.list-table .lt-command a {
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #fff;
+	background: #7c6d5b;
+	border-radius: 3px;
+	display: inline-block;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+
+.list-table .lt-command {
+	height: 44px;
+	line-height: 44px;
+	background: #e8ddd0;	
+}
+
+.list-table .ltselect.lt-private {
+	background-color: green;
+}
+
+.list-table .lt-title {
+	height: 39px;
+	line-height: 39px;
+	background: #ae9b84;
+	text-indent: 20px;
+	color: #fff;
+}

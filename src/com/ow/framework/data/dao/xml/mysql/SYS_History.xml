@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="history">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="historyID" column="HistoryID" />
+		<result property="historyNum" column="HistoryNum" />
+		<result property="historyTitle" column="HistoryTitle" />
+		<result property="historyContent" column="HistoryContent" />
+		<result property="historyTime" column="HistoryTime" />
+		<result property="historyInfo" column="HistoryInfo" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryContent,history.HistoryTime,history.HistoryInfo 
+		from  sys_history history 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="historyTitle != null and historyTitle != ''"> history.HistoryTitle like '${historyTitle}%'</if>
+			</trim>
+		</where>
+		order by history.HistoryTime desc limit ${start},${offset}
+	</select>
+	<select id="select_page_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryContent,history.HistoryTime,history.HistoryInfo 
+		from  sys_history history order by history.HistoryTime asc 
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select  count(*) from  sys_history history 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="historyTitle != null and historyTitle != ''"> history.HistoryTitle like '${historyTitle}%'</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_by_date_limit" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryContent,history.HistoryTime,history.HistoryInfo 
+		from  sys_history history 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="historyNum != null and historyNum != ''"> (history.HistoryNum like '%${historyNum}')
+				 or (history.HistoryNum like '%${historyNumother}') or(history.HistoryNum like '%${historyNumZero}')</if>
+			</trim>
+		</where>
+		order by history.HistoryNum desc limit ${start},${offset}
+	</select>
+	<select id="select_by_date" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryTime,history.HistoryInfo 
+		from  sys_history history 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="historyNum != null and historyNum != ''"> (history.HistoryNum like '%${historyNum}')
+				 or (history.HistoryNum like '%${historyNumother}') or(history.HistoryNum like '%${historyNumZero}')
+				</if>
+				
+			</trim>
+		</where>
+		order by history.HistoryTime desc limit ${start},${offset}
+	</select>
+	<select id="select_by_date_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_history history 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="historyNum != null and historyNum != ''"> (history.HistoryNum like '%${historyNum}')
+				 or (history.HistoryNum like '%${historyNumother}')  or(history.HistoryNum like '%${historyNumZero}')
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select  history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryContent,history.HistoryTime,history.HistoryInfo 
+		from  sys_history history 
+	</select>
+	
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryContent,history.HistoryTime,history.HistoryInfo  from  sys_history history 
+		where history.HistoryID = ${historyID}
+	</select>
+	<select id="select_one_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select history.HistoryID,history.HistoryNum,history.HistoryTitle,history.HistoryContent,history.HistoryTime,history.HistoryInfo  from  sys_history history 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="id != null and id != ''">
+				  history.HistoryID=${id} 
+				</if>
+			</trim>
+		</where>	
+	</select>	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_history
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="historyTitle != null">,HistoryTitle</if>
+			<if test="historyInfo != null">,HistoryInfo</if>
+			<if test="historyContent != null">,HistoryContent</if>
+			<if test="historyNum != null">,HistoryNum</if>
+			,HistoryTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="historyTitle != null">,#{historyTitle}</if>
+			<if test="historyInfo != null">,#{historyInfo}</if>
+			<if test="historyContent != null">,#{historyContent}</if>
+			<if test="historyNum != null">,#{historyNum}</if>
+			,now()
+		</trim>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_history
+		<set>
+			<trim prefixOverrides=",">
+				<if test="historyTitle != null">,HistoryTitle = #{historyTitle}</if>
+				<if test="historyInfo != null">,HistoryInfo = #{historyInfo}</if>
+				<if test="historyContent != null">,HistoryContent = #{historyContent}</if>
+				<if test="historyNum != null">,HistoryNum = #{historyNum}</if>
+				,HistoryTime = now()
+			</trim>
+		</set>
+		where HistoryID=${historyID}
+	</update>
+	<delete id="delete_by_Id" parameterType="java.util.HashMap">
+		delete from sys_history where HistoryID in (${historyID})
+	</delete>
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="sys_team">
+	<!--
+	   AREA_ID              bigint not null,
+	   AREA_NAME        varchar(200),
+	        注：xxxx系统说明，因角色暂无停用一条件，暂时性将角色状态(ROLE_STATUS)字段关闭。    2010-9-16  成生记录
+	-->
+	<resultMap id="convertResultRole" type="result">
+		<result property="tID" column="teamid" />
+		<result property="tName" column="name" />
+		<result property="tDescription" column="description" />
+		<result property="tUserName" column="user_name" />
+		<result property="userImg" column="team_img" />
+		<result property="createrID" column="creater" />
+		<result property="peoples" column="peoples" />
+		<result property="attention" column="attention" />  <!-- 小组公告 -->
+		<result property="isPublic" column="isPublic" />
+		
+	</resultMap>
+	<select id="select_by_id" resultMap="convertResultRole" parameterType="param">
+		select t.*,su.user_name,(select count(stum.userid) from sys_team_user_mapper stum  where stum.teamid=t.teamid) as peoples from sys_team t,sys_user su 
+		where t.creater=su.user_id and teamid=${tID}
+	 </select>
+	<select id="select_all" resultMap="convertResultRole" parameterType="param">
+		select t.*,su.user_name,(select count(stum.userid) from sys_team_user_mapper stum  where stum.teamid=t.teamid and stum.memState !=0) as peoples,(select count(stum.userid) from sys_team_user_mapper stum  where stum.teamid=t.teamid and stum.userid=${s_userID}) as stateT from sys_team t,sys_user su 
+		where t.creater=su.user_id  
+		<if test="userID != null and userID != ''">
+			and su.user_id = ${userID}
+		</if>
+		ORDER BY t.teamid desc
+		limit ${start},${offset}
+	 </select>
+	 <select id="select_all_count" resultType="java.lang.Integer" parameterType="param">
+		select count(t.teamid) from sys_team t,sys_user su 
+		where t.creater=su.user_id  
+		<if test="s_userID != null and s_userID != ''">
+			and su.user_id = ${s_userID}
+		</if>
+	 </select>
+	 <select id="select_all_byUser" resultMap="convertResultRole" parameterType="param">
+		select t.*,su.user_name,(select count(stum.userid) from sys_team_user_mapper stum  where stum.teamid=t.teamid and stum.memState !=0) as peoples,(select count(stum.userid) from sys_team_user_mapper stum  where stum.teamid=t.teamid and stum.userid=${s_userID}) as stateT ,(select stum.memState from sys_team_user_mapper stum  where stum.teamid=t.teamid and stum.userid=${s_userID}) as joinState
+			from sys_team t,sys_user su ,sys_team_user_mapper stu
+		where t.creater=su.user_id  and stu.teamid=t.teamid
+		<if test="userID != null and userID != ''">
+			and stu.userid= ${userID}
+		</if>
+		ORDER BY t.teamid desc
+		limit ${start},${offset}
+	 </select>
+	 <select id="select_all_byUser_count" resultType="java.lang.Integer" parameterType="param">
+		select count(t.teamid) from sys_team t,sys_user su ,sys_team_user_mapper stu
+		where t.creater=su.user_id  and stu.teamid=t.teamid
+		<if test="userID != null and userID != ''">
+			and stu.userid= ${userID}
+		</if>
+	 </select>
+	 <select id="select_page" resultMap="convertResultRole" parameterType="param">
+		select t.*,su.user_name from sys_team t,sys_user su where t.creater=su.user_id order by t.teamid desc limit ${start},${offset}
+	 </select>
+	 <select id="select_page_count" resultMap="convertResultRole" parameterType="param">
+		select count(t.teamid) from sys_team t,sys_user su where t.creater=su.user_id
+	 </select>
+	 <!-- 
+	 <insert id="addBlog" parameterType="Blog" > 
+	 	<selectKey keyProperty="blogid" resultType="int" order="BEFORE"> 
+	 		select seq_order.nextval() from dual </selectKey> 
+	 	insert into Blog
+	 		(author,subject,content, publishTime,blogid)
+	    values
+	    	(#{author}#,#{subject}#,#{content}#,#{publishTime}#,#{blogid}) 
+	 </insert>
+	  -->
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into sys_team (name,description,attention,creater,isPublic)
+		values (#{tName},#{tDescription},#{attention},${s_userID},${isPublic})	
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	 </insert>
+
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_team
+		<set>
+		<trim prefixOverrides=",">		
+			<if test="tName!=null">,name = #{tName}</if>
+			<if test="tDescription!=null">,description = #{tDescription}</if>
+			<if test="tImg!=null">,team_img = #{tImg}</if>
+			<if test="attention!=null">,attention = #{attention}</if>
+			<if test="isPublic!=null">,isPublic = #{isPublic}</if>
+			</trim>
+		</set>
+		 where teamid=${tID}
+	</update>	 
+	
+	<update id="update_HeadImg" parameterType="java.util.HashMap">
+		update sys_team
+		<set>
+			<trim prefixOverrides=",">
+				<if test="userImg != null">,team_img = #{userImg}</if>
+			</trim>
+		</set>
+		where teamid=${tID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from sys_team where teamid in (${tID}) and creater=${s_userID}
+	</delete> 
+</mapper>

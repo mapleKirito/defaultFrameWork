@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="area">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="areaID" column="AREA_ID" />
+		<result property="areaParentID" column="AREA_ParentID" />
+		<result property="areaParentName" column="AREA_ParentName" />
+		<result property="areaName" column="AREA_Name" />
+		<result property="areaPath" column="AREA_Path" />
+		<result property="areaSign" column="AREA_Sign" />
+		<result property="areaLevel" column="AREA_Level" />
+		<result property="areaIsChild" column="AREA_IsChild" />
+		<result property="areaIsShow" column="AREA_IsShow" />
+		<result property="areaUserID" column="AREA_UserID" />
+		<result property="areaUserAccount" column="AREA_UserAccount" />
+		<result property="areaOperateTime" column="AREA_OperateTime" />
+		<result property="areaCreateTime" column="AREA_CreateTime" />
+		<result property="areaCreator" column="AREA_Creator" />
+	</resultMap>
+	<select id="select_one_by_name" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,area.AREA_IsShow
+		from sys_area area
+		where area.AREA_Name = #{areaName}
+	</select>
+		
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,area.AREA_IsShow
+		from sys_area area
+	</select>
+	<select id="select_by_id" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,
+			case when area1.AREA_Name is null then '顶级地区' else area1.AREA_Name end as AREA_ParentName ,area.AREA_IsShow
+		from sys_area area left join sys_area area1 on area1.AREA_ID = area.AREA_ParentID
+		where area.AREA_ID = ${areaID}
+	</select>
+	<select id="select_by_pathoth_id" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,
+			case when area1.AREA_Name is null then '顶级地区' else area1.AREA_Name end as AREA_ParentName ,area.AREA_IsShow
+		from sys_area area left join sys_area area1 on area1.AREA_ID = area.AREA_ParentID
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="erCountry != null and erCountry != ''">
+		 			area.AREA_ID = ${erCountry}
+		 		</if>
+		 		<if test="erProvince != null and erProvince != ''">
+		 			area.AREA_ID = ${erProvince}
+		 		</if>
+		 		<if test="erCity != null and erCity != ''">
+		 			area.AREA_ID = ${erCity}
+		 		</if>
+		 		<if test="erArea != null and erArea != ''">
+		 			area.AREA_ID = ${erArea}
+		 		</if>
+		 	</trim>
+		 </where>			
+	</select>
+	<select id="select_name_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select area.AREA_Name from sys_area area where area.AREA_ID = ${areaID}
+	</select>
+	<select id="select_one_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,area.AREA_IsShow
+		from sys_area area
+		where area.AREA_ID = ${id}
+	</select>		
+	<select id="select_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				area.AREA_IsShow=1
+				<if test="id == null">
+				  and area.AREA_ParentID=0 
+				</if>
+				<if test="id != null and id != ''">
+				and area.AREA_ParentID=${id}
+				</if>
+				<if test="areaParentID != null and areaParentID != ''">
+					and area.AREA_ID=${areaID}
+				</if>
+				<if test="areaID != null and areaID != ''">
+					and area.AREA_Name=${areaName}
+				</if>
+			<!-- 	<if test="areaIsShow != null and areaIsShow != ''">
+					and area.AREA_IsShow=#{areaIsShow}
+				</if>
+				 -->
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_by_pid_tree" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				
+				<if test="id == null">
+				  and area.AREA_ParentID=0 
+				</if>
+				<if test="id != null and id != ''">
+				and area.AREA_ParentID=${id}
+				</if>
+				<if test="areaParentID != null and areaParentID != ''">
+					and area.AREA_ID=${areaID}
+				</if>
+				<if test="areaID != null and areaID != ''">
+					and area.AREA_Name=${areaName}
+				</if>
+			<!-- 	<if test="areaIsShow != null and areaIsShow != ''">
+					and area.AREA_IsShow=#{areaIsShow}
+				</if>
+				 -->
+			</trim>
+		</where>
+	</select>
+	<select id="select_by_pid_create" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="id == null">
+				  and area.AREA_ParentID=0 
+				</if>
+				<if test="id != null and id != ''">
+				and area.AREA_ParentID=${id}
+				</if>
+				<if test="areaParentID != null and areaParentID != ''">
+					and area.AREA_ID=${areaID}
+				</if>
+				<if test="areaID != null and areaID != ''">
+					and area.AREA_Name=${areaName}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查找树形下拉信息，orgParentID固定写到js里了，所以必须取这个变量 	-->
+	<select id="select_tree" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="parentID == null or parentID == ''">
+				  	area.AREA_ParentID=0 
+				</if>
+				<if test="parentID != null and parentID != ''">
+					area.AREA_ParentID=${parentID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查询父级分类	 -->
+	<select id="select_parent_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="areaParentID != null and areaParentID != ''">
+					area.AREA_ID=${areaParentID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查询下级分类 	-->
+	<select id="select_child_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="areaID == null">
+				  	area.AREA_ParentID=0 
+				</if>
+				<if test="areaID != null and areaID != ''">
+					area.AREA_ParentID=${areaID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查询所有下级地区 	-->
+	<select id="select_child_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="areaID != null">
+				  	area.AREA_ID != ${areaID}
+				</if>
+				<if test="areaPath != null and areaPath != ''">
+					area.AREA_Path like '${areaPath}%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	
+	<!-- 查询地区名是否重复 -->
+	<select id="check_areaName" resultMap="convertResult" parameterType="java.util.HashMap">
+		SELECT a.AREA_Name,a.AREA_ID,a.AREA_ParentID FROM sys_area a 
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix="">
+				<if test="areaParentID != null and areaParentID !=''">
+					and a.AREA_ParentID = ${areaParentID}
+				</if>
+				<if test="areaName != null and areaName != ''">
+					and a.AREA_Name = '${areaName}'
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	
+	
+	<!-- 查询所有父级分类 	-->
+	<select id="select_parent_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator,area.AREA_IsShow
+		from sys_area area
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="areaID == null">
+				  	area.AREA_ID=0 
+				</if>
+				<if test="areaID != null and areaID != ''">
+					area.AREA_ID in (${areaID})
+				</if>
+			</trim>
+		</where>
+		order by area.AREA_Level ,area.AREA_ID desc
+	</select>
+	<!-- 根据areaParentID模糊查询机构数量 	-->
+	<select id="select_count_by_areaPath" resultType="int" parameterType="java.util.HashMap">
+		select count(*)  from sys_area c
+		<where>
+			<trim prefixOverrides="and">
+				<if test="areaPath !=null and areaPath !=''">
+					and c.AREA_Path like '%,${areaPath},%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select
+			area.AREA_ID, area.AREA_ParentID, area.AREA_Name, area.AREA_Path, area.AREA_Sign,
+			area.AREA_Level, area.AREA_IsChild, area.AREA_UserID,
+			area.AREA_UserAccount, area.AREA_OperateTime, area.AREA_CreateTime,
+			area.AREA_Creator ,area.AREA_IsShow
+		from sys_area area
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultMap="convertResult"
+		parameterType="java.util.HashMap">
+		select count(*) from sys_area area
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_area
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="areaParentID!=null">,AREA_ParentID</if>
+			<if test="areaName!=null">,AREA_Name</if>
+			<if test="areaPath!=null">,AREA_Path</if>
+			<if test="areaSign!=null">,AREA_Sign</if>
+			<if test="areaLevel!=null">,AREA_Level</if>
+			<if test="areaIsChild!=null">,AREA_IsChild</if>
+			,AREA_IsShow
+			<if test="s_userID!=null">,AREA_UserID</if>
+			<if test="s_userLoginAccount!=null">,AREA_UserAccount</if>
+			,AREA_OperateTime
+			,AREA_CreateTime
+			<if test="s_userLoginAccount!=null">,AREA_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="areaParentID!=null">,#{areaParentID}</if>
+			<if test="areaName!=null">,#{areaName}</if>
+			<if test="areaPath!=null">,#{areaPath}</if>
+			<if test="areaSign!=null">,#{areaSign}</if>
+			<if test="areaLevel!=null">,#{areaLevel}</if>
+			<if test="areaIsChild!=null">,#{areaIsChild}</if>
+			,0
+			<if test="s_userID!=null">,#{s_userID}</if>
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+			,now()
+			,now()
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_area
+		<set>
+			<trim prefixOverrides=",">
+				<if test="areaParentID!=null">,AREA_ParentID=#{areaParentID}</if>
+				<if test="areaName!=null">,AREA_Name=#{areaName}</if>
+				<if test="areaPath!=null">,AREA_Path=#{areaPath}</if>
+				<if test="areaSign!=null">,AREA_Sign=#{areaSign}</if>
+				<if test="areaLevel!=null">,AREA_Level=#{areaLevel}</if>
+				<if test="areaIsChild!=null">,AREA_IsChild=#{areaIsChild}</if>
+				<if test="s_userID != null">,AREA_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount != null">,AREA_UserAccount=#{s_userLoginAccount}</if>
+				,AREA_OperateTime = now()
+			</trim>
+		</set>
+		where AREA_ID=${areaID}
+	</update>
+	
+	<update id="update_relation" parameterType="java.util.HashMap">
+		update sys_area
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="areaPath!=null and areaPath!=''">,AREA_Path = #{areaPath}</if>
+				<if test="s_userID!=null">,AREA_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount!=null">,AREA_UserAccount=#{s_userLoginAccount}</if>
+				,AREA_OperateTime = now()
+			</trim>
+		</set>
+		where AREA_ID=${areaID}
+	</update>
+	
+	<update id="update_name" parameterType="java.util.HashMap">
+		update sys_area
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="areaName!=null">,AREA_Name=#{areaName}</if>
+				<if test="areaSign!=null">,AREA_Sign=#{areaSign}</if>
+			</trim>
+		</set>
+		where AREA_ID=${areaID}
+	</update>	
+	
+	<update id="update_ischild" parameterType="java.util.HashMap">
+		update sys_area
+		<set>
+			<trim prefixOverrides=",">
+				<if test="areaIsChild!=null and areaIsChild!=''">,AREA_IsChild = #{areaIsChild}</if>
+				<if test="s_userID!=null">,AREA_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount != null">,AREA_UserAccount=#{s_userLoginAccount}</if>
+				,AREA_OperateTime = now()
+		    </trim>
+		</set>
+		 where AREA_ID=${areaID}
+	</update>
+	
+	<update id="update_under_child" parameterType="java.util.HashMap">
+		update sys_area
+		<set>
+			<trim prefixOverrides=",">
+				<if test="areaPath != null and areaPath != ''">,AREA_Path = #{areaPath}</if>
+				<if test="areaLevel != null and areaLevel != ''">,AREA_Level = #{areaLevel}</if>
+				<if test="s_userID!=null">,AREA_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount!=null">,AREA_UserAccount=#{s_userLoginAccount}</if>
+				,AREA_OperateTime = now()
+		    </trim>
+		</set>
+		 where AREA_ID=${areaID}
+	</update>
+	
+	<update id="update_area_show" parameterType="java.util.HashMap">
+		update sys_area
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="areaIsShow!=null">,AREA_IsShow=#{areaIsShow}</if>
+			</trim>
+		</set>
+		where AREA_ID=${areaID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_area where AREA_ID in (${areaID})
+		</trim>
+	</delete>
+</mapper>
+
+
+

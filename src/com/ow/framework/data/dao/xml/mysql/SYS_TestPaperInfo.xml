@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="testpaper">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="tpID" column="TP_ID" />
+		<result property="tpName" column="TP_Name" />
+	</resultMap>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from  sys_test_paper_info testpaper
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="tpName != null and tpName != ''"> testpaper.TP_Name like '${tpName}%'</if>
+			</trim>
+		</where>
+		order by testpaper.TP_ID desc limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from  sys_test_paper_info testpaper
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="tpName != null and tpName != ''"> testpaper.TP_Name like '${tpName}%'</if>
+			</trim>
+		</where>
+	</select>
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_test_paper_info
+		<set>
+			<trim prefixOverrides=",">
+				<if test="tpName != null">,TP_Name = #{tpName}</if>
+		</trim>
+		</set>
+		where TP_ID=${tpID}
+	</update>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_test_paper_info
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tpName != null and tpName != ''">,TP_Name</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="tpName != null and tpName != ''">,#{tpName}</if>
+		</trim>
+	</insert>
+	<delete id="delete_by_Id" parameterType="java.util.HashMap">
+		delete from sys_test_paper_info where TP_ID in (${tpID})
+	</delete>
+</mapper>

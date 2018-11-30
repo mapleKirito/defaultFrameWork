@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+function loadComplete(){
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+	
+	var ug = navigator.userAgent.toLowerCase();
+	var userAgent = document.getElementById("userAgent");
+	var browserType = "";
+	var ver = "";
+	var IE = ug.match(/msie\s*\d\.\d/);
+	var isIE = check(/msie/);
+	if(isIE) {
+	    $("#music").html('<embed src="" id="mp" style="height:0px;width:0px;" autostart="false" loop="true">');
+	}else{
+	 	$("#music").html('<audio src="" id="mp"></audio>');
+	}
+	    
+	//$("#pikame").PikaChoose({carousel:true});
+	    
+	//初始�?
+	$("#pikame").css({"width":$("#pikame li").length*161+"px"});
+	
+	var clickTag=true;
+	$(".clip img:first").addClass("active");
+	$(".pika-stage img").attr("src",$(".clip img:first").attr("srcs"));
+	
+	
+	$(".clip").each(function(){
+		$(this).find("img").click(function(){
+			//alert($(this).parent().parent().index());
+			$(".pika-stage img").attr("src",$(this).attr("srcs"));
+			$(".clip img").removeClass("active");
+			$(this).addClass("active");
+		});
+	})
+	
+	$(".pika-stage").on("swipeleft",function(){
+		    if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().next().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+		  }); 
+	
+	$(".pika-stage").on("swiperight",function(){
+		 if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().prev().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+	  }); 
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+		
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete); 
+}
+
+setTimeout(loadscript,10);
+
+
+</script>
+</head>
+<body>
+<input type="hidden" value="" id="dingwei" />
+	<table>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<img class="icon" style="margin-left: 20px;" src="page/html/34/name.png" border="0" alt="">
+						</td>
+						<td>
+							<table style="margin-left:100px;">
+								<tr>
+									<td><img pid='BLS3000001000029' pname='scanner' class='pbtn' src='page/html/34/scanner.png' style='margin-left:10px;'  width='64' height='89' border='0' alt=''></td><td><img pid='BLS3000001000029' pname='pic' class='pbtn' src='page/html/34/pic.png' style='margin-left:10px;'  width='64' height='89' border='0' alt=''></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;position: relative;top:-10px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:top;">
+				<span style="font-size: 35px;margin-left: 20px;">三国两晋南北朝</span>
+				
+				<div id="music" style="display: none;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td  style="vertical-align:top;">
+				<table cellspacing="10px">
+						<tr>
+							<td >
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td>
+														<div class="pikachoose">
+															<div class="pika-stage" style="height: 330px;">
+																<img class="b" src="" alt="" title="" style="left: 0px; display: inline;">
+															</div>
+															<div class=" jcarousel-skin-pika">
+																<div class="jcarousel-container jcarousel-container-horizontal" style="position: relative; display: block;">
+																	<div class="jcarousel-clip jcarousel-clip-horizontal" style="position: relative;">
+																		<ul id="pikame" class="pika-thumbs jcarousel-list jcarousel-list-horizontal" style="overflow: hidden; position: relative; top: 0px; margin: 0px; padding: 0px; left: 0px;">
+																			<li class='jcarousel-item jcarousel-item-horizontal jcarousel-item-1 jcarousel-item-1-horizontal' style='float: left; list-style: none;'><div class='clip'><img class='icon' src='upload/BLS/3/0000/20150210Thumbnail/T_BLS3000001000029.jpg' srcs='upload/BLS/3/0000/20150210InThum/I_BLS3000001000029.jpg' style='display: inline; width: 100%; '></div></li>
+																		</ul>
+																	</div>
+																	<div class="jcarousel-prev jcarousel-prev-horizontal jcarousel-prev-disabled jcarousel-prev-disabled-horizontal" disabled="disabled" style="display: block;"></div>
+																	<div class="jcarousel-next jcarousel-next-horizontal" style="display: block;"></div>
+																</div>
+															</div>
+															<div class="pika-tooltip" style="display: none; opacity: 0.01;"></div>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<div style="float: left;margin-left:-2px;"><img class="icon"  width="1003"  src="page/html/34/xian.png" border="0" alt=""></div>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/pause.png");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

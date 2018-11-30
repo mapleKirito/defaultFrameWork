@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- Some or all of these can be flipped to true for debugging -->
+	<constant name="struts.i18n.reload" value="true" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.custom.i18n.resources" value="language/globalMessages,language/systemMessages,language/teacherMessages,language/studentMessages" />
+	<constant name="struts.serve.static" value="true" />
+	<constant name="struts.serve.static.browserCache" value="false" />  
+	<constant name="struts.multipart.maxSize" value="1024000000" />
+	<package name="struts" extends="struts-default">
+		<interceptors>
+			<interceptor name="authority" class="com.ow.framework.controller.interceptor.AuthorityInterceptor" />
+		</interceptors>
+		<global-results>
+			<result name="loginout">/exit.jsp</result>
+			<result name="noAccess">/noAccess.jsp</result>
+		</global-results>
+		<action name="loginAction" class="com.ow.framework.controller.action.LoginAction">
+			<result name="success">/main.jsp</result>
+			<result name="fail">/index.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="forwardAction" class="com.ow.framework.controller.action.ForwardAction">
+			<result name="module">/${directFile}</result>
+			<result name="success">/${directFile}</result>
+			<result name="input">/error.jsp</result>
+			<result name="error">/error.jsp</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>
+		<action name="decorateForwardAction" class="com.ow.framework.controller.action.DecorateForwardAction">
+			<result name="module">/${directFile}</result>
+			<result name="error">/error.jsp</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>		
+		<action name="childrenDecorateAction" class="com.ow.framework.controller.action.ChildrenDecorateAction">  
+            <result name="success">${childrenname}</result>
+            <result name="error">/childrenfail.jsp</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+        </action>
+		<action name="operateAction" class="com.ow.framework.controller.action.OperateAction">
+			<result name="input">/error.jsp</result>
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="fail">/error.jsp</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>
+		<action name="confirmAction" class="com.ow.framework.controller.action.ConfirmAction">
+			<result name="input">/error.jsp</result>
+			<result name="confirm">/confirm.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="fail">/error.jsp</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>		
+	</package>
+	<package name="global" extends="struts-default">
+		<action name="commonForwardAction" class="com.ow.framework.controller.action.CommonForwardAction">
+			<result name="module">/${directFile}</result>
+			<result name="success">/${directFile}</result>
+		</action>			
+		<action name="registerAction" class="com.ow.framework.controller.action.RegisterAction">
+			<result name="success">/success2.jsp</result>
+			<result name="fail">/fail2.jsp</result>
+		</action>	
+		<action name="retrieveQuestionAction" class="com.ow.framework.controller.action.RetrieveQuestionAction">
+			<result name="success">/${directFile}</result>
+			<result name="fail">/fail2.jsp</result>
+		</action>			
+		<action name="retrievePasswordAction" class="com.ow.framework.controller.action.RetrievePasswordAction">
+			<result name="success">/success2.jsp</result>
+			<result name="fail">/fail2.jsp</result>
+		</action>	
+	</package>
+	<package name="download" extends="struts-default">
+		<default-action-ref name="download" />
+		<action name="downloadAction" class="com.ow.framework.controller.action.DownloadAction">
+			<result name="input">/fail.jsp</result>
+			<result name="error">/fileNotExist.jsp</result>
+			<result name="success" type="stream">
+				<param name="contentType">text/plain</param>
+                <param name="inputName">targetFile</param>
+				<param name="contentDisposition">attachment;filename="${downloadFileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="downloadAction2" class="com.ow.framework.controller.action.DownloadAction2">
+			<result name="input">/fail.jsp</result>
+			<result name="error">/fileNotExist.jsp</result>
+			<result name="success" type="stream">
+				<param name="contentType">text/plain</param>
+                <param name="inputName">targetFile</param>
+				<param name="contentDisposition">attachment;filename="${downloadFileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+	</package>
+	<package name="upload" extends="struts-default" >
+		<interceptors>
+			<interceptor name="authority" class="com.ow.framework.controller.interceptor.AuthorityInterceptor" />
+		</interceptors>
+		<global-results>
+			<result name="loginout">/exit.jsp</result>
+		</global-results>
+		<action name="uploadAction" class="com.ow.framework.controller.action.UploadAction" method="execute">
+			<param name="savePath">upload</param>
+			<result name="success">/success.jsp</result>
+			<result name="input">/fail.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="none">/${directFile}</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>
+		<action name="uploadDataAction" class="com.ow.framework.controller.action.UploadDataAction">
+			<param name="savePath">upload</param>
+			<result name="success">/success.jsp</result>
+			<result name="input">/fail.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="none">/${directFile}</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>
+		
+		<action name="chilerenUploadDataAction" class="com.ow.framework.controller.action.UploadDataAction">
+			<param name="savePath">upload</param>
+			<result name="success">/childrensuccess.jsp</result>
+			<result name="input">/fail.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="none">/${directFile}</result>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="authority" />
+		</action>
+		
+		<action name="uploadImage" class="com.ow.framework.controller.action.UploadImageAction"></action>  
+	</package>
+		
+	<package name="ajax" extends="json-default">
+		<global-results>
+			<result name="loginout">/exit.jsp</result>
+		</global-results>
+		<action name="ajaxAction" class="com.ow.framework.controller.action.AjaxAction">
+			<result type="json" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+	</package>	
+	
+	<package name="certCodeImage" extends="struts-default">
+		<action name="certCodeImageAction" class="com.ow.framework.controller.action.CertCodeImageAction">
+            <result type="stream">  
+                <param name="contentType">image/jpeg</param>  
+                <param name="inputName">inputStream</param>  
+            </result>  
+		</action>	
+	</package>	
+		
+	<package name="ajaxCheckCode" extends="json-default">
+		<action name="ajaxCheckCodeAction" class="com.ow.framework.controller.action.AjaxCheckCodeAction">
+			<result type="json"/>
+		</action>		
+	</package>			
+</struts>

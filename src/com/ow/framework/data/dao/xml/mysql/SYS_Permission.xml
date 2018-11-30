@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+   PMS_ID               bigint not null comment '权限表主键',
+   PMS_Code             varchar(100) not null comment '系统权限代码，编码为数字，具有一定的规律。格式如下：1，11，111，112，12，121，122，13，131，132……',
+   PMS_ParentCode       varchar(100) comment '父权限代码，编码也为数字，格式同上（code）。',
+   PMS_Index            varchar(200) comment '权限名称，用2-6个汉字进行规整描述，以方便在页面显示。',
+   PMS_Name             varchar(200) comment '权限名称，用2-6个汉字进行规整描述，以方便在页面显示。',
+   PMS_Type             smallint,
+   PMS_IsValid          int comment '此权限是否有效。1：有效 0：无效',
+   PMS_DataSource       varchar(50),
+   PMS_DataHandlerBean  varchar(50),   数据处理bean
+   PMS_InitEvent        varchar(5000),
+   PMS_DefaultEvent     varchar(5000) comment '操作命令，根据操作数据库的类别进行定义，主要包括add，modify，delete， list(无分页列表)，pagelist(有分页列表)',
+   PMS_ExtendEvent      varchar(5000),
+   PMS_Desc             varchar(200) comment '权限描述',
+   PMS_Icon             varchar(500) comment '功能使用图片',
+   PMS_DirectFile       varchar(500) comment '跳转目标文件，点击功能按钮出发的事件，在进行跳转的时候，跳转的目标页面。若不跳转可以为空。',
+   PMS_Transaction      int comment '此操作是否进行事务处理。1：是，0：否',
+   PMS_AfterExecuteCode varchar(100),
+   PMS_ImitationStep    varchar(100) comment '操作步骤记录标识,全局唯一，以模块编号+步骤描述命名',
+   PMS_CreateTime       datetime comment '创建时间：角色的创建时间，为以后进行跟踪查询。',
+   PMS_Creator          varchar(50) comment '创建者：角色创建者姓名的记录。',
+	-->
+<mapper namespace="permission">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="pmsID" column="PMS_ID" />
+		<result property="pmsCode" column="PMS_Code" />
+		<result property="pmsParentCode" column="PMS_ParentCode" />
+		<result property="pmsName" column="PMS_Name" />
+		<result property="pmsIndex" column="PMS_Index" />
+		<result property="pmsType" column="PMS_Type" />
+		<result property="pmsIsValid" column="PMS_IsValid" />
+		<result property="pmsDataSource" column="PMS_DataSource" />
+		<result property="pmsInitEvent" column="PMS_InitEvent" />
+		<result property="pmsDataHandlerBean" column="PMS_DataHandlerBean" />
+		<result property="pmsDefaultEvent" column="PMS_DefaultEvent" />
+		<result property="pmsExtendEvent" column="PMS_ExtendEvent" />
+		<result property="pmsDesc" column="PMS_Desc" />
+		<result property="pmsIcon" column="PMS_Icon" />
+		<result property="pmsDirectFile" column="PMS_DirectFile" />
+		<result property="pmsTransaction" column="PMS_Transaction" />
+		<result property="pmsImitationStep" column="PMS_ImitationStep" />
+		<result property="pmsBeforeExecuteCode" column="PMS_BeforeExecuteCode" />
+		<result property="pmsAfterExecuteCode" column="PMS_AfterExecuteCode" />
+		<result property="pmsCreateTime" column="PMS_CreateTime" />
+		<result property="pmsCreator" column="PMS_Creator" />
+		<result property="paixu" column="paixu" />
+	</resultMap>
+	
+	<select id="select_login_all_pms" resultMap="convertResult" parameterType="param">
+		select * from sys_permission where (PMS_Type = 1 or PMS_Type = 2) order by PMS_isValid ASC
+	</select>
+	 	
+	<select id="select_all_pms" resultMap="convertResult" parameterType="param">
+		select * from sys_permission where PMS_Type = 1 order by PMS_isValid ASC
+	</select>
+	 
+	<select id="select_by_code" resultMap="convertResult" parameterType="param">
+		select * from sys_permission where PMS_Code = #{pmsCode}
+	</select>
+	 	 
+	<select id="select_all_pms_by_roleID" resultMap="convertResult" parameterType="param">
+	 	<if test="roleParentID == 0">
+	 	select * from sys_permission where (PMS_Type = 1 or PMS_Type = 2) order by PMS_isValid ASC
+	 	</if>
+	 	<if test="roleParentID != 0">
+		select * from sys_permission,sys_role_permission_mapper 
+		where (sys_permission.PMS_Type = 1 or sys_permission.PMS_Type = 2) 
+		and sys_permission.PMS_Code=sys_role_permission_mapper.RPM_PmsCode
+		and sys_role_permission_mapper.RPM_RoleID =${roleParentID} order by PMS_isValid ASC	 		
+	 	</if>
+	 </select>
+
+	<select id="select_logion_user_pms" resultMap="convertResult" parameterType="param">
+		select distinct sys_permission.* ,sys_role_permission_mapper.rpm_pmscode from sys_permission,sys_role_permission_mapper,sys_User_Role_Mapper
+		where sys_role_permission_mapper.RPM_PmsCode = sys_permission.PMS_Code
+			and sys_role_permission_mapper.RPM_RoleID = sys_User_Role_Mapper.URM_RoleID
+			and sys_User_Role_Mapper.URM_UserID = #{userID} 
+			  order by sys_permission.paixu ASC
+	 </select>
+
+
+	<insert id="insert" parameterType="param">
+		insert into sys_permission
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="pmsCode!=null">,PMS_Code</if>
+			<if test="pmsParentCode!=null">,PMS_ParentCode</if>
+			<if test="pmsName!=null">,PMS_Name</if>
+			<if test="pmsIndex!=null">,PMS_Index</if>
+			<if test="pmsType!=null">,PMS_Type</if>
+			<if test="pmsIsValid!=null">,PMS_IsValid</if>
+			<if test="pmsDataSource!=null">,PMS_DataSource</if>
+			<if test="pmsInitEvent!=null">,PMS_InitEvent</if>
+			<if test="pmsDataHandlerBean!=null">,PMS_DataHandlerBean</if>
+			<if test="pmsDefaultEvent!=null">,PMS_DefaultEvent</if>
+			<if test="pmsExtendEvent!=null">,PMS_ExtendEvent</if>
+			<if test="pmsDesc!=null">,PMS_Desc</if>
+			<if test="pmsIcon!=null">,PMS_Icon</if>
+			<if test="pmsDirectFile!=null">,PMS_DirectFile</if>
+			<if test="pmsTransaction!=null">,PMS_Transaction</if>
+			<if test="pmsImitationStep!=null">,PMS_ImitationStep</if>
+			<if test="pmsBeforeExecuteCode!=null">,PMS_BeforeExecuteCode</if>
+			<if test="pmsAfterExecuteCode!=null">,PMS_AfterExecuteCode</if>
+			<if test="pmsCreateTime!=null">,PMS_CreateTime</if>
+			<if test="pmsCreator!=null">,PMS_Creator</if>
+			<if test="paixu!=null">,paixu</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="pmsCode!=null">,#{pmsCode}</if>
+			<if test="pmsParentCode!=null">,#{pmsParentCode}</if>
+			<if test="pmsName!=null">,#{pmsName}</if>
+			<if test="pmsIndex!=null">,#{pmsIndex}</if>
+			<if test="pmsType!=null">,${pmsType}</if>
+			<if test="pmsIsValid!=null">,${pmsIsValid}</if>
+			<if test="pmsDataSource!=null">,#{pmsDataSource}</if>
+			<if test="pmsInitEvent!=null">,#{pmsInitEvent}</if>
+			<if test="pmsDataHandlerBean!=null">,#{pmsDataHandlerBean}</if>
+			<if test="pmsDefaultEvent!=null">,#{pmsDefaultEvent}</if>
+			<if test="pmsExtendEvent!=null">,#{pmsExtendEvent}</if>
+			<if test="pmsDesc!=null">,#{pmsDesc}</if>
+			<if test="pmsIcon!=null">,#{pmsIcon}</if>
+			<if test="pmsDirectFile!=null">,#{pmsDirectFile}</if>
+			<if test="pmsTransaction!=null">,${pmsTransaction}</if>
+			<if test="pmsImitationStep!=null">,#{pmsImitationStep}</if>
+			<if test="pmsBeforeExecuteCode!=null">,#{pmsBeforeExecuteCode}</if>
+			<if test="pmsAfterExecuteCode!=null">,#{pmsAfterExecuteCode}</if>			
+			<if test="pmsCreateTime!=null">,now()</if>
+			<if test="pmsCreator!=null">,#{pmsCreator}</if>
+			<if test="paixu!=null">,#{paixu}</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="param">
+		update sys_permission
+		<set>
+			<trim prefixOverrides=",">
+				<if test="pmsCode!=null">,PMS_Code=#{pmsCode}</if>
+				<if test="pmsParentCode!=null">,PMS_ParentCode=#{pmsParentCode}</if>
+				<if test="pmsName!=null">,PMS_Name=#{pmsName}</if>
+				<if test="pmsIndex!=null">,PMS_Index=#{pmsIndex}</if>
+				<if test="pmsType!=null">,PMS_Type=#{pmsType}</if>
+				<if test="pmsIsValid!=null">,PMS_IsValid=#{pmsIsValid}</if>
+				<if test="pmsDataSource!=null">,PMS_DataSource=#{pmsDataSource}</if>
+				<if test="pmsInitEvent!=null">,PMS_InitEvent=#{pmsInitEvent}</if>
+				<if test="pmsDataHandlerBean!=null">,PMS_DataHandlerBean=#{pmsDataHandlerBean}</if>
+				<if test="pmsDefaultEvent!=null">,PMS_DefaultEvent=#{pmsDefaultEvent}</if>
+				<if test="pmsExtendEvent!=null">,PMS_ExtendEvent=#{pmsExtendEvent}</if>
+				<if test="pmsDesc!=null">,PMS_Desc=#{pmsDesc}</if>
+				<if test="pmsIcon!=null">,PMS_Icon=#{pmsIcon}</if>
+				<if test="pmsDirectFile!=null">,PMS_DirectFile=#{pmsDirectFile}</if>
+				<if test="pmsTransaction!=null">,PMS_Transaction=${pmsTransaction}</if>
+				<if test="pmsImitationStep!=null">,PMS_ImitationStep=#{pmsImitationStep}</if>
+				<if test="pmsBeforeExecuteCode!=null">,PMS_BeforeExecuteCode=#{pmsBeforeExecuteCode}</if>
+				<if test="pmsAfterExecuteCode!=null">,PMS_AfterExecuteCode=#{pmsAfterExecuteCode}</if>				
+				<if test="pmsCreateTime!=null">,PMS_CreateTime=#{pmsCreateTime}</if>
+				<if test="pmsCreator!=null">,PMS_Creator=#{pmsCreator}</if>
+				<if test="paixu!=null">,paixu=#{paixu}</if>
+			</trim>
+		</set>
+		 where PMS_ID=${pmsID}
+	</update>
+
+	<delete id="delete" parameterType="param">
+		delete from sys_permission  
+	</delete>
+</mapper>

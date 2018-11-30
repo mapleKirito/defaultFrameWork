@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root> 
+	<menu>
+	<m  text="文物博览室">
+		<cm  text="原始社会时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,160,&paramMap.erTotalID=160&pageSize=8&type=1"></cm>
+		<cm  text="夏商周时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,47,&paramMap.erTotalID=47&pageSize=8&type=1"></cm>
+		<cm  text="春秋战国时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,62,&paramMap.erTotalID=62&pageSize=8&type=1
+"></cm>
+		<cm  text="秦汉时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,75,&paramMap.erTotalID=75&pageSize=8&type=1
+"></cm>
+		<cm  text="三国两晋南北朝时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,30,&paramMap.erTotalID=30&pageSize=8&type=1
+"></cm>
+		<cm  text="隋唐五代时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,96,&paramMap.erTotalID=96&pageSize=8&type=1
+"></cm>
+		<cm  text="辽宋夏金元时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,2,&paramMap.erTotalID=2&pageSize=8&type=1
+"></cm>
+		<cm  text="明清时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,116,&paramMap.erTotalID=116&pageSize=8&type=1
+"></cm>
+		<cm  text="中国近现代时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,133,&paramMap.erTotalID=133&pageSize=8&type=1
+"></cm>
+		<cm  text="世界古代时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,271,&paramMap.erTotalID=271&pageSize=8&type=1
+"></cm>
+		<cm  text="世界近现代时期" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,1,272,&paramMap.erTotalID=272&pageSize=8&type=1
+"></cm>
+	</m>  
+	<m  text="专题研读室">
+		<cm  text="政治制度史" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,219,224,&paramMap.orCategory=224&pageSize=8&type=1
+
+"></cm>
+		<cm  text="经济制度史" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,219,225,&paramMap.orCategory=225&pageSize=8&type=1
+"></cm>
+		<cm  text="思想史" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,219,226,&paramMap.orCategory=226&pageSize=8&type=1
+"></cm>
+		<cm  text="艺术史" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,219,227,&paramMap.orCategory=227&pageSize=8&type=1
+"></cm>
+	  
+		<cm  text="历史事件" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,213,216,&paramMap.path=,0,213,216,&paramMap.orCategory=216&pageSize=8&type=1
+"></cm>
+		<cm  text="历史人物" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,219,228,&paramMap.orCategory=228&pageSize=8&type=1
+"></cm>
+	</m> 
+	<m  text="影像资料室">        
+		<cm  text="近现代影像资料" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,213,214,&paramMap.path=,0,213,214,&paramMap.orCategory=214&pageSize=8&type=1
+"></cm>
+		<cm  text="纪录片" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,213,215,&paramMap.path=,0,213,215,&paramMap.orCategory=215&pageSize=8&type=1
+"></cm>
+		<cm  text="历史剧" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,213,216,&paramMap.path=,0,213,216,&paramMap.orCategory=216&pageSize=8&type=1
+"></cm>
+		<cm  text="科学还原" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,213,217,&paramMap.path=,0,213,217,&paramMap.orCategory=217&pageSize=8&type=1
+"></cm>
+	</m>     
+	<m  text="自主探究室">    
+		<cm  text="探究热身" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,206,207,&pageSize=8&type=1&zizhureshen
+"></cm>
+		<cm  text="探究广场" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,206,208,&pageSize=8&type=1&zizhuguang
+"></cm>
+		<cm  text="探究成果" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,206,212,&pageSize=8&type=1&zizhuchengguo
+"></cm>
+	</m>
+	<m  text="教学研究室">
+		<cm  text="课件参考" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,218,221,&paramMap.orCategory=221&pageSize=8&type=1
+"></cm>
+		<cm  text="微课程" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,218,222,&paramMap.orCategory=222&pageSize=8&type=1
+"></cm>
+   </m>   
+	<m  text="情系家园">
+		<cm  text="家乡探秘" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,259,260,&pageSize=8&type=1
+"></cm>
+		<cm  text="校园追风" url="http://192.168.1.106:8086/dm/forwardAction.action?code=-1700&path=,0,259,265,&pageSize=8&type=1
+"></cm>
+	</m>   
+	</menu>
+</root>

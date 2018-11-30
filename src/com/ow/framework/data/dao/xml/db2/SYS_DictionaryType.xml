@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="dictType">
+	<resultMap id="convertResultDictionaryType" type="result">
+		<result property="dtID" column="DT_ID" />
+		<result property="dtName" column="DT_Name" />
+		<result property="dtDesc" column="DT_Desc" />
+	</resultMap>
+	<resultMap id="convertResultDictionaryTypeHaveDicID" type="result">
+		<result property="dtID" column="DT_ID" />
+		<result property="dtName" column="DT_Name" />
+		<result property="dtDesc" column="DT_Desc" />
+		<result property="dicID" column="DIC_ID" />
+	</resultMap>
+	<select id="select_all" resultMap="convertResultDictionaryType" parameterType="param">
+		select * from SYS_DictionaryType 
+		<where>
+		 	<if test="dtID!=null">
+		 	 DT_ID=#{dtID}
+			</if>
+		</where>
+		 order by DT_ID
+		 limit ${start},${offset}
+	 </select>
+	 <select id="select_all_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from SYS_DictionaryType 
+		<where>
+		 	<if test="dtID!=null">
+		 	 DT_ID=#{dtID}
+			</if>
+		</where>
+	 </select>
+	 <select id="select_ictionaryt_by_id" resultMap="convertResultDictionaryType" parameterType="param">
+	 	select DT_ID,
+	 	DT_Name,
+	 	DT_Desc
+	 	from SYS_DictionaryType where DT_ID=${dtID}
+	 </select>
+	  <select id="select_ictionaryt_by_dicid" resultMap="convertResultDictionaryType" parameterType="param">
+	 	select DT_ID,
+	 	DT_Name,
+	 	DT_Desc
+	 	from SYS_DictionaryType where DT_ID=(select DIC_DictTypeID from SYS_Dictionary where DIC_ID=${dicID})
+	 </select>
+	 <insert id="insert" parameterType="java.util.HashMap">
+	 	insert into SYS_DictionaryType
+	 	<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="dtName!=null">,DT_Name</if>
+			<if test="dtDesc!=null">,DT_Desc</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="dtName!=null">,#{dtName}</if>
+			<if test="dtDesc!=null">,#{dtDesc}</if>
+		</trim>
+	 </insert>
+	 <update id="update" parameterType="java.util.HashMap">
+		update SYS_DictionaryType
+		<set>
+			<if test="dtName!=null">DT_Name = #{dtName}</if>
+			<if test="dtDesc!=null">,DT_Desc = #{dtDesc}</if>
+		</set>
+		 where DT_ID=${key}
+	</update>
+	<delete id="delete" parameterType="java.util.HashMap">
+		delete from SYS_DictionaryType where DT_ID in (${dtID})
+	</delete>
+	
+	 <select id="check_dtName" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from SYS_DictionaryType
+		where DT_Name = '${dtName}'
+	</select>	
+</mapper>

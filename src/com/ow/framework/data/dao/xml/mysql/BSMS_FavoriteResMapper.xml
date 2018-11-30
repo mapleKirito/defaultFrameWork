@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+	 RF_ID                bigint, 收藏夹id
+   	 Res_Type             char(1) comment '对应各个资源表的表名',
+   	 Res_ID               bigint, 资源id
+     Res_Name             varchar(200) 资源名称
+     -->
+<mapper namespace="favoriteResMapper">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="frmId" column="FRM_ID" />
+		<result property="rfId" column="RF_ID" />
+		<result property="resType" column="Res_Type" />
+		<result property="resId" column="Res_ID" />
+		<result property="resName" column="Res_Name" />
+	</resultMap>
+	<select id="select_by_favoriteId" resultMap="convertResult" parameterType="param">
+		select frm.* from favorite_res_mapper frm where frm.RF_ID=${favoriteId}
+	</select>	
+	
+	<delete id="delete_by_favoriteId" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from favorite_res_mapper where RF_ID in (${favoriteId})
+		</trim>
+	</delete>
+	
+	<update id="move_res" parameterType="java.util.HashMap">
+		update favorite_res_mapper
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="moveFavoriteId!=null">,RF_ID = #{moveFavoriteId}</if>
+			</trim>
+		</set>
+		 where FRM_ID=${frmId}
+	</update>
+</mapper>
+

@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+	ORG_ID bigint(20) 组织机构id
+	ORG_ParentID bigint(20) 组织机构父id
+	ORG_Relation varchar(2000) 
+	ORG_Name varchar(100) 机构名称
+	ORG_Code varchar(50) 机构代码
+	ORG_Level varchar(11) 机构等级
+	ORG_Phone varchar(30) 机构电话
+	ORG_Fax varchar(30) 机构传真
+	ORG_PostCode varchar(10) 机构邮编
+	ORG_Address varchar(500) 机构地址
+	ORG_Desc varchar(500) 机构详细
+	ORG_Status int(11) 机构状态
+	ORG_CreateTime datetime 机构创建时间
+	ORG_Creator varchar(50) 机构创建者
+	-->
+	
+<mapper namespace="category">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="cateID" column="CATE_ID" />
+		<result property="cateParentID" column="CATE_ParentID" />
+		<result property="cateParentName" column="CATE_ParentName" />
+		<result property="cateName" column="CATE_Name" />
+		<result property="catePath" column="CATE_Path" />
+		<result property="cateSign" column="CATE_Sign" />
+		<result property="cateSort" column="CATE_Sort" />
+		<result property="cateSearchKeyWord" column="CATE_SearchKeyWord" />
+		<result property="cateSearchKeyWordName" column="CATE_SearchKeyWordName" />
+		<result property="cateKeyWord" column="CATE_KeyWord" />
+		<result property="cateLevel" column="CATE_Level" />
+		<result property="cateStatus" column="CATE_Status" />
+		<result property="cateIsChild" column="CATE_IsChild" />
+		<result property="cateUserID" column="CATE_UserID" />
+		<result property="cateUserAccount" column="CATE_UserAccount" />
+		<result property="cateOperateTime" column="CATE_OperateTime" />
+		<result property="cateCreateTime" column="CATE_CreateTime" />
+		<result property="cateCreator" column="CATE_Creator" />
+	</resultMap>
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+		category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+		category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+		category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+		category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+		category.CATE_Creator ,
+		d.DIC_Name as CATE_SearchKeyWordName
+		from 
+			res_category category
+			left join sys_dictionary d on d.DIC_ID = category.CATE_SearchKeyWord and d.DT_Value = 'category_keyword'
+	</select>
+	<select id="select_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator,
+			case when category1.CATE_Name is null then '0' else category1.CATE_Name end as CATE_ParentName ,
+			d.DIC_Name as CATE_SearchKeyWordName
+		from 
+			res_category category 
+			left join res_category category1 on category1.CATE_ID = category.CATE_ParentID 
+			left join sys_dictionary d on d.DIC_ID = category.CATE_SearchKeyWord and d.DT_Value = 'category_keyword'
+		where category.CATE_ID = ${cateID}
+	</select>
+	<select id="select_one_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="id != null and id != ''">
+				  category.CATE_ID=${id} 
+				</if>
+			</trim>
+		</where>	
+	</select>		
+	<select id="select_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="id == null">
+				  category.CATE_ParentID=0 
+				</if>
+				<if test="id != null and id != ''">
+					category.CATE_ParentID=${id}
+				</if>
+				<if test="cateSign != null and cateSign != ''">
+					and category.CATE_Sign=#{cateSign}
+				</if>	
+				<if test="cateStatus != null and cateStatus != ''">
+					and category.CATE_Status=#{cateStatus}
+				</if>	
+			</trim>
+		</where>
+		order by category.CATE_Sort 
+	</select>	
+	<select id="select_by_catesign" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="cateSign != null and cateSign != ''">
+					category.CATE_Sign=#{cateSign}
+				</if>	
+			</trim>
+		</where>
+	</select>
+	<!-- 根据标识，返回当前分类的下一级	 -->
+	<select id="select_level1_by_sign" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category join res_category c on category.CATE_ParentID = c.CATE_ID
+		<where>
+			<trim prefixOverrides="and" > 
+				c.CATE_Sign = '${cateSign}'
+			</trim>
+		</where>
+		ORDER BY category.CATE_Sort 
+	</select>
+	<select id="select_name_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select category.CATE_Name from res_category category 
+		where category.CATE_ID = ${cateID}
+	</select>	
+	<select id="select_name_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select category.CATE_Name from res_category category 
+		where category.CATE_ID =${cateParentID}
+	</select>		
+	<!-- 根据标识查询分类	 -->
+	<select id="select_by_sign" resultMap="convertResult" parameterType="java.util.HashMap">
+		select 
+			count(*) as count 
+		from 
+			res_category category 
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="cateSign != null and cateSign != ''">
+					and category.CATE_Sign = '${cateSign}'
+				</if>
+				<if test="cateID != null and cateID != ''">
+					and category.CATE_ID != ${cateID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查询父级分类	 -->
+	<select id="select_parent_by_id" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="cateParentID != null and cateParentID != ''">
+					category.CATE_ID=${cateParentID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查询下级分类	 -->
+	<select id="select_child_by_pid" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				<!--by maple category.CATE_Status = 1 -->
+				<if test="id!=null">
+			 	 	and category.CATE_ParentID=${id}
+				</if>
+				<if test="cateID != null and cateID != ''">
+					and category.CATE_ParentID=${cateID}
+				</if>
+				<if test="cateIDtop != null and cateIDtop != ''">
+					and category.CATE_ParentID=${cateIDtop}
+					<if test="cateIDtop == 0">
+						and	category.CATE_Sign='exhibition'
+					</if>				
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 查询下级分类除自主探究	 -->
+	<select id="select_child_by_pid_2" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				and CATE_Path not like ',0,206,%'
+				<!--by maple category.CATE_Status = 1 -->
+				<if test="id!=null">
+			 	 	and category.CATE_ParentID=${id}
+				</if>
+				<if test="cateID != null and cateID != ''">
+					and category.CATE_ParentID=${cateID}
+				</if>
+				<if test="cateIDtop != null and cateIDtop != ''">
+					and category.CATE_ParentID=${cateIDtop}
+					<if test="cateIDtop == 0">
+						and	category.CATE_Sign='exhibition'
+					</if>				
+				</if>
+			</trim>
+		</where>
+	</select>
+	<!-- 筛选查询下级分类	 -->
+	<select id="select_child_by_pid_screen" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+			 from res_category category
+			  where category.CATE_Status = 1 and category.CATE_Path like '${catePath}%' and category.CATE_Level = ${cateLevel}
+			ORDER BY category.CATE_Sort 
+	</select>
+	
+	<select id="select_tree" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		<where>
+			<trim prefixOverrides="and" > 
+				<if test="parentID == null or parentID == ''">
+				  category.CATE_ParentID=0 
+				</if>
+				<if test="parentID != null and parentID != ''">
+					category.CATE_ParentID=${parentID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_count" resultMap="convertResult" parameterType="java.util.HashMap">
+		select count(*)
+		from res_category category
+	</select>
+	<!-- 根据cateParentID模糊查询机构数量	 -->
+	<select id="select_count_by_catePath" resultType="int" parameterType="java.util.HashMap">
+		select count(*) from res_category c
+		<where>
+			<trim prefixOverrides="and">
+				<if test="catePath !=null and catePath !=''">
+					and c.CATE_Path like '%,${catePath},%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_by_catePath" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from res_category c
+		<where>
+			<trim prefixOverrides="and">
+				<if test="Oldpath !=null and Oldpath !=''">
+					and c.CATE_Path like '%,${Oldpath},%'
+				</if>
+			</trim>
+		</where>
+	</select>
+	<select id="select_has_sameCate" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_category c
+		<where>
+			<trim prefixOverrides="and">
+					and c.CATE_ParentID =${cateParentID}
+					and c.CATE_Name = #{cateName}
+			</trim>
+		</where>
+	</select>
+	
+	
+	<select id="check_cateName"  resultMap="convertResult" parameterType="java.util.HashMap">
+		select c.CATE_ID, c.CATE_ParentID, c.CATE_Name 
+		from res_category c
+		<where>
+			<trim  prefix="" prefixOverrides="and" suffix="">
+			
+				<if test="cateParentID != null and cateParentID !=''">
+					and c.CATE_ParentID = ${cateParentID}
+				</if>
+				<if test="cateName != null and cateName != ''">
+					and c.CATE_Name = '${cateName}'
+				</if>
+					
+					
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into res_category
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="cateParentID != null">,CATE_ParentID</if>
+			<if test="cateName!=null">,CATE_Name</if>
+			<if test="catePath!=null">,CATE_Path</if>
+			<if test="cateSign!=null">,CATE_Sign</if>
+			<if test="cateSort!=null">,CATE_Sort</if>
+			<if test="cateSearchKeyWord!=null">,CATE_SearchKeyWord</if>
+			<if test="cateKeyWord!=null">,CATE_KeyWord</if>
+			<if test="cateLevel!=null">,CATE_Level</if>
+			<if test="cateIsChild!=null">,CATE_IsChild</if>
+			<if test="s_userID!=null">,CATE_UserID</if>
+			<if test="s_userLoginAccount!=null">,CATE_UserAccount</if>
+			,CATE_Status
+			,CATE_OperateTime
+			,CATE_CreateTime
+			<if test="s_userLoginAccount!=null">,CATE_Creator</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="cateParentID!=null">,#{cateParentID}</if>
+			<if test="cateName!=null">,#{cateName}</if>
+			<if test="catePath!=null">,#{catePath}</if>
+			<if test="cateSign!=null">,#{cateSign}</if>
+			<if test="cateSort!=null">,#{cateSort}</if>
+			<if test="cateSearchKeyWord!=null">,#{cateSearchKeyWord}</if>
+			<if test="cateKeyWord!=null">,#{cateKeyWord}</if>
+			<if test="cateLevel!=null">,#{cateLevel}</if>
+			<if test="cateIsChild!=null">,#{cateIsChild}</if>
+			<if test="s_userID!=null">,#{s_userID}</if>
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+			,1,now(),now()
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="java.util.HashMap">
+		update res_category
+		<set>
+			<trim prefixOverrides=",">
+				<if test="cateParentID!=null">,CATE_ParentID=#{cateParentID}</if>
+				<if test="cateName!=null">,CATE_Name=#{cateName}</if>
+				<if test="catePath!=null">,CATE_Path=#{catePath}</if>
+				<if test="cateSign!=null">,CATE_Sign=#{cateSign}</if>
+				<if test="cateSort!=null">,CATE_Sort=#{cateSort}</if>
+				<if test="cateSearchKeyWord!=null">,CATE_SearchKeyWord=#{cateSearchKeyWord}</if>
+				<if test="cateKeyWord!=null">,CATE_KeyWord=#{cateKeyWord}</if>
+				<if test="s_userID!=null">,CATE_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount!=null">,CATE_UserAccount=#{s_userLoginAccount}</if>
+				,CATE_OperateTime = now()
+			</trim>
+		</set>
+		where CATE_ID=${cateID}
+	</update>
+	<update id="update_ischild" parameterType="java.util.HashMap">
+		update res_category
+		<set>
+			<trim prefixOverrides=",">
+				<if test="cateIsChild!=null and cateIsChild!=''">,CATE_IsChild = #{cateIsChild}</if>
+				<if test="s_userID!=null">,CATE_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount != null">,CATE_UserAccount=#{s_userLoginAccount}</if>
+				,CATE_OperateTime = now()
+		    </trim>
+		</set>
+		 where CATE_ID=${cateID}
+	</update>	
+	<update id="update_catePath" parameterType="java.util.HashMap">
+		update res_category
+		<set>
+			<trim prefixOverrides=",">
+				<if test="catePath!=null">,CATE_Path=#{catePath}</if>
+				<if test="s_userID!=null">,CATE_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount != null">,CATE_UserAccount=#{s_userLoginAccount}</if>
+				,CATE_OperateTime = now()
+		    </trim>
+		</set>
+		 where CATE_ID=${cateID}
+	</update>	
+	<update id="update_ischild_y" parameterType="java.util.HashMap">
+		update res_category set CATE_IsChild = 1 where CATE_ID=${y_cateParentID}
+	</update>
+	<update id="update_status" parameterType="java.util.HashMap">
+		update res_category set CATE_Status=1
+		 where CATE_ID=${cateID}
+	</update>
+	<update id="update_res_status" parameterType="java.util.HashMap">
+		update res_category set CATE_Status='${cateStatus}'
+		 where CATE_ID=${cateID}
+	</update>	
+	<update id="update_relation" parameterType="java.util.HashMap">
+		update res_category
+		<set>			
+			<trim prefixOverrides=",">
+				<if test="catePath!=null and catePath!=''">,CATE_Path = #{catePath}</if>
+				<if test="s_userID!=null">,CATE_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount!=null">,CATE_UserAccount=#{s_userLoginAccount}</if>
+				,CATE_OperateTime = now()
+			</trim>
+		</set>
+		where CATE_ID=${cateID}
+	</update>
+	
+	<update id="update_under_child" parameterType="java.util.HashMap">
+		update res_category
+		<set>
+			<trim prefixOverrides=",">
+				<if test="catePath != null and catePath != ''">,CATE_Path = #{catePath}</if>
+				<if test="cateLevel != null and cateLevel != ''">,CATE_Level = #{cateLevel}</if>
+				<if test="s_userID!=null">,CATE_UserID=#{s_userID}</if>
+				<if test="s_userLoginAccount!=null">,CATE_UserAccount=#{s_userLoginAccount}</if>
+				,CATE_OperateTime = now()
+		    </trim>
+		</set>
+		 where CATE_ID = ${cateID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from res_category where CATE_ID in (${cateID})
+		</trim>
+	</delete>
+	
+	<!-- 查询父级分类  五个科室顶级分类	 -->
+	<select id="select_parent_by_id_0" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			category.CATE_ID, category.CATE_ParentID, category.CATE_Name, category.CATE_Path,
+			category.CATE_Sign, category.CATE_Sort, category.CATE_SearchKeyWord,
+			category.CATE_KeyWord, category.CATE_UserID, category.CATE_UserAccount,
+			category.CATE_OperateTime, category.CATE_CreateTime,category.CATE_Level,category.CATE_IsChild,
+			category.CATE_Creator 
+		from res_category category
+		where category.CATE_ParentID = 0
+	</select>
+</mapper>
+

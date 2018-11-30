@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="syssetting">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="srID" column="SR_ID" />
+		<result property="srAlertFlssh" column="SR_AlertFlssh" />
+		<result property="srUnicomNet" column="SR_UnicomNet" />
+		<result property="srStuIsAuditing" column="SR_StuIsAuditing" />
+		<result property="srTeaIsAuditing" column="SR_TeaIsAuditing" />
+		<result property="srOperateTime" column="SR_OperateTime" />
+	</resultMap>
+	
+	<select id="select" resultMap="convertResult" parameterType="java.util.HashMap">
+		select syssetting.SR_ID, syssetting.SR_AlertFlssh, syssetting.SR_UnicomNet,syssetting.SR_StuIsAuditing,syssetting.SR_TeaIsAuditing, DATE_FORMAT(syssetting.SR_OperateTime,'%Y-%m-%d %H:%i:%s') SR_OperateTime from sys_settings syssetting
+	</select>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_settings
+		<set>
+			<trim prefixOverrides=",">
+				<if test="srAlertFlssh_ != null">,SR_AlertFlssh = #{srAlertFlssh_}</if>
+				<if test="srUnicomNet_ != null">,SR_UnicomNet = #{srUnicomNet_}</if>
+				<if test="srStuIsAuditing_ != null">,SR_StuIsAuditing = #{srStuIsAuditing_}</if>
+				<if test="srTeaIsAuditing_ != null">,SR_TeaIsAuditing = #{srTeaIsAuditing_}</if>
+				,SR_OperateTime = now()
+			</trim>
+		</set>
+	</update>
+</mapper>

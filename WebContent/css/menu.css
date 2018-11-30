@@ -1,0 +1,27 @@
+BODY {
+	FONT-SIZE: 12px
+}
+.info {
+	FONT-SIZE: 14px; WIDTH: 20px; COLOR: #ffffff; FONT-FAMILY: @Tahoma,@微软雅黑
+}
+TABLE {
+	FONT-SIZE: 12px; MARGIN: 0px; CURSOR: default
+}
+TR {
+	HEIGHT: 20px
+}
+TR.over {
+	FONT-SIZE: 12px; CURSOR: default; COLOR: #ffffff; BACKGROUND-COLOR: #000080
+}
+TR.out {
+	FONT-SIZE: 12px; COLOR: #000000; BACKGROUND-COLOR: #efefef
+}
+DIV.rm_div {
+	BORDER-RIGHT: #ffffff 1px outset; PADDING-RIGHT: 1px; BORDER-TOP: #ffffff 1px outset; DISPLAY: none; PADDING-LEFT: 1px; FILTER: Alpha(Opacity='95'); PADDING-BOTTOM: 1px; BORDER-LEFT: #ffffff 1px outset; WIDTH: 0px; PADDING-TOP: 1px; BORDER-BOTTOM: #ffffff 1px outset; POSITION: absolute; HEIGHT: 0px; BACKGROUND-COLOR: #efefef
+}
+HR.sperator {
+	BORDER-RIGHT: #ffffff 1px inset; BORDER-TOP: #ffffff 1px inset; BORDER-LEFT: #ffffff 1px inset; WIDTH: 95%; BORDER-BOTTOM: #ffffff 1px inset
+}
+.w2kfont {
+	FONT-SIZE: 8pt; FONT-FAMILY: Tahoma
+}

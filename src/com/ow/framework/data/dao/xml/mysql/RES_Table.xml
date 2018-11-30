@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="restable">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="rTable" column="rtable" />
+		<result property="Id" column="id" />
+		<result property="rName" column="rname" />
+		<result property="rType" column="rtype" />
+		<result property="userName" column="username" />
+		<result property="rCreatetime" column="rcreatetime" />
+		<result property="Thumbnail" column="Thumbnail" />
+		<result property="keywords" column="keywords" />
+	</resultMap>
+	<select id="select_by_resid_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(*) from res_resource res where res.RR_ResourceID = ${rrResourceID} and res.RR_ResourceType = '${rrResourceType}'
+	</select>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			rt.id,rt.rtable,rt.rcreatetime,rt.username,rt.Thumbnail,rt.rname,rt.rtype
+		from
+			res_table rt
+		where
+			rt.userid=#{s_userID}
+				<if test="rTable != null and rTable != '' ">
+					and rt.rtable=#{rTable}
+				</if>
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_page2" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			rt.id,rt.rtable,rt.rcreatetime,rt.username,rt.Thumbnail,rt.rname,rt.rtype
+		from
+			res_table rt
+		where
+			rt.userid=#{uID}
+				<if test="rTable != null and rTable != '' ">
+					and rt.rtable=#{rTable}
+				</if>
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_res_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rtype,rt.rname
+		from
+			res_table rt
+		where
+			rt.userid=#{ruserid}
+			and rt.rtable=#{rTable}
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_search_res" resultMap="convertResult" parameterType="java.util.HashMap">
+	select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rname,rt.rtype
+		from res_table rt
+			<if test="keyword != null and keyword != '' ">
+				where rt.rname like '%${keyword}%'
+			</if>
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_share_res" resultMap="convertResult" parameterType="java.util.HashMap">
+	select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rtype,rt.rname
+		from
+			res_table rt
+		where
+			rt.userid=#{ruserid}
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res" resultMap="convertResult" parameterType="java.util.HashMap">
+	select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rname,rt.rtype
+		from res_table rt
+		<where>
+			(rt.userid != #{ruserid} or rt.userid is null) 
+				${values}
+
+				<if test="tableName != null and tableName != ''">
+					and rt.rtable = #{tableName}
+				</if>
+		</where>
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_like_res2" resultMap="convertResult" parameterType="java.util.HashMap">
+	select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rname,rt.rtype
+		from res_table rt
+		<where>
+			(rt.userid != #{uID} or rt.userid is null) 
+				${values}
+
+				<if test="tableName != null and tableName != ''">
+					and rt.rtable = #{tableName}
+				</if>
+		</where>
+		order by rt.rcreatetime desc 
+		limit ${start},${offset}
+	</select>
+	<select id="select_like_res_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select
+			count(rt.id)
+		from res_table rt
+		<where>
+			(rt.userid != #{ruserid} or rt.userid is null) 
+				${values}
+
+				<if test="tableName != null and tableName != ''">
+					and rt.rtable = #{tableName}
+				</if>
+		</where>
+	</select>
+	
+	<select id="select_page_keywords"  resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rname,rt.rtype,rt.keywords
+		from res_table rt
+		<where>
+			<if test="keyword != null and keyword != '' "> 
+				and rt.keywords   like '%${keyword}%' 
+			</if>
+		</where>
+		limit ${start},${offset}
+	</select>
+	<select id="select_page_keywords_little"  resultMap="convertResult" parameterType="java.util.HashMap">
+		select
+			rt.id,rt.rtable,rt.rcreatetime,rt.userid,rt.Thumbnail,rt.rname,rt.rtype,rt.keywords
+		from res_table rt
+		<where>
+			<if test="keyword != null and keyword != '' "> 
+				and rt.keywords   like '%${keyword}%' 
+			</if>
+		</where>
+		limit ${start},${offset}
+	</select>
+</mapper>

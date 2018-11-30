@@ -1,0 +1,192 @@
+/* 根ul */
+.jq_selectMenu {
+	background:#FFFFFF;
+	border:1px solid #999;
+	margin-left:-1px;
+	list-style:none;
+	overflow-y:auto;
+	z-index:1000;
+	position:absolute;
+	height:150px;
+	display:none;
+	overflow:auto;
+}
+/* 所有下级的菜单 */
+.jq_selectMenu ul,.jq_selectMenu li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: block;
+}
+/* 所有的li */
+.jq_selectMenu li {
+	font-size: 12px;
+	line-height: 18px;
+	padding: 1px 0 1px 16px;
+	margin: 0;
+	background: url(../images/plugin/select_menu_default_line.gif) 0 0 no-repeat;
+}
+/* li分枝结束 */
+.jq_selectMenu li.branch-last {
+	background-position: 0 -1766px;
+}
+/* li节点 */
+.jq_selectMenu li.node-normal {
+	background-position: 0 -176px;
+}
+
+/* li节点结束.默认为- */
+.jq_selectMenu li.node-last {
+	background: url(../images/plugin/select_menu_default.gif) 0 -111px no-repeat;
+}
+.jq_selectMenu li.node-last-open {
+	background-position: 0 -111px;
+}
+.jq_selectMenu li.node-last-close {
+	background-position: -32px -67px;
+}
+
+/* li去除一切线条 */
+.jq_selectMenu-noline li {
+	background-image:none;
+}
+.jq_selectMenu-noline li.node-last {
+	background: url(../images/plugin/select_menu_default.gif) -16px -89px no-repeat;
+}
+.jq_selectMenu-noline li.node-last-open {
+	background-position: -16px -89px;
+}
+.jq_selectMenu-noline li.node-last-close {
+	background-position: -48px -45px;
+}
+
+
+/* 节点+-图标 */
+.jq_selectMenu li span.flex-ico {
+	background-image: url(../images/plugin/select_menu_default.gif);
+	background-repeat: no-repeat;
+	float:left;
+	width:16px;
+	height:16px;
+	cursor:pointer;
+	margin-left:-16px;
+	background-position: -64px -23px;
+}
+.jq_selectMenu li span.flex-open {
+	background-position: -64px -23px;
+}
+.jq_selectMenu li span.flex-close {
+	background-position: -80px -1px;
+}
+
+.jq_selectMenu li span.flex-none {
+	background-position: 0 0;
+}
+.jq_selectMenu-noline li span.flex-close {
+	background-position: -48px -46px;
+}
+.jq_selectMenunoline li span.flex-open {
+	background-position: -16px -90px;
+}
+
+/* 红色风格 */
+.jq_selectMenu-red li {
+	background-image: url(../images/plugin/select_menu_red_line.gif);
+}
+.jq_selectMenu-red li span.flex-ico,.jq_selectMenu-red li.node-last {
+	background-image: url(../images/plugin/select_menu_red.gif);
+}
+/* 黑色风格 */
+.jq_selectMenu-black li {
+	background-image: url(../images/plugin/select_menu_black_line.gif);
+}
+.jq_selectMenu-black li span.flex-ico,.jq_selectMenu-black li.node-last {
+	background-image: url(../images/plugin/select_menu_black.gif);
+}
+/* 灰色风格 */
+.jq_selectMenu-gray li {
+	background-image: url(../images/plugin/select_menu_gray_line.gif);
+}
+.jq_selectMenu-gray li span.flex-ico,.jq_selectMenu-gray li.node-last {
+	background-image: url(../images/plugin/select_menu_gray.gif);
+}
+/* famfamfam风格 */
+.jq_selectMenu-famfamfam li {
+	background-image: url(../images/plugin/select_menu_famfamfam_line.gif);
+}
+.jq_selectMenu-famfamfam li span.flex-ico,.jq_selectMenu-famfamfam li.node-last {
+	background-image: url(../images/plugin/select_menu_famfamfam.gif);
+}
+
+/* 图标支持 */
+.jq_selectMenu-file {
+	padding-left: 16px;
+	background:url(../images/plugin/file.gif) 0 0 no-repeat;
+}
+.jq_selectMenu-folder {
+	padding-left: 16px;
+	background:url(../images/plugin/folder-open.gif) 0 0 no-repeat;
+}
+.jq_selectMenu-folder-close {
+	padding-left: 16px;
+	background:url(../images/plugin/folder-close.gif) 0 0 no-repeat;
+}
+
+.jq_selectBox {
+	background:#FFFFFF url(../images/plugin/select_box_off.gif) no-repeat right center;
+	border:1px solid #999;
+	cursor:pointer;
+	display:block;
+	width: 150px; height: 16px;
+}
+.jq_selectBoxHover {
+	background:#FFFFFF url(../images/plugin/select_box_on.gif) no-repeat right center;
+}
+.jq_selectBox a.jq_selectValue {
+	display:block;
+	margin:1px 1px 2px;
+	padding:1px 20px 2px 4px;
+	white-space:nowrap;
+	color:#000;	
+	overflow:hidden;
+	width:100%;
+	height:16px;
+}
+.jq_selectBoxOptions {
+	background:#FFFFFF;
+	border:1px solid #999;
+	margin-left:-1px;
+	list-style:none;
+	overflow-y:auto;
+	z-index:1000;
+	position:absolute;
+	width:100%;
+	height:150px;
+	display:none;
+	overflow:auto;
+}
+.jq_selectBoxOptions a{
+	color:#000;
+	display:block;
+	height:16px;
+	line-height:16px;
+	padding-left:4px;
+	background:#fff;	
+	overflow:hidden;
+	white-space:nowrap;
+}
+.jq_selectBoxOptions a:hover{
+	background:#bbb
+}
+.jq_selectBoxOptions a.selected{
+	background:#bbb
+}
+/* 解决 firefox 点击放大出现虚线框，从而导致滚动条的问题  */
+.jq_selectBox a { 
+	outline: none; 
+	text-decoration:none;
+}
+.jq_selectBox a:focus { 
+	outline: none; 
+	text-decoration:none;
+} 

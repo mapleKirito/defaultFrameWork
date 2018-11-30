@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="science">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="sciID" column="SCI_ID" />
+		<result property="sciName" column="SCI_Name" />
+		<result property="sciSort" column="SCI_Sort" />
+	</resultMap>
+	
+	<select id="select_by_sort" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from sys_catescience a order by a.SCI_Sort
+	</select>
+	
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_catescience
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="sciName !=null">,SCI_Name</if>
+			<if test="sciSort !=null">,SCI_Sort</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="sciName !=null">,#{sciName}</if>
+			<if test="sciSort !=null">,#{sciSort}</if>
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_catescience
+		<set>
+			<trim prefixOverrides=",">
+				<if test="sciName !=null">,SCI_Name=#{sciName}</if>
+				<if test="sciSort !=null">,SCI_Sort=#{sciSort}</if>
+			</trim>
+		</set>
+		where SCI_ID=${sciID}
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_catescience where SCI_ID in (${sciID})
+		</trim>
+	</delete>
+	
+</mapper>

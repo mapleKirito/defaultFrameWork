@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!--
+   T_ID                 bigint not null auto_increment,
+   T_Content            text,
+   T_Title              varchar(20),
+   T_ReplyCount         int,
+   T_ViewCount          int,
+   T_CreateTime         datetime,
+   T_OperateTime        datetime,
+	-->
+	
+<mapper namespace="taskFinshed">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="tfID" column="TF_ID" />
+		<result property="taskId" column="Task_ID" />
+		<result property="taskAlert" column="Task_Alert" />
+		<result property="orgID" column="ORG_ID" />
+		<result property="studentID" column="Student_ID" />
+		<result property="teacherID" column="Teacher_ID" />
+		<result property="status" column="Status" />	
+		<result property="applyStatus" column="ApplyStatus" />		
+		<result property="createTime" column="CreateTime" />	
+		<result property="title" column="T_Title" />
+		<result property="content" column="T_Content" />	
+		<result property="tCreateTime" column="T_CreateTime" />	
+		<result property="userGender" column="USER_Gender" />
+		<result property="userName" column="USER_Name" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="applyTime" column="ApplyTime" />
+		<result property="finishedTime" column="FinishedTime" />
+		<result property="replyCount" column="T_ReplyCount" />
+		<result property="viewCount" column="T_ViewCount" />
+	</resultMap>
+	
+	<resultMap type="result" id="pageSize">
+		<result property="size" column="size" />
+	</resultMap>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into task_finshed
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			,Task_ID,ORG_ID,Student_ID,Teacher_ID,Status,CreateTime,ApplyStatus
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			,#{taskId},${orgID},#{studentID},${s_userID},'0',now(),'0'
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>		
+	</insert>
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select st.t_title,tf.task_id,st.T_ReplyCount,st.T_ViewCount from task_finshed tf, std_task st
+		<where>
+		tf.task_id = st.t_id and (status is Null or status ='' or status ='0')  and  tf.Teacher_Id=${s_userID} 
+		</where>
+		group by tf.task_id order by tf.CreateTime desc
+		limit ${start},${offset}
+	</select>	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="param">
+	 	select count(*) from (select distinct tf.task_id  from task_finshed tf WHERE (tf.status is Null or tf. status ='' or tf.status ='0') and tf.Teacher_ID=${s_userID}) as ttt
+	</select>	
+	<select id="select_std_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select distinct st.T_Title,st.T_Content, tf.Task_ID,st.T_ReplyCount,st.T_ViewCount,DATE_FORMAT(st.T_CreateTime,'%Y-%m-%d %H:%i:%s') T_CreateTime
+		from task_finshed tf join std_task st on tf.Task_ID = st.T_ID
+		<where>
+		<trim prefixOverrides="and">
+			(tf.ApplyStatus is Null or tf.ApplyStatus='' or tf.ApplyStatus='0')		
+			<if test="status != null">
+			 	 and status=${status}
+			</if>
+			<if test="s_userType == 1">
+				and tf.Teacher_ID=${s_userID}
+			</if>
+			<if test="s_userType == 2">
+				and tf.Student_ID=${s_userID}
+			</if>	
+			<if test="orgID != null and orgID !=''">
+			 	 and tf.ORG_ID=${orgID}
+			</if>
+		</trim>
+		</where>
+		 order by tf.CreateTime desc
+		limit ${start},${offset}
+	</select>	
+	<select id="select_std_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from task_finshed tf join std_task st on tf.Task_ID = st.T_ID
+		<where>
+		<trim prefixOverrides="and">
+		(tf.ApplyStatus is Null or tf.ApplyStatus='' or tf.ApplyStatus='0')				
+		<if test="status != null">
+		 	 and status=${status}
+		</if>
+		<if test="s_userType == 1">
+			and tf.Teacher_ID=${s_userID}
+		</if>
+		<if test="s_userType == 2">
+			and tf.Student_ID=${s_userID}
+		</if>		
+		<if test="orgID != null and orgID !=''">
+		 	 and tf.ORG_ID=${orgID}
+		</if>
+		</trim>
+		</where>
+	</select>	
+	
+	<select id="select_user_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select su.USER_Name,su.USER_Gender,so.ORG_Name,tf.Student_ID,tf.Task_Alert as taskAlert,tf.ORG_ID as orgID from task_finshed tf join sys_user su on tf.Student_ID = su.USER_ID join sys_organization so on tf.ORG_ID =so.ORG_ID
+		<where>
+		(status is Null or status ='' or status ='0') and tf.Teacher_ID=${s_userID} and su.user_type=2 and tf.Task_ID=${taskId} order by tf.CreateTime desc
+		</where>
+		limit ${start},${offset}
+	</select>	
+	<select id="select_user_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from task_finshed tf join sys_user su on tf.Student_ID = su.USER_ID join sys_organization so on tf.ORG_ID =so.ORG_ID
+		<where>
+		(status is Null or status ='' or status ='0') and tf.Teacher_ID=${s_userID} and su.user_type=2 and tf.Task_ID=${taskId} order by tf.CreateTime desc
+		</where>
+	</select>	
+
+	<select id="select_unfinish_correct_task_count" resultType="java.lang.Integer" parameterType="param">
+		select count( distinct st.T_ID) 
+		from std_task st,task_finshed tf
+		<if test="s_userType == 1">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Teacher_ID=${s_userID} 
+		and st.T_Type='1'
+		and (tf.ApplyStatus is Null or tf.ApplyStatus ='' or tf.ApplyStatus ='0')
+		and tf.status='0'
+		</if>
+		<if test="s_userType == 2">
+		where st.T_ID=tf.Task_ID  
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Student_ID=${s_userID} 
+		and st.T_Type='1'
+		and (tf.status ='0' or tf.status is Null or tf.status='' )
+		</if>
+		<if test="s_userType == 3 || s_userType == 0 ">
+		where st.T_ID=tf.Task_ID
+		and (tf.status ='0' or tf.status is Null or tf.status='')
+		</if>
+	</select>
+	<select id="select_today_task_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) 
+		from std_task st,task_finshed tf
+		<if test="s_userType == 1">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Teacher_ID=${s_userID} 
+		and tf.ApplyStatus ='0' 
+		and st.T_Type='1'
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+		</if>
+		<if test="s_userType == 2">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Student_ID=${s_userID} 
+		and tf.status ='0' 
+		and st.T_Type='1'
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+		</if>
+		<if test="s_userType == 0">
+		where tf.status ='0' and DATE_FORMAT(tf.CreateTime,'%Y-%m-%d')=DATE_FORMAT(now(),'%Y-%m-%d')
+		</if>		
+	</select>	
+	<select id="select_yestoday_task_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) 
+		from std_task st,task_finshed tf
+		<if test="s_userType == 1">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Teacher_ID=${s_userID} 
+		and tf.ApplyStatus ='0'
+		and tf.status ='1'
+		and st.T_Type='1'
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m-%d')=DATE_SUB(DATE_FORMAT(now(),'%Y-%m-%d'),INTERVAL 1 DAY)
+		</if>
+		<if test="s_userType == 2">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Student_ID=${s_userID} 
+		and tf.status ='0' 
+		and st.T_Type='1'
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m-%d')=DATE_SUB(DATE_FORMAT(now(),'%Y-%m-%d'),INTERVAL 1 DAY)
+		</if>
+		<if test="s_userType == 0">
+		where tf.status ='0' 
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m-%d')=DATE_SUB(DATE_FORMAT(now(),'%Y-%m-%d'),INTERVAL 1 DAY)
+		</if>		
+	</select>	
+	<!-- 上周作业统计	 -->
+	<select id="select_lastweek_task_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) 
+		from std_task st,task_finshed tf
+		<if test="s_userType == 1">
+		where st.T_ID=tf.Task_ID 
+		and ORG_ID in (${s_userOrgID}) 
+		and Teacher_ID=${s_userID} 
+		and ApplyStatus ='0' 
+		and tf.status ='1' 
+		and st.T_Type='1'
+		and YEARWEEK(DATE_FORMAT(CreateTime,'%Y-%m-%d'))=YEARWEEK(now())-1
+		</if>
+		<if test="s_userType == 2">
+		where st.T_ID=tf.Task_ID  
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Student_ID=${s_userID} 
+		and tf.status ='0' 
+		and st.T_Type='1'
+		and YEARWEEK(DATE_FORMAT(tf.CreateTime,'%Y-%m-%d'))=YEARWEEK(now())-1
+		</if>
+		<if test="s_userType == 0">
+		where tf.status ='0' and YEARWEEK(DATE_FORMAT(tf.CreateTime,'%Y-%m-%d'))=YEARWEEK(now())-1
+		</if>		
+	</select>	
+	<select id="select_lastmonth_task_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) 
+		from std_task st,task_finshed tf
+		<if test="s_userType == 1">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Teacher_ID=${s_userID} 
+		and tf.ApplyStatus ='0' 
+		and tf.status ='1' 
+		and st.T_Type='1'		
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m')=DATE_FORMAT(DATE_SUB(now(), INTERVAL 1 MONTH),'%Y-%m')
+		</if>
+		<if test="s_userType == 2">
+		where st.T_ID=tf.Task_ID 
+		and tf.ORG_ID in (${s_userOrgID}) 
+		and tf.Student_ID=${s_userID} 
+		and tf.status ='0' 
+		and st.T_Type='1'
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m')=DATE_FORMAT(DATE_SUB(now(), INTERVAL 1 MONTH),'%Y-%m')
+		</if>
+		<if test="s_userType == 0">
+		where tf.status ='0' 
+		and DATE_FORMAT(tf.CreateTime,'%Y-%m')=DATE_FORMAT(DATE_SUB(now(), INTERVAL 1 MONTH),'%Y-%m')
+		</if>			
+	</select>	
+	<select id="select_by_userId_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) as count_by  from task_finshed tf
+		<where>
+			<trim prefixOverrides="and">
+			 	<if test="userType == 2">
+			 	 and Student_ID=${userID}
+				</if>	
+				<if test="userType == 1">
+			 	 and Teacher_ID=${userID}
+				</if>
+			</trim>		
+		</where>		
+	</select>
+	<delete id="delete_by_taskId" parameterType="java.util.HashMap">
+		delete from task_finshed
+		<where>
+		 	<if test="taskId != null">
+		 	 TASK_ID=${taskId}
+			</if>			
+		</where>
+	</delete>	
+	<delete id="delete_by_userId" parameterType="java.util.HashMap">
+		delete from task_finshed
+		<where>
+			<trim prefixOverrides="and">
+			 	<if test="userType == 2">
+			 	 and Student_ID in (${userID}) 
+				</if>	
+				<if test="userType == 1">
+			 	 and Teacher_ID in (${userID}) 
+				</if>
+				<if test="taskId != null ">
+			 	 and Task_ID in (${taskId})
+				</if>
+			</trim>		
+		</where>
+	</delete>
+	<update id="update_student_status" parameterType="java.util.HashMap">
+		update task_finshed
+		set status = 1,FinishedTime=now()
+		where Task_ID=${taskId} and ORG_ID in (${s_userOrgID}) and Student_ID=${s_userID}
+	</update>
+	<update id="update_teacher_status" parameterType="java.util.HashMap">
+		update task_finshed
+		set applyStatus = 1,ApplyTime=now()
+		where Task_ID=${tId} and ORG_ID in (${s_userOrgID}) and Teacher_ID=${s_userID}
+	</update>	
+	<update id="init_update_alert" parameterType="java.util.HashMap">
+		update task_finshed set Task_Alert = 1,FinishedTime=now()
+		where Task_ID=${tID} and ORG_ID in (${s_userOrgID}) and Student_ID in (${studentID})
+	</update>
+</mapper>
+

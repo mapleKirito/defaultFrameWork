@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="gagellery">
+	<resultMap id="convertResult" type="java.util.HashMap">
+		<result property="gaID" column="Ga_ID" />
+		<result property="gaParentId" column="Ga_ParentId" />
+		<result property="gaSrc" column="GA_Src" />
+		<result property="gaDescription" column="GA_Description" />
+		<result property="gaUserID" column="GA_UserID" />
+		<result property="gaCreateTime" column="GA_CreateTime" />
+		<result property="gaShare" column="share" />
+	</resultMap>
+	
+	<select id="select_by_ids" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from sys_mygallery gallery where Ga_ID in #{gaID}
+	</select>
+	<select id="select_by_ids_pic" resultMap="convertResult" parameterType="java.util.HashMap">
+		select * from sys_mygallery gallery where Ga_ID in #{gaID}
+	</select>
+	<select id="select_by_team" resultMap="convertResult" parameterType="java.util.HashMap">
+		select su.user_name,gallery.Ga_ParentId,gallery.share,gallery.GA_UserID,gallery.Ga_ID,gallery.GA_Src,gallery.GA_Description,DATE_FORMAT(GA_CreateTime,'%Y-%m-%d') as GA_CreateTime from sys_mygallery gallery,sys_user su
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				and su.user_id=gallery.GA_UserID
+				<if test="gaDescription != null and gaDescription != ''">
+					and gallery.GA_Description like '${gaDescription}%' 
+				</if>
+				<if test="gaShare != null and gaShare != ''">
+					and gallery.share = ${gaShare}
+				</if>
+				<if test="userID != null and userID != ''">
+					and gallery.GA_UserID = ${userID}
+				</if>
+					and gallery.teamID = ${tID}
+			</trim>
+		</where>
+		ORDER BY gallery.Ga_ID desc
+	</select>
+	<select id="select_all" resultMap="convertResult" parameterType="java.util.HashMap">
+		select su.user_name,gallery.Ga_ParentId,gallery.share,gallery.GA_UserID,gallery.Ga_ID,gallery.GA_Src,gallery.GA_Description,DATE_FORMAT(GA_CreateTime,'%Y-%m-%d') as GA_CreateTime from sys_mygallery gallery,sys_user su
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+			and su.user_id=gallery.GA_UserID
+				<if test="gaDescription != null and gaDescription != ''">
+					and gallery.GA_Description like '${gaDescription}%' 
+				</if>
+				<if test="gaShare != null and gaShare != ''">
+					and gallery.share = ${gaShare}
+				</if>
+				<if test="userID != null and userID != ''">
+					and gallery.GA_UserID = ${userID}
+				</if>
+				<if test="teamID == null or teamID == ''">
+					and gallery.teamID is null
+				</if>
+				<if test="teamID != null and teamID != ''">
+					and gallery.teamID = ${teamID}
+				</if>
+				<if test="gaParentId != null and gaParentId != ''">
+					and gallery.Ga_ParentId = ${gaParentId}
+				</if>
+			</trim>
+		</where>
+		ORDER BY gallery.Ga_ID desc
+	</select>
+	
+	
+	<select id="select_page" resultMap="convertResult" parameterType="java.util.HashMap">
+		select su.user_name,gallery.Ga_ParentId,gallery.share,gallery.GA_UserID,gallery.Ga_ID,gallery.GA_Src,gallery.GA_Description,DATE_FORMAT(GA_CreateTime,'%Y-%m-%d') as GA_CreateTime from sys_mygallery gallery,sys_user su
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+			and su.user_id=gallery.GA_UserID
+				<if test="gaDescription != null and gaDescription != ''">
+					and gallery.GA_Description like '${gaDescription}%' 
+				</if>
+				<if test="gaShare != null and gaShare != ''">
+					and gallery.share = ${gaShare}
+				</if>
+					and gallery.Ga_ParentId is null
+				<if test="userID != null and userID != ''">
+					and gallery.GA_UserID = ${userID}
+				</if>
+				<if test="teamID == null or teamID == ''">
+					and gallery.teamID is null
+				</if>
+				<if test="teamID != null and teamID != ''">
+					and gallery.teamID = ${teamID}
+				</if>
+			</trim>
+		</where>
+		ORDER BY gallery.Ga_ID desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_pic" resultMap="convertResult" parameterType="java.util.HashMap">
+		select su.user_name,gallery.Ga_ParentId,gallery.share,gallery.GA_UserID,gallery.Ga_ID,gallery.GA_Src,gallery.GA_Description,DATE_FORMAT(GA_CreateTime,'%Y-%m-%d') as GA_CreateTime from sys_mygallery gallery,sys_user su
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+			and su.user_id=gallery.GA_UserID
+				<if test="gaDescription != null and gaDescription != ''">
+					and gallery.GA_Description like '${gaDescription}%' 
+				</if>
+				<if test="gaShare != null and gaShare != ''">
+					and gallery.share = ${gaShare}
+				</if>
+				<if test="gaParentId != null and gaParentId != ''">
+					and gallery.Ga_ParentId = ${gaParentId}
+				</if>
+				<if test="userID != null and userID != ''">
+					and gallery.GA_UserID = ${userID}
+				</if>
+				<if test="teamID == null or teamID == ''">
+					and gallery.teamID is null
+				</if>
+				<if test="teamID != null and teamID != ''">
+					and gallery.teamID = ${teamID}
+				</if>
+			</trim>
+		</where>
+		ORDER BY gallery.Ga_ID desc
+		limit ${start},${offset}
+	</select>
+	
+	<select id="select_page_count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(gallery.Ga_ID) from sys_mygallery gallery
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="gaDescription != null and gaDescription != ''">
+					and gallery.GA_Description like '${gaDescription}%' 
+				</if>
+				<if test="gaShare != null and gaShare != ''">
+					and gallery.share = ${gaShare}
+				</if>
+				
+					and gallery.Ga_ParentId is null
+			
+				<if test="userID != null and userID != ''">
+					and gallery.GA_UserID = ${userID}
+				</if>
+				<if test="teamID == null or teamID == ''">
+					and gallery.teamID is null
+				</if>
+				<if test="teamID != null and teamID != ''">
+					and gallery.teamID = ${teamID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	
+	<select id="select_page_count_pic" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		select count(gallery.Ga_ID) from sys_mygallery gallery
+		<where>
+			<trim prefix="" prefixOverrides="and" suffix=""> 
+				<if test="gaDescription != null and gaDescription != ''">
+					and gallery.GA_Description like '${gaDescription}%' 
+				</if>
+				<if test="gaShare != null and gaShare != ''">
+					and gallery.share = ${gaShare}
+				</if>
+				<if test="gaParentId != null and gaParentId != ''">
+					and gallery.Ga_ParentId = ${gaParentId}
+				</if>
+				<if test="userID != null and userID != ''">
+					and gallery.GA_UserID = ${userID}
+				</if>
+				<if test="teamID == null or teamID == ''">
+					and gallery.teamID is null
+				</if>
+				<if test="teamID != null and teamID != ''">
+					and gallery.teamID = ${teamID}
+				</if>
+			</trim>
+		</where>
+	</select>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into sys_mygallery
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="gaSrc != null">,GA_Src</if>
+			<if test="gaParentId != null">,Ga_ParentId</if>
+			<if test="gaDescription != null">,GA_Description</if>
+			<if test="gaUserID != null">,GA_UserID</if>
+			<if test="gaShare != null">,share</if>
+			<if test="teamID != null">,teamID</if>
+			,GA_CreateTime
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="gaSrc != null">,#{gaSrc}</if>
+			<if test="gaParentId != null">,#{gaParentId}</if>
+			<if test="gaDescription != null">,#{gaDescription}</if>
+			<if test="gaUserID != null">,#{gaUserID}</if>
+			<if test="gaShare != null">,${gaShare}</if>
+			<if test="teamID != null">,${teamID}</if>
+			,now()
+		</trim>
+		<selectKey keyProperty="generatedKey" resultType="int"> 
+			 select LAST_INSERT_ID() as generatedKey   
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="java.util.HashMap">
+		update sys_mygallery
+		<set>
+			<trim prefixOverrides=",">
+				<if test="gaSrc != null">,GA_Src = #{gaSrc}</if>
+				<if test="gaDescription != null">,GA_Description = #{gaDescription}</if>
+			</trim>
+		</set>
+		where Ga_ID=${gaID}
+	</update>
+	
+	<update id="updateShare" parameterType="java.util.HashMap">
+		update sys_mygallery
+		set share=${gaShare}
+		where Ga_ID=${gaID}
+		<if test="gaParentId != null and gaParentId != ''">
+		 or Ga_ParentId = ${gaParentId}
+		</if>
+	</update>
+	
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from sys_mygallery where Ga_ID in (${gaID}) or Ga_ParentId in (${gaParentId})
+		</trim>
+	</delete>
+	
+</mapper>

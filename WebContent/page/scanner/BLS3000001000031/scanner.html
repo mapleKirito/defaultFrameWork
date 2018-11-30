@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>二维码扫描页</title>
+<link type="text/css" href="page/html/pageUnit/styles/css3.css" rel="stylesheet" />
+<script type="text/javascript" src="page/html/pageUnit/lib/lazyload.js"></script>
+<script type="text/javascript" src="page/html/pageUnit/lib/head.core.min.js"></script>
+ <style type="text/css">
+li{margin-left: 8px;float: left;list-style: none;}
+#allmap {width: 265px;height: 218px;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+</style>
+
+<script type="text/javascript">
+function loadComplete(){
+	
+	
+	
+	function check(reg) {
+	  	  var ug = navigator.userAgent.toLowerCase();
+	  	  return reg.test(ug);
+	}
+	
+	var curWwwPath=window.document.location.href; 
+	var pathName=window.document.location.pathname; 
+	var pos=curWwwPath.indexOf(pathName); 
+	var localhostPaht=curWwwPath.substring(0,pos); 
+	var st=localhostPaht+"/dm/";
+	
+	var ug = navigator.userAgent.toLowerCase();
+	var userAgent = document.getElementById("userAgent");
+	var browserType = "";
+	var ver = "";
+	var IE = ug.match(/msie\s*\d\.\d/);
+	var isIE = check(/msie/);
+	var isPad= (ug.match(/iPad/i)=="ipad");
+	if(isIE) {
+	    $("#music").html('<embed src="" id="mp" style="height:0px;width:0px;" autostart="false" loop="true">');
+	}else{
+	 	$("#music").html('<audio src="" id="mp"></audio>');
+	}
+	    
+	//$("#pikame").PikaChoose({carousel:true});
+	    
+	//初始�?
+	$("#pikame").css({"width":$("#pikame li").length*161+"px"});
+	
+	var clickTag=true;
+	$(".clip img:first").addClass("active");
+	$(".pika-stage img").attr("src",$(".clip img:first").attr("srcs"));
+	
+	
+	$(".clip").each(function(){
+		$(this).find("img").click(function(){
+			//alert($(this).parent().parent().index());
+			$(".pika-stage img").attr("src",$(this).attr("srcs"));
+			$(".clip img").removeClass("active");
+			$(this).addClass("active");
+		});
+	})
+	
+	$(".pika-stage").on("swipeleft",function(){
+		    if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().next().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+		  }); 
+	
+	$(".pika-stage").on("swiperight",function(){
+		 if(clickTag){
+		    	clickTag=false;
+		    	//alert($(".active").parent().parent().next().find("img").attr("src"));
+			    var pic=$(".active").parent().parent().prev().find("img");
+			    if(pic.attr("src")!=null){
+			    	$(".pika-stage img").attr("src",pic.attr("srcs"));
+				    $(".clip img").removeClass("active");
+				    pic.addClass("active");
+			    }
+			    
+			    setTimeout(function(){
+	                clickTag=true;
+	         	},300);
+		    }
+	  }); 
+	
+	$("img").each(function(){
+	    if($(this).hasClass("b")){
+	    	$(this).click(function(){
+	    		window.imagelistner.openImage($(this)[0].src);
+	    		if(isPad){
+	    			document.location = "ios:pic:"+$(this)[0].src;
+	    		}
+	    		
+	    	});
+	   	}
+  	});
+	
+	$(".pbtn").each(function(){
+	   	$(this).click(function(){
+	   		//alert($(this).attr("pid")+"=="+$(this).attr("pname"));
+	   		location.href="show_page?id="+$(this).attr("pid")+"&pageName="+$(this).attr("pname");
+	   	});
+  	});
+	
+	$("#jump_map").click(function(){
+		
+		//window.maplistner.openMap($("#point_x").val(),$("#point_y").val());
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+		
+	})
+		
+	
+	 /* $("#pikame").on("swipeleft",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=-720;
+		    if((0-l)+720>parseInt($(this).css("width"))){
+		    	l=0-(parseInt($(this).css("width"))-720);
+		    }
+		    $(this).animate({"left":l+"px"});
+		  }); 
+	 
+	 $("#pikame").on("swiperight",function(){
+		    var l=parseInt($(this).css("left"));
+		    l+=720;
+		    if(l>0){
+		    	l=0;
+		    }
+		    $(this).animate({"left":l+"px"});
+		  });  */
+	
+		
+	$("#allmap").click(function(){
+		//alert("全屏地图");
+		window.maplistner.openMap($("#dingwei").val());
+		
+		if(isPad){
+			document.location = "ios:point:"+$("#dingwei").val();
+		}
+	});
+}
+ 
+function loadscript(){
+	LazyLoad.loadOnce([
+			'page/html/pageUnit/lib/jquery-1.9.1.min.js',
+			'page/html/pageUnit/lib/jquery.mobile-1.3.0.js',
+			'page/html/pageUnit/lib/jquery.touchwipe.min.js',
+			'page/html/pageUnit/lib/jquery.preload.min.js'
+		], 
+		loadComplete);
+}
+
+setTimeout(loadscript,10);
+
+function initialize() {
+    //地图
+	var map = new BMap.Map("allmap",{mapType: BMAP_HYBRID_MAP});
+	var point = new BMap.Point(74.404, 53.915);
+	map.centerAndZoom(point, 4);
+	map.enableScrollWheelZoom();  
+
+	var erlalo = $("#dingwei").val();
+	var erval = erlalo.split("|");
+	var ischina = true;
+
+	for (var i = 0; i < erval.length; i ++) {
+		var jing = erval[i].split(",")[0];
+		var weid = erval[i].split(",")[1];
+		
+		if(jing>=73.33 && jing<=135.05 && weid>=3.51 && weid<= 53.33){
+			ischina = false;
+		}
+	    var point = new BMap.Point(erval[i].split(",")[0], erval[i].split(",")[1]);
+	    addMarker(point);
+	}
+
+	if(ischina){
+		setTimeout(function(){
+			map.setCenter(new BMap.Point(0, 20));  
+			map.setZoom(3);    
+		}, 1500);	
+		 	
+	}    
+	
+	function addMarker(point){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	}
+	//地图结束
+}
+
+function loadScript() {
+    var script = document.createElement("script");
+    script.src = "http://api.map.baidu.com/api?v=1.5&ak=D1835706182777b6cf2e0a57846a26e8&callback=initialize";
+    document.body.appendChild(script);
+}
+ 
+window.onload = loadScript;
+
+</script>
+</head>
+<body>
+<input type="hidden" value="" id="dingwei" />
+	<table>
+		
+		<tr>
+			<td>
+			<DIV LANG="zh-CN" TEXT="#000000" LINK="#0000ff" DIR="LTR"><H1 CLASS="cjk" ALIGN=CENTER STYLE="margin-top: 0cm; margin-bottom: 0cm;  line-height: 0.48cm"><FONT COLOR="#000000"><FONT SIZE=6 STYLE="font-size: 26pt">夏商周时期</FONT></FONT></H1><H1 CLASS="cjk" ALIGN=CENTER STYLE="margin-top: 0cm; margin-bottom: 0cm;  font-weight: normal; line-height: 0.48cm"></H1><P CLASS="cjk" STYLE="text-indent: 0.56cm; margin-bottom: 0cm"><FONT COLOR="#333333"><SPAN STYLE="background: #ffffff">夏商周即中国夏朝、商朝、周朝三个朝代的简称</SPAN></FONT><FONT COLOR="#000000"><SPAN STYLE="background: #ffffff">。</SPAN></FONT></P><P CLASS="cjk" STYLE="margin-bottom: 0cm"><BR></P><H2 CLASS="cjk"><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT FACE="Arial, sans-serif"><SPAN STYLE="background: #ffffff">1.</SPAN></FONT></FONT></SPAN>简要介绍</H2><H3 CLASS="cjk"><A NAME="2366791-2502629-1_1"></A><SPAN LANG="en-US">1.1</SPAN>鲧禹治水</H3><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt">最早有文献记载的一位夏氏族成员是鲧。《国语</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">周语》中说鲧作为夏族首领被封在崇，故被称为&ldquo;崇伯鲧&rdquo;。之后禹继承了鲧，为&ldquo;崇伯禹&rdquo;。这表明夏族早期活动于崇山附近。当时河水泛滥，为了抵抗洪水不少部落形成了部落联盟</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[2]</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">，鲧被四岳推选领导治水，历时九年而最终失败。治水失败的原因可能是因为他不善于团结族人及其他部落。《尚书</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">尧典》记载</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[3]</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">，尧最初认为鲧方命圮族、毁败善类而反对鲧领导治水，说明鲧在领导治水时，有不少部落对他不满。《尚书</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">洪范》与《国语</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">鲁语》中又提到&ldquo;鲧障洪水&rdquo;，说明鲧治水的方法主要用土木堵塞以屏障洪水，或许这亦是鲧治水九年失败的原因之一</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[4]</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">。鲧治水失败后，被殛死于东方黄海海滨的羽山。</FONT></P><P ALIGN=CENTER STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><IMG class='b' SRC="page/scanner/BLS3000001000031/1423564164663_html_4ed6ed48.png" NAME="图形1" ALIGN=BOTTOM WIDTH=234 HEIGHT=300 BORDER=0></P><H3 CLASS="cjk" STYLE="page-break-before: always"><SPAN LANG="en-US">1.2</SPAN>大禹治水</H3><P ALIGN=LEFT STYLE="text-indent: 0.74cm; margin-bottom: 0cm;  line-height: 0.74cm; widows: 2; orphans: 2"><A NAME="2366791-2502629-2"></A><FONT SIZE=2 STYLE="font-size: 10pt">各部落的族人，终于将洪水治平。《史记</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">夏本纪》记载禹治水时&ldquo;劳身焦思，居外十三年，过家门不敢入&rdquo;，其刻苦精神得到后世传颂，治水过程可能也促进了各部落族人的团结。《孟子</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">滕文公》提到了禹的治水方法：&ldquo;疏九河，瀹济、漯而注诸海；决汝、汉，排淮、泗而注之江。&rdquo;禹亦倡导农业，强调&ldquo;躬耕而有天下。</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">[6]&rdquo;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">《韩非子</FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US">&middot;</SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt">五蠹》赞禹&ldquo;身执耒&#33279;以为民先，股无&#32968;，胫不生毛，虽臣虏之劳不苦于此矣。</FONT></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"> </P><H3 CLASS="cjk"><SPAN LANG="en-US">1.3</SPAN>讨伐三苗</H3><P CLASS="cjk" STYLE="text-indent: 0.85cm; margin-bottom: 0cm;  line-height: 0.64cm"><FONT COLOR="#333333">由于禹治水有功和促进农业生产，夏部族势力增强。随后舜又派禹去讨伐</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/68918.htm" TARGET="_blank"><FONT COLOR="#136ec2">三苗</FONT></A></U></FONT><FONT COLOR="#333333">。禹屡次击败三苗，将三苗驱赶到</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/74729.htm" TARGET="_blank"><FONT COLOR="#136ec2">丹江</FONT></A></U></FONT><FONT COLOR="#333333">与</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/18683.htm" TARGET="_blank"><FONT COLOR="#136ec2">汉水</FONT></A></U></FONT><FONT COLOR="#333333">流域，巩固了君权。《</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/2232.htm" TARGET="_blank"><FONT COLOR="#136ec2">墨子</FONT></A></U></FONT><FONT FACE="Calibri, sans-serif"><SPAN LANG="en-US"><FONT COLOR="#333333"><FONT FACE="Arial, sans-serif">&middot;</FONT></FONT></SPAN></FONT><FONT COLOR="#333333">非攻》中说道禹克三苗后，&ldquo;别物上下，卿</FONT></P><P CLASS="cjk" STYLE="margin-bottom: 0cm;  line-height: 0.64cm"><BR></P><P CLASS="cjk" STYLE="text-indent: 0.85cm; margin-bottom: 0cm;  line-height: 0.64cm"><A NAME="ref_[7]_11041743"></A><A NAME="ref_[3]_11041743"></A><A NAME="ref_3_11041743"></A><A NAME="ref_[8]_11041743"></A><FONT COLOR="#333333">制大极，而神民不违，天下乃静。&rdquo;可以说明禹在治水与讨伐三苗胜利后，夏部族已成为部族联盟首领。舜把帝位</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/19089.htm" TARGET="_blank"><FONT COLOR="#136ec2">禅让</FONT></A></U></FONT><FONT COLOR="#333333">给禹，禹在</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/105358.htm" TARGET="_blank"><FONT COLOR="#136ec2">涂山</FONT></A></U></FONT><FONT COLOR="#333333">召集部落会盟，再次征讨三苗。据《</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/19124.htm" TARGET="_blank"><FONT COLOR="#136ec2">左传</FONT></A></U></FONT><FONT COLOR="#333333">》记载&ldquo;执玉帛者万国&rdquo;参加了涂山会盟，</FONT><FONT FACE="Calibri, sans-serif"><SPAN LANG="en-US"><FONT COLOR="#3366cc"><SUP><FONT FACE="Arial, sans-serif">[7]</FONT></SUP></FONT><FONT COLOR="#136ec2"><FONT FACE="Arial, sans-serif"><FONT SIZE=1 STYLE="font-size: 1pt">&nbsp;</FONT></FONT></FONT></SPAN></FONT><FONT COLOR="#333333">可见夏部落的号召力。有一次在</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/485220.htm" TARGET="_blank"><FONT COLOR="#136ec2">会稽</FONT></A></U></FONT><FONT COLOR="#333333">部落会盟时，</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/459884.htm" TARGET="_blank"><FONT COLOR="#136ec2">防风氏</FONT></A></U></FONT><FONT COLOR="#333333">首领迟到而被禹所处死。古文献中亦记载禹以诸侯部落路途的远近来分别纳贡约多少，可见夏氏族对其周边部落经济上的控制。禹曾推举东方颇有威望的</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/11755433.htm" TARGET="_blank"><FONT COLOR="#136ec2">偃姓</FONT></A></U></FONT><FONT COLOR="#333333">首领</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/50374.htm" TARGET="_blank"><FONT COLOR="#136ec2">皋陶</FONT></A></U></FONT><FONT COLOR="#333333">为继承人，以示对传统禅让制的尊重</FONT><FONT FACE="Calibri, sans-serif"><SPAN LANG="en-US"><FONT COLOR="#3366cc"><SUP><FONT FACE="Arial, sans-serif">[3]</FONT></SUP></FONT><FONT COLOR="#136ec2"><FONT FACE="Arial, sans-serif"><FONT SIZE=1 STYLE="font-size: 1pt">&nbsp;</FONT></FONT></FONT></SPAN></FONT><FONT COLOR="#333333">。然而皋陶没有等及禅让，比禹早逝。禹又命</FONT><FONT COLOR="#0000ff"><U><A HREF="http://baike.baidu.com/view/227717.htm" TARGET="_blank"><FONT COLOR="#136ec2">东夷</FONT></A></U></FONT><FONT COLOR="#333333">首领益</FONT><FONT FACE="Calibri, sans-serif"><SPAN LANG="en-US"><FONT COLOR="#3366cc"><SUP><FONT FACE="Arial, sans-serif">[8]</FONT></SUP></FONT><FONT COLOR="#136ec2"><FONT FACE="Arial, sans-serif"><FONT SIZE=1 STYLE="font-size: 1pt">&nbsp;</FONT></FONT></FONT></SPAN></FONT><FONT COLOR="#333333">为承人，然而有很多部落都不拥戴，反而拥戴禹的儿子启</FONT></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=LEFT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><BR><BR></P><P ALIGN=RIGHT STYLE="margin-bottom: 0.32cm;  line-height: 0.74cm; widows: 2; orphans: 2"><FONT SIZE=2 STYLE="font-size: 10pt"><B>摘自</B></FONT><FONT FACE="Arial, sans-serif"><FONT SIZE=2 STYLE="font-size: 10pt"><SPAN LANG="en-US"><B>:</B></SPAN></FONT></FONT><FONT SIZE=2 STYLE="font-size: 10pt"><B>百度百科</B></FONT></P></DIV>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+	var n=0;
+	var m=0;
+    function music(){
+  	  //alert(document.getElementById("mp"));
+     	if(n==1){
+     		document.getElementById("mp").pause();
+     		$("#audioplay img").attr("src","page/html/34/play.png");
+     		n=2;
+     		m=0;
+     	}else{
+     		document.getElementById("mp").play();
+     		$("#audioplay img").attr("src","page/html/34/pause.png");
+     		n=1;
+     		m=1;
+     	}
+    } 
+    
+    function pause(){
+    	  //alert(document.getElementById("mp"));
+       		document.getElementById("mp").pause();
+       		$("#audioplay img").attr("src","page/html/34/play.png");
+       		n=2;
+      } 
+    
+    function play(){
+       		document.getElementById("mp").play();
+       		$("#audioplay img").attr("src","page/html/34/pause.png");
+       		n=1;
+      } 
+    
+    function resume(){
+    	if(m==1){
+   			play();
+        }
+    }
+	</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+.article h1 {
+	color: #333;
+	font-size: 2.2em;
+	margin-top: .2em;
+}
+
+.jcropper-holder {
+	border: 1px black solid;
+}
+
+#ladingImag {
+	position: absolute;
+	top: 45%;
+}
+
+#outer {
+	text-align: center;
+}
+
+.jcExample .article {
+	width: 565px;
+}
+
+img#target {
+	margin: 0 10px;
+	padding: 5px;
+	border: 1px solid gray;
+	background: #fff;
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135,
+		Color='#000000');
+}
+
+div#jcPreview {
+	border: 5px solid gray;
+	background: #fff;
+}
+
+#uploadBigFile {
+	border: 1px solid gray;
+	color: gray;
+}
+
+.subButton {
+
+	height: 23px;
+	
+}
+
+.uploadDiv,#jfold {
+	width: 325px;
+}
+
+img#preview {
+	width: 150px;
+	height: 150px;
+}
+
+table tr td span {
+	color: #ffffff;
+}
+
+img#target,img#preview {
+	float: none;
+}

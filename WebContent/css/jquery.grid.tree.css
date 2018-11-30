@@ -1,0 +1,64 @@
+/*------------------------*/
+/*--------表格样式---------*/
+/*------------------------*/
+
+/**表格外层table样式*/
+.gridTreeTable{
+	background-color: #ae9b84;
+	border-collapse: collapse;
+	border-top: 1px solid #ffffff;
+	line-height: 40px;
+}
+.gridTreeTable tr td a span{color: #ffffff;}
+.gridTreeTable tr td span{color: #ffffff;}
+
+/**表格头Thead样式*/
+.gridTreeHeadThead{
+}
+
+/**表格头Tr样式*/
+.gridTreeHeadTr{
+	background-repeat:repeat-x;
+	height:40px;	
+}
+/**表格头Th样式*/
+.gridTreeHeadTh{
+	height:40px;
+	font-size: 12px;
+	color:#ffffff;
+}
+
+/**表格体Td样式*/
+.gridTreeBodyTd{
+	/* height: 30px; */
+	font-size: 12px;
+	cursor: default;
+	line-height: 40px;
+	text-indent: 0px;
+	padding:0 0 0 0;
+}
+.jq_treeCNodeEventImg{
+	cursor:pointer;
+}
+
+.jq_treePNodeEventImg{
+	cursor:pointer;
+}
+
+.jq_columnA{
+	text-align: right;
+}	
+.gridTreeHeadTh,.gridTreeBodyTd{
+	font-weight: normal;
+	border-right: 1px solid #ffffff;
+	border-bottom: 1px solid #ffffff;
+}
+.gridTreeBodyTrOver,.gridTreeBodyTrOutOdd{height: 40px;}
+.gridTreeTable tr th{}
+.gridTreeTable .gridTreeBodyTrOver,.gridTreeTable .gridTreeBodyTrOutOdd,.gridTreeTable .gridTreeBodyTrOutEven{background: #ae9b84;}
+.SkyTableLine tr td a div#create_1_div span,.SkyTableLine tr td a div#create_2_div span{color: #ffffff;font-size: 14px;}
+.SkyTableLine tr td a div#create_1_div img,.SkyTableLine tr td a div#create_1_div span{vertical-align: middle;background: #606373;}
+.SkyTableLine tr td a div#create_2_div img,.SkyTableLine tr td a div#create_2_div span{vertical-align: middle;background: #606373;}
+.SkyTableLine #create_1_div{background: #606373;padding: 7px 15px;float: left;margin-top: 2px;}
+.SkyTableLine #create_2_div{background: #606373;padding: 7px 15px;float: left;margin-top: 2px;margin-left: 2px;}
+

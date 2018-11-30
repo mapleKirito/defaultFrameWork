@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper 
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="operateLog">
+	<!--
+		OL_ID bigint(20) (NULL) NO PRI (NULL) select,insert,update,references日志随机编号：系统生成
+		OL_OrgID bigint(20) (NULL) NO PRI (NULL) select,insert,update,references 日志记录机构ID
+		OL_UserID bigint(20) (NULL) NO PRI (NULL) select,insert,update,references 日志记录用户ID
+		OL_UserAccount varchar(100) utf8_bin YES UNI (NULL) select,insert,update,references 日志记录用户名
+		OL_OperateTime datetime (NULL) YES (NULL) select,insert,update,references 日志记录操作时间
+		OL_Content varchar(500) utf8_bin YES UNI (NULL) select,insert,update,references  日志内容
+		OL_AccessIP varchar(20) utf8_bin YES UNI (NULL) select,insert,update,references 日志记录IP
+		Example: <select id=”findActiveBlogLike” parameterType=”Blog” resultType=”Blog”> SELECT
+		* FROM BLOG <where> <if test=”state != null”> state = #{state} </if>
+		<if test=”title != null”> AND title like #{title} </if> <if
+		test=”author != null and author.name != null”> AND title like
+		#{author.name} </if> </where> </select>
+	-->
+	<resultMap id="convertResultOl" type="result">
+		<result property="olID" column="OL_ID" />
+		<result property="olOrgID" column="OL_OrgID" />
+		<result property="orgName" column="ORG_Name" />
+		<result property="olUserID" column="OL_UserID" />
+		<result property="olUserAccount" column="OL_UserAccount" />
+		<result property="userName" column="USER_Name" />
+		<result property="olOperateTime" column="OL_OperateTime" />
+		<result property="olOperateTime1" column="OL_OperateTime1" />
+		<result property="olContent" column="OL_Content" />
+		<result property="olAccessIP" column="OL_AccessIP" />
+	</resultMap>
+	<insert id="insert" parameterType="java.util.HashMap">
+		insert into SYS_OperateLog
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="s_userOrgID!=null">,OL_OrgID</if>
+			<if test="s_userID!=null">,OL_UserID</if>
+			<if test="s_userLoginAccount!=null">,OL_UserAccount</if>
+			,OL_OperateTime
+			<if test="OL_Content!=null">,OL_Content</if>
+			<if test="s_userLoginIP!=null">,OL_AccessIP</if>
+		</trim>
+		values
+		<trim prefix="(" prefixOverrides="," suffix=")">
+			<if test="s_userOrgID!=null">,${s_userOrgID}</if>
+			<if test="s_userID!=null">,#{s_userID}</if>
+			<if test="s_userLoginAccount!=null">,#{s_userLoginAccount}</if>
+			,now()
+			<if test="OL_Content!=null">,#{OL_Content}</if>
+			<if test="s_userLoginIP!=null">,#{s_userLoginIP}</if>
+		</trim>
+	</insert>
+	<select id="select_ol_page" resultMap="convertResultOl" parameterType="param">
+		select ol.*,og.ORG_Name,date_format(ol.OL_OperateTime,'%Y-%m-%d %H:%i:%s') OL_OperateTime1,us.USER_Name 
+		from SYS_OperateLog ol,SYS_Organization og,SYS_User us
+		<where>
+		<if test="select_default_value==null or select_default_value==''">
+			 (ORG_Relation like '%,${s_userOrgID},%' or ORG_ID=${s_userOrgID}) 
+		</if>
+		<if test="select_default_value!=null and select_default_value!=''">
+			and (ORG_Relation like '%,${select_default_value},%' or ORG_ID=${select_default_value}) 
+		</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="timeStart!=null and timeStart!=''"> and OL_OperateTime >= '${timeStart} 00:00:00'</if>
+		<if test="timeEnd!=null and timeEnd!=''"> and '${timeEnd} 23:59:59' >= OL_OperateTime </if>
+		</where>
+		limit ${start},${offset}
+	</select>
+	<select id="select_ol_page_count" resultType="java.lang.Integer" parameterType="param">
+		select count(*) from SYS_OperateLog ol,SYS_Organization og,SYS_User us 
+		<where>
+		<if test="select_default_value==null or select_default_value==''">
+			 (ORG_Relation like '%,${s_userOrgID},%' or ORG_ID=${s_userOrgID}) 
+		</if>
+		<if test="select_default_value!=null and select_default_value!=''">
+			and (ORG_Relation like '%,${select_default_value},%' or ORG_ID=${select_default_value}) 
+		</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="timeStart!=null and timeStart!=''"> and OL_OperateTime >= '${timeStart}  00:00:00'</if>
+		<if test="timeEnd!=null and timeEnd!=''"> and '${timeEnd} 23:59:59' >= OL_OperateTime </if>
+		</where>
+	</select>
+	<delete id="delete" parameterType="java.util.HashMap">
+		<trim prefixOverrides="," suffixOverrides=",">
+			delete from SYS_OperateLog where OL_ID in (${olID})
+		</trim>
+	</delete>
+	<select id="select_ol_export" resultMap="convertResultOl" parameterType="param">
+		select ol.*,og.ORG_Name,date_format(ol.OL_OperateTime,'%Y-%m-%d %H:%i:%s') OL_OperateTime1 from SYS_OperateLog ol left join SYS_Organization og 
+		on ol.OL_OrgID = og.ORG_ID 
+		left join SYS_User us on ol.OL_UserID = us.USER_ID 
+		<where>
+		<if test="select_default_value!=null and select_default_value!=''">
+			 and OL_OrgID in (
+				select ORG_ID from SYS_Organization where ORG_ParentID=${select_default_value} or ORG_ID=${select_default_value}
+			)
+		</if>
+		<if test="name!=null and name!=''"> and USER_Name like '%${name}%'</if>
+		<if test="timeStart!=null and timeStart!=''"> and OL_OperateTime >= '${timeStart} 00:00:00'</if>
+		<if test="timeEnd!=null and timeEnd!=''"> and '${timeEnd} 23:59:59' >= OL_OperateTime </if>
+		</where>
+	</select>
+</mapper>
